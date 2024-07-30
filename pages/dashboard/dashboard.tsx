@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import CountUp from 'react-countup';
+import CountUp from "react-countup";
 import Dropdown from "@/components/Dropdown";
 import { Fragment } from "react";
 import { IRootState } from "@/store";
@@ -52,8 +52,9 @@ const Dashboard = () => {
   const [requestBalance, setRequestBalance] = useState([]);
   const [requestedHoldBalance, setRequestedHoldBalance] = useState([]);
   const [totalProfit, setTotalProfit] = useState([]);
+  const [totalBal, setTotalBal] = useState([]);
   const router = useRouter();
-  console.log("total:", weeklyLeadData)
+  console.log("total:", weeklyLeadData);
 
   useEffect(() => {
     tokenGet();
@@ -89,6 +90,7 @@ const Dashboard = () => {
     getRequestedBalanceData();
     getRequestedHoldBalance();
     getTotalProfit();
+    getTotalBal();
   }, []);
 
   const getApprovedKycData = async () => {
@@ -128,6 +130,30 @@ const Dashboard = () => {
       setLoading(false);
     } catch (e) {
       console.error(e, "reject kyc error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getTotalBal = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/admin/getTotalPaidWithdrawRequestData`,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res.data, "bal data response");
+
+      setTotalBal(res?.data?.data);
+      setLoading(false);
+    } catch (e) {
+      console.error(e, "reject bal error");
     } finally {
       setLoading(false);
     }
@@ -372,12 +398,15 @@ const Dashboard = () => {
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get(`${BASE_URL}/admin/requestedHoldBalanceData`, {
-        maxBodyLength: Infinity,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        `${BASE_URL}/admin/requestedHoldBalanceData`,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res.data, "data response");
       setRequestedHoldBalance(res?.data?.data);
       setLoading(false);
@@ -389,7 +418,6 @@ const Dashboard = () => {
   };
 
   const getTotalProfit = async () => {
-    
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
@@ -407,7 +435,7 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return loading ? (
     <div>
@@ -415,270 +443,337 @@ const Dashboard = () => {
     </div>
   ) : (
     <div>
-      {totalUserOpen === false && kycRejectedOpen === false && kycSubmittedOpen === false && kycCompletedOpen === false && kycPendingOpen === false && <div>
-        <div className="flex flex-col w-full justify-between">
-          {/* <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:w-[78.5vw]"> */}
-            <h5 className="pt-5 px-4 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
-              TOTAL PROFIT
+      {totalUserOpen === false &&
+        kycRejectedOpen === false &&
+        kycSubmittedOpen === false &&
+        kycCompletedOpen === false &&
+        kycPendingOpen === false && (
+          <div>
+            <div className="flex w-full flex-col justify-between">
+              {/* <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:w-[78.5vw]"> */}
+              <h5 className="px-4 pt-5 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
+                TOTAL PROFIT
+              </h5>
+              <div className="flex w-full justify-between py-7 xs:flex-col lg:flex-row">
+                <AnimatedCard
+                  title="Daily Earning"
+                  value={totalProfit?.dailyCommission?.amount}
+                >
+                  <ArrowCircleUpIcon className="text-white" />
+                </AnimatedCard>
+
+                <AnimatedCard
+                  title="Weekly Earning"
+                  value={totalProfit?.weeklyCommission?.amount}
+                >
+                  <ArrowCircleUpIcon className="text-white" />
+                </AnimatedCard>
+
+                <AnimatedCard
+                  title="Monthly Earning"
+                  value={totalProfit?.monthlyCommission?.amount}
+                >
+                  <ArrowCircleDownIcon className="text-white" />
+                </AnimatedCard>
+
+                <AnimatedCard
+                  title="Total Earning"
+                  value={totalProfit?.totalCommission?.amount}
+                >
+                  <ArrowCircleDownIcon className="text-white" />
+                </AnimatedCard>
+                {/* </div> */}
+              </div>
+
+              {/* Card Container */}
+              {/* <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:w-[78.5vw]"> */}
+              <h5 className="px-4 pt-3 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
+                TOTAL WITHDRAW BALANCE
+              </h5>
+
+              <div className="flex justify-between  py-7 xs:flex-col lg:flex-row">
+                <AnimatedCard
+                  title={"Total Balance"}
+                  value={totalBal?.totalAmount}
+                >
+                  <GroupIcon className="text-white" />
+                </AnimatedCard>
+
+                <AnimatedCard
+                  title={"Monthly Balance"}
+                  value={totalBal?.weekly?.totalAmount}
+                >
+                  <GroupIcon className="text-white" />
+                </AnimatedCard>
+
+                <AnimatedCard
+                  title={"Weekly Balance"}
+                  value={totalBal?.monthly?.totalAmount}
+                >
+                  <GroupIcon className="text-white" />
+                </AnimatedCard>
+
+                <AnimatedCard
+                  title={"Daily Balance"}
+                  value={totalBal?.yearly?.totalAmount}
+                >
+                  <GroupIcon className="text-white" />
+                </AnimatedCard>
+              </div>
+              {/* </div> */}
+            </div>
+
+            {/* <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom"> */}
+            <h5 className="px-4 pt-5 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
+              USER
             </h5>
-            <div className="flex justify-between py-7 xs:flex-col lg:flex-row w-full">
-              <AnimatedCard title="Daily Earning" value={totalProfit?.dailyCommission?.amount}>
-                <ArrowCircleUpIcon className="text-white" />
-              </AnimatedCard>
+            <div className="flex justify-center gap-2 px-6 py-7 xs:flex-col lg:flex-row ">
+              <span onClick={() => setTotalUserOpen(true)}>
+                <AnimatedCard title={"Total Users"} value={totalkyc?.totalUser}>
+                  <GroupIcon className="text-white" />
+                </AnimatedCard>
+              </span>
 
-              <AnimatedCard title="Weekly Earning" value={totalProfit?.weeklyCommission?.amount}>
-                <ArrowCircleUpIcon className="text-white" />
-              </AnimatedCard>
+              <span onClick={() => setKycSubmittedOpen(true)}>
+                <AnimatedCard
+                  title={"KYC Submitted"}
+                  value={submittedKycData?.totalUser}
+                  // onPress={() => router.push({
+                  //   pathname: '/apps/kyc-table',
+                  //   query: { tableData: JSON.stringify(submittedKycData?.userData) }
+                  // },
+                  //   '/apps/kyc-table'
+                  // )}
+                >
+                  <GroupIcon className="text-white" />
+                </AnimatedCard>
+              </span>
 
-              <AnimatedCard title="Monthly Earning" value={totalProfit?.monthlyCommission?.amount}>
-                <ArrowCircleDownIcon className="text-white" />
-              </AnimatedCard>
+              <span onClick={() => setKycCompletedOpen(true)}>
+                <AnimatedCard
+                  title={"KYC Completed"}
+                  value={approveKycData?.totalUser}
+                >
+                  <TaskAltIcon className="text-white" />
+                </AnimatedCard>
+              </span>
 
-              <AnimatedCard title="Total Earning" value={totalProfit?.totalCommission?.amount}>
-                <ArrowCircleDownIcon className="text-white" />
-              </AnimatedCard>
+              <span onClick={() => setKycPendingOpen(true)}>
+                <AnimatedCard
+                  title={"Pending Users"}
+                  value={pendingKycData?.totalUser}
+                >
+                  <PendingIcon className="text-white" />
+                </AnimatedCard>
+              </span>
+
+              <span onClick={() => setKycRejectedOpen(true)}>
+                <AnimatedCard
+                  title={"KYC Rejected"}
+                  value={rejectKycData?.totalUser}
+                >
+                  <DoDisturbAltIcon className="text-white" />
+                </AnimatedCard>
+              </span>
+            </div>
             {/* </div> */}
-          </div>
 
-          {/* Card Container */}
-          {/* <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:w-[78.5vw]"> */}
-            <h5 className="pt-3 px-4 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
-              TOTAL BALANCE
+            {/* <div className="sx:mt-[12px] mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:mt-4"> */}
+            <h5 className="px-4 pt-5 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
+              WALLET
             </h5>
+            <div className="flex justify-center gap-2 px-6 py-7 xs:flex-col lg:flex-row">
+              <AnimatedCard
+                title={"Paid Balance"}
+                value={paidWalletBalance?.totalCredit}
+              >
+                <CurrencyRupeeIcon className="text-white" />
+              </AnimatedCard>
 
-            <div className="flex justify-between  py-7 xs:flex-col lg:flex-row">
-              <AnimatedCard title={"Total Balance"} value={"4859"}>
+              <AnimatedCard title={"Unpaid Balance"} value={"4859"}>
+                <MoneyOffIcon className="text-white" />
+              </AnimatedCard>
+
+              <AnimatedCard
+                title={"Requested Balance"}
+                value={requestBalance?.totalAmount}
+              >
                 <GroupIcon className="text-white" />
               </AnimatedCard>
 
-              <AnimatedCard title={"Monthly Balance"} value={"4859"}>
+              <AnimatedCard
+                title={"Hold Balance"}
+                value={requestedHoldBalance?.totalAmount}
+              >
                 <GroupIcon className="text-white" />
               </AnimatedCard>
 
-              <AnimatedCard title={"Weekly Balance"} value={"4859"}>
-                <GroupIcon className="text-white" />
-              </AnimatedCard>
-
-              <AnimatedCard title={"Daily Balance"} value={"4859"}>
+              <AnimatedCard title={"Cancel Balance"} value={"4859"}>
                 <GroupIcon className="text-white" />
               </AnimatedCard>
             </div>
-          {/* </div> */}
-        </div>
+            {/* </div> */}
 
-        {/* <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom"> */}
-          <h5 className="pt-5 px-4 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
-            USER
-          </h5>
-          <div className="flex justify-center gap-2 px-6 py-7 xs:flex-col lg:flex-row ">
-            <span onClick={() => setTotalUserOpen(true)}>
-              <AnimatedCard
-                title={"Total Users"}
-                value={totalkyc?.totalUser}
-              >
-                <GroupIcon className="text-white" />
-              </AnimatedCard>
-            </span>
-
-            <span onClick={() => setKycSubmittedOpen(true)}>
-              <AnimatedCard
-                title={"KYC Submitted"}
-                value={submittedKycData?.totalUser}
-              // onPress={() => router.push({
-              //   pathname: '/apps/kyc-table',
-              //   query: { tableData: JSON.stringify(submittedKycData?.userData) }
-              // },
-              //   '/apps/kyc-table'
-              // )}
-              >
-                <GroupIcon className="text-white" />
-              </AnimatedCard>
-            </span>
-
-            <span onClick={() => setKycCompletedOpen(true)}>
-              <AnimatedCard
-                title={"KYC Completed"}
-                value={approveKycData?.totalUser}
-              >
-                <TaskAltIcon className="text-white" />
-              </AnimatedCard>
-            </span>
-
-            <span onClick={() => setKycPendingOpen(true)}>
-              <AnimatedCard
-                title={"Pending Users"}
-                value={pendingKycData?.totalUser}
-              >
-                <PendingIcon className="text-white" />
-              </AnimatedCard>
-            </span>
-
-            <span onClick={() => setKycRejectedOpen(true)}>
-              <AnimatedCard
-                title={"KYC Rejected"}
-                value={rejectKycData?.totalUser}
-              >
-                <DoDisturbAltIcon className="text-white" />
-              </AnimatedCard>
-            </span>
-
-          </div>
-        {/* </div> */}
-
-        {/* <div className="sx:mt-[12px] mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:mt-4"> */}
-          <h5 className="pt-5 px-4 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
-            WALLET
-          </h5>
-          <div className="flex justify-center gap-2 px-6 py-7 xs:flex-col lg:flex-row">
-            <AnimatedCard title={"Paid Balance"} value={paidWalletBalance?.totalCredit}>
-              <CurrencyRupeeIcon className="text-white" />
-            </AnimatedCard>
-
-            <AnimatedCard title={"Unpaid Balance"} value={"4859"}>
-              <MoneyOffIcon className="text-white" />
-            </AnimatedCard>
-
-            <AnimatedCard title={"Requested Balance"} value={requestBalance?.totalAmount}>
-              <GroupIcon className="text-white" />
-            </AnimatedCard>
-
-            <AnimatedCard title={"Hold Balance"} value={requestedHoldBalance?.totalAmount}>
-              <GroupIcon className="text-white" />
-            </AnimatedCard>
-
-            <AnimatedCard title={"Cancel Balance"} value={"4859"}>
-              <GroupIcon className="text-white" />
-            </AnimatedCard>
-          </div>
-        {/* </div> */}
-
-        <div className="sx:mt-[12px] mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#1E1611] dark:shadow-custom sm:mt-4">
-          <h5 className="pt-5 px-4 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
-            LEAD
-          </h5>
-          <div className="mt-6 flex items-center justify-center xs:mt-3 xs:justify-center sm:justify-between">
-            <div className="flex w-full justify-center p-4  xs:flex-col  lg:flex-row lg:space-x-2">
-              <div className="relative flex w-full flex-col justify-center py-4 lg:w-1/2">
-                <div className="duration-700 group relative h-[150px] w-full cursor-pointer overflow-hidden border-none bg-white px-6 pb-6 pt-6 shadow-xl ring-1 ring-gray-900/5 transition-all hover:-translate-y-1 hover:shadow-2xl dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-10">
-                  <span className="absolute left-5 top-10 z-0 h-12 w-12 rounded-full from-main_dark to-stone-600 transition-all duration-700 group-hover:scale-[10] group-hover:bg-sky-500 dark:group-hover:bg-gradient-to-r"></span>
-                  <div className="relative z-10 mx-auto max-w-md">
-                    <div className="sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex items-center justify-center">
-                        {" "}
-                        {/* Centering the title */}
-                        <span
-                          className="w-13 mt-[-7px] flex h-12 place-items-center items-center justify-center rounded-full bg-[#FFC96F] transition-all duration-700 group-hover:bg-[#FFC96F] dark:bg-orange-500  dark:group-hover:bg-orange-400"
-                          style={{ aspectRatio: "1" }}
-                        >
-                          <GroupIcon className="text-white" />
-                        </span>
-                        <h2 className="w-full text-center  text-xl font-semibold group-hover:text-white/90">
-                          Total Online
-                        </h2>{" "}
-                        {/* Removed ml-3 */}
-                      </div>
-                      <div className="mt-4 flex items-center justify-between px-10 sm:mt-0">
-                        <div className="text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
-                          <div className="font-semibold">Admin</div>
-                          <div className="text-center font-semibold">2</div>
-                        </div>
-                        <div className="text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
-                          <div className="font-semibold">Affiliate</div>
-                          <div className="text-center font-semibold">5</div>
+            <div className="sx:mt-[12px] mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#1E1611] dark:shadow-custom sm:mt-4">
+              <h5 className="px-4 pt-5 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
+                LEAD
+              </h5>
+              <div className="mt-6 flex items-center justify-center xs:mt-3 xs:justify-center sm:justify-between">
+                <div className="flex w-full justify-center p-4  xs:flex-col  lg:flex-row lg:space-x-2">
+                  <div className="relative flex w-full flex-col justify-center py-4 lg:w-1/2">
+                    <div className="group relative h-[150px] w-full cursor-pointer overflow-hidden border-none bg-white px-6 pb-6 pt-6 shadow-xl ring-1 ring-gray-900/5 transition-all duration-700 hover:-translate-y-1 hover:shadow-2xl dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-10">
+                      <span className="absolute left-5 top-10 z-0 h-12 w-12 rounded-full from-main_dark to-stone-600 transition-all duration-700 group-hover:scale-[10] group-hover:bg-sky-500 dark:group-hover:bg-gradient-to-r"></span>
+                      <div className="relative z-10 mx-auto max-w-md">
+                        <div className="sm:flex-row sm:items-center sm:justify-between">
+                          <div className="flex items-center justify-center">
+                            {" "}
+                            {/* Centering the title */}
+                            <span
+                              className="w-13 mt-[-7px] flex h-12 place-items-center items-center justify-center rounded-full bg-[#FFC96F] transition-all duration-700 group-hover:bg-[#FFC96F] dark:bg-orange-500  dark:group-hover:bg-orange-400"
+                              style={{ aspectRatio: "1" }}
+                            >
+                              <GroupIcon className="text-white" />
+                            </span>
+                            <h2 className="w-full text-center  text-xl font-semibold group-hover:text-white/90">
+                              Total Online
+                            </h2>{" "}
+                            {/* Removed ml-3 */}
+                          </div>
+                          <div className="mt-4 flex items-center justify-between px-10 sm:mt-0">
+                            <div className="text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
+                              <div className="font-semibold">Admin</div>
+                              <div className="text-center font-semibold">2</div>
+                            </div>
+                            <div className="text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
+                              <div className="font-semibold">Affiliate</div>
+                              <div className="text-center font-semibold">5</div>
+                            </div>
+                          </div>
                         </div>
                       </div>
+                      {/* Add a div for the overlay */}
+                      <div className="absolute inset-0 bg-[#FFA62F] from-main_dark to-stone-600 opacity-0 transition-opacity duration-700 group-hover:opacity-100 dark:bg-gradient-to-r"></div>
                     </div>
                   </div>
-                  {/* Add a div for the overlay */}
-                  <div className="absolute inset-0 bg-[#FFA62F] from-main_dark to-stone-600 opacity-0 transition-opacity duration-700 group-hover:opacity-100 dark:bg-gradient-to-r"></div>
-                </div>
-              </div>
 
-              <div className="relative flex w-full flex-col justify-center py-4 lg:w-1/2">
-                <div className="duration-700 group relative h-[150px] w-full cursor-pointer overflow-hidden border-none bg-white px-6 pb-6 pt-6 shadow-xl ring-1 ring-gray-900/5 transition-all hover:-translate-y-1 hover:shadow-2xl dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-10">
-                  <span className="absolute left-5 top-10 z-0 h-12 w-12 rounded-full from-main_dark to-stone-600 transition-all duration-300 group-hover:scale-[10] group-hover:bg-sky-500 dark:group-hover:bg-gradient-to-r"></span>
-                  <div className="relative z-10 mx-auto max-w-md">
-                    <div className="sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex">
-                        {" "}
-                        {/* Centering the title */}
-                        <span
-                          className="w-13 mt-[-7px] flex h-12 place-items-center items-center justify-center rounded-full bg-[#FFC96F] transition-all duration-300 group-hover:bg-[#FFC96F] dark:bg-orange-500 dark:group-hover:bg-orange-400"
-                          style={{ aspectRatio: "1" }}
-                        >
-                          <GroupIcon className="text-white" />
-                        </span>
-                        <h2 className="w-full text-center text-xl font-semibold group-hover:text-white/90">
-                          Total Users
-                        </h2>{" "}
-                        {/* Removed ml-3 */}
+                  <div className="relative flex w-full flex-col justify-center py-4 lg:w-1/2">
+                    <div className="group relative h-[150px] w-full cursor-pointer overflow-hidden border-none bg-white px-6 pb-6 pt-6 shadow-xl ring-1 ring-gray-900/5 transition-all duration-700 hover:-translate-y-1 hover:shadow-2xl dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-10">
+                      <span className="absolute left-5 top-10 z-0 h-12 w-12 rounded-full from-main_dark to-stone-600 transition-all duration-300 group-hover:scale-[10] group-hover:bg-sky-500 dark:group-hover:bg-gradient-to-r"></span>
+                      <div className="relative z-10 mx-auto max-w-md">
+                        <div className="sm:flex-row sm:items-center sm:justify-between">
+                          <div className="flex">
+                            {" "}
+                            {/* Centering the title */}
+                            <span
+                              className="w-13 mt-[-7px] flex h-12 place-items-center items-center justify-center rounded-full bg-[#FFC96F] transition-all duration-300 group-hover:bg-[#FFC96F] dark:bg-orange-500 dark:group-hover:bg-orange-400"
+                              style={{ aspectRatio: "1" }}
+                            >
+                              <GroupIcon className="text-white" />
+                            </span>
+                            <h2 className="w-full text-center text-xl font-semibold group-hover:text-white/90">
+                              Total Users
+                            </h2>{" "}
+                            {/* Removed ml-3 */}
+                          </div>
+                          <div className="mt-4 flex justify-between sm:mt-0 lg:px-10">
+                            <div className="text-base leading-7 text-gray-600 transition-all duration-700 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
+                              <div className="font-semibold">Monthly</div>
+                              <div className="font-semibold">
+                                {monthlyLeadData?.totalLead}
+                              </div>
+                            </div>
+                            <div className="text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
+                              <div className="font-semibold">Weekly</div>
+                              <div className="font-semibold">
+                                {weeklyLeadData?.totalLead}
+                              </div>
+                            </div>
+                            <div className="text-base leading-7 text-gray-600 transition-all duration-700 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
+                              <div className="font-semibold">Daily</div>
+                              <div className="font-semibold">
+                                {dailyLeadData?.totalLead}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="mt-4 flex justify-between sm:mt-0 lg:px-10">
-                        <div className="text-base leading-7 text-gray-600 transition-all duration-700 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
-                          <div className="font-semibold">Monthly</div>
-                          <div className="font-semibold">{monthlyLeadData?.totalLead}</div>
-                        </div>
-                        <div className="text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
-                          <div className="font-semibold">Weekly</div>
-                          <div className="font-semibold">{weeklyLeadData?.totalLead}</div>
-                        </div>
-                        <div className="text-base leading-7 text-gray-600 transition-all duration-700 group-hover:text-white/90 dark:text-gray-300 dark:group-hover:text-white">
-                          <div className="font-semibold">Daily</div>
-                          <div className="font-semibold">{dailyLeadData?.totalLead}</div>
-                        </div>
-                      </div>
+                      {/* Overlay to cover the entire card */}
+                      <div className="absolute inset-0 bg-[#FFA62F] from-main_dark to-stone-600 opacity-0 transition-opacity duration-700 group-hover:opacity-100 dark:bg-gradient-to-r"></div>
                     </div>
                   </div>
-                  {/* Overlay to cover the entire card */}
-                  <div className="absolute inset-0 bg-[#FFA62F] from-main_dark to-stone-600 opacity-0 transition-opacity duration-700 group-hover:opacity-100 dark:bg-gradient-to-r"></div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="mt-6 items-center justify-between gap-4 xs:mt-3 sm:flex">
-          {/* <div className="flex w-full justify-between xs:flex-col xs:space-y-2 lg:flex-row lg:space-x-4 lg:space-y-0">
+            <div className="mt-6 items-center justify-between gap-4 xs:mt-3 sm:flex">
+              {/* <div className="flex w-full justify-between xs:flex-col xs:space-y-2 lg:flex-row lg:space-x-4 lg:space-y-0">
             <Table header={"TOP 10 ADMIN"} />
           </div> */}
-          <div className="flex w-full justify-between xs:flex-col xs:space-x-0 xs:space-y-1 sm:space-x-0 lg:flex-row lg:space-x-4 lg:space-y-0">
-            <Table header={"TOP 10 AFFILIATES"} tableData={topAffiliateData}/>
+              <div className="flex w-full justify-between xs:flex-col xs:space-x-0 xs:space-y-1 sm:space-x-0 lg:flex-row lg:space-x-4 lg:space-y-0">
+                <Table
+                  header={"TOP 10 AFFILIATES"}
+                  tableData={topAffiliateData}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-
-
-      </div>}
-      {
-        totalUserOpen &&
+        )}
+      {totalUserOpen && (
         <div>
-          {<KycTable tableData={totalkyc?.userData} setClose={setTotalUserOpen} title={"Total User Data"}/>}
+          {
+            <KycTable
+              tableData={totalkyc?.userData}
+              setClose={setTotalUserOpen}
+              title={"Total User Data"}
+            />
+          }
         </div>
-      }
-      {
-        kycSubmittedOpen &&
+      )}
+      {kycSubmittedOpen && (
         <div>
-          {<KycTable tableData={submittedKycData?.userData} setClose={setKycSubmittedOpen} title={"Submitted KYC Details"}/>}
+          {
+            <KycTable
+              tableData={submittedKycData?.userData}
+              setClose={setKycSubmittedOpen}
+              title={"Submitted KYC Details"}
+            />
+          }
         </div>
-      }
-      {
-        kycCompletedOpen &&
+      )}
+      {kycCompletedOpen && (
         <div>
-          {<KycTable tableData={approveKycData?.userData} setClose={setKycCompletedOpen} title={"Approved KYC Details"}/>}
+          {
+            <KycTable
+              tableData={approveKycData?.userData}
+              setClose={setKycCompletedOpen}
+              title={"Approved KYC Details"}
+            />
+          }
         </div>
-      }
-      {
-        kycPendingOpen &&
+      )}
+      {kycPendingOpen && (
         <div>
-          {<KycTable tableData={pendingKycData?.userData} setClose={setKycPendingOpen} title={"Pending KYC Details"}/>}
+          {
+            <KycTable
+              tableData={pendingKycData?.userData}
+              setClose={setKycPendingOpen}
+              title={"Pending KYC Details"}
+            />
+          }
         </div>
-      }
-      {
-        kycRejectedOpen &&
+      )}
+      {kycRejectedOpen && (
         <div>
-          {<KycTable tableData={rejectKycData?.userData} setClose={setKycRejectedOpen} title={"Rejected KYC Details"}/>}
+          {
+            <KycTable
+              tableData={rejectKycData?.userData}
+              setClose={setKycRejectedOpen}
+              title={"Rejected KYC Details"}
+            />
+          }
         </div>
-      }
-    </div >
+      )}
+    </div>
   );
 };
 export default auth(Dashboard);
