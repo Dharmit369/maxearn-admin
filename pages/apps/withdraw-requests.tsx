@@ -9,6 +9,9 @@ import { showAlert } from "@/components/showAlert";
 import moment from "moment";
 import { useRouter } from "next/router";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import StatusModel from "@/components/statusModel";
+import ModelDetails from "@/components/ModelDetails";
+import ModelDetailsNew from "@/components/ModelDetailsNew";
 
 export default function UserWallet() {
   const data = {
@@ -21,6 +24,11 @@ export default function UserWallet() {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [userDropdownData, setUserDropdownData] = useState([]);
+  const [status, setStatus] = useState("");
+  const [statusModelOpen, setStatusModelOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [modelDetails, setModelDetails] = useState(false);
+  const [modelData, setModelData] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -114,6 +122,50 @@ export default function UserWallet() {
       [e.target.name]: e.target.value,
     });
   };
+
+  const handleStatus = (id, newStatus) => {
+    setStatus(newStatus);
+    setSelectedId(id); // Set the selected id
+    setStatusModelOpen(true);
+  };
+
+  const submitData = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    console.log(`${BASE_URL}/kyc/updateKycStatus/${selectedId}`);
+    const _data = {
+      status: status,
+      note: "withdrow for user"
+
+    }
+    try {
+      const res = await axios.put(`${BASE_URL}/withdraw/${selectedId}`, _data, {
+        maxBodyLength: Infinity,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data, "data response");
+      if (res) {
+        // router.push("/dashboard/dashboard");
+        // setTableData(res?.data?.data);
+        setStatusModelOpen(false);
+        setLoading(false);
+      } else {
+        showAlert(15, res?.data?.message, "error");
+      }
+    } catch (e) {
+      console.error(e, "login error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVisibility = (data: any) => {
+    setModelDetails(true);
+    setModelData(data)
+  }
+
 
   return loading ? (
     <div>
@@ -223,6 +275,7 @@ export default function UserWallet() {
                     <th>Date</th>
                     <th>Amount</th>
                     <th>User Name</th>
+                    <th>Status Details</th>
                     <th>Status</th>
                     <th className="text-center">Action</th>
                   </tr>
@@ -237,20 +290,43 @@ export default function UserWallet() {
                         <td>{moment(data?.date)?.format("DD/MM/YYYY")}</td>
                         <td>{data?.amount + " " + "Rs"}</td>
                         <td>{data?.username}</td>
+                        <td>
+                          <span
+                            className={`badge whitespace-nowrap ${data?.status === "in_review"
+                              ? "bg-primary   "
+                              : data?.status === "Pending"
+                                ? "bg-secondary"
+                                : data?.status === "In Progress"
+                                  ? "bg-success"
+                                  : data?.status === "Canceled"
+                                    ? "bg-danger"
+                                    : "bg-primary"
+                              }`}
+                          >
+                            {data?.status?.toUpperCase()}
+                          </span>
+                        </td>
 
                         <td>
                           <span
-                            className={`badge whitespace-nowrap ${
-                              data?.status === "paid"
-                                ? "bg-primary"
-                                : data?.status === "requested"
-                                ? "bg-green-700"
-                                : data?.status === "not_paid"
-                                ? "bg-danger"
-                                : "bg-primary"
-                            }`}
+                            className={`badge whitespace-nowrap `}
                           >
-                            {data?.status?.toUpperCase()}
+                            {/* {data.status} */}
+                            <select
+                              id="Type"
+                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#1E1611]"
+                              onChange={(e) => handleStatus(data?._id, e.target.value)}
+                              value={status}
+                            >
+                              <option key={"all"} value={"all"}>
+                                Please Select
+                              </option>
+                              {userDropdownData?.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
                           </span>
                         </td>
                         <td className="text-center">
@@ -278,7 +354,7 @@ export default function UserWallet() {
                             >
                               REVERT
                             </span>
-                            <VisibilityIcon className="ml-5" />
+                            <VisibilityIcon className="ml-5" onClick={() => handleVisibility(data)} />
                           </div>
                         </td>
                       </tr>
@@ -290,6 +366,14 @@ export default function UserWallet() {
           </div>
         </div>
       </div>
+      {statusModelOpen && (
+        <StatusModel
+          setStatusModelOpen={setStatusModelOpen}
+          Data={() => submitData()}
+        />
+      )}
+
+      {modelDetails && <ModelDetailsNew setModelDetails={setModelDetails} modelData={modelData} />}
     </div>
   );
 }
