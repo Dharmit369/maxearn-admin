@@ -8,7 +8,7 @@ import Loader from "./Layouts/Loader";
 
     const statusModel = ({
     setStatusModelOpen,
-    // submitData,
+    Data,
     statusId,
     status
 }: any) => {
@@ -102,7 +102,7 @@ import Loader from "./Layouts/Loader";
                     <div className="flex justify-end mt-8">
                         <button
                             className="rounded bg-blue-500 px-6 py-3 text-white hover:bg-blue-600"
-                            onClick={() => submitData()}
+                            onClick={Data? Data : () => submitData()}
                         >
                             Save
                         </button>
