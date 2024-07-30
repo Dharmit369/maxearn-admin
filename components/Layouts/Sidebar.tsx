@@ -70,21 +70,25 @@ const Sidebar = () => {
   return (
     <div className={semidark ? "dark" : ""}>
       <nav
-        className={`sidebar shadow-[5px_0_25px_0_rgba(94,92,154,0.1)]- fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] transition-all duration-300 ${semidark ? "text-white-dark" : ""
-          }`}
+        className={`sidebar shadow-[5px_0_25px_0_rgba(94,92,154,0.1)]- fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] transition-all duration-300 ${
+          semidark ? "text-white-dark" : ""
+        }`}
       >
         <div className="h-full bg-[#FF4400] dark:bg-[#29221d] ">
           <div className="flex items-center justify-between px-4 py-3">
-            <Link href="/" className="main-logo  shrink-0 items-center  w-full self-center justify-center flex">
+            <Link
+              href="/"
+              className="main-logo  flex w-full  shrink-0 items-center justify-center self-center"
+            >
               {themeConfig.theme === "light" ? (
                 <img
-                  className="inline h-[160px] w-[150px] ltr:-ml-1 rtl:-mr-1 ltr:-mt-7 lg:mb-[-34px] py-4"
+                  className="inline h-[160px] w-[150px] py-4 lg:mb-[-34px] ltr:-ml-1 ltr:-mt-7 rtl:-mr-1"
                   src={Images.MAX_EARN_LOGO}
                   alt="logo"
                 />
               ) : (
                 <img
-                  className="inline h-[150px] w-[150px] ltr:-ml-1 rtl:-mr-1 ltr:-mt-7 lg:mb-[-34px] py-4"
+                  className="inline h-[150px] w-[150px] py-4 lg:mb-[-34px] ltr:-ml-1 ltr:-mt-7 rtl:-mr-1"
                   src={Images.MAX_EARN_LOGO}
                   alt="logo"
                 />
@@ -133,7 +137,7 @@ const Sidebar = () => {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
-                           stroke="white"
+                          stroke="white"
                           className="h-6 w-6 dark:stroke-white"
                         >
                           <path
@@ -181,7 +185,7 @@ const Sidebar = () => {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
-                           stroke="white"
+                          stroke="white"
                           className="h-6 w-6"
                         >
                           <path
@@ -205,7 +209,7 @@ const Sidebar = () => {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
-                           stroke="white"
+                          stroke="white"
                           className="h-6 w-6"
                         >
                           <path
@@ -253,7 +257,7 @@ const Sidebar = () => {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
-                           stroke="white"
+                          stroke="white"
                           className="h-6 w-6"
                         >
                           <path
@@ -269,7 +273,7 @@ const Sidebar = () => {
                       </div>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link href="/apps/send-notification" className="group">
                       <div className="flex items-center">
                         <svg
@@ -292,7 +296,7 @@ const Sidebar = () => {
                         </span>
                       </div>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item">
                     <a
                       href="#"
@@ -308,7 +312,7 @@ const Sidebar = () => {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
-                           stroke="white"
+                          stroke="white"
                           className="h-6 w-6"
                         >
                           <path
@@ -322,12 +326,15 @@ const Sidebar = () => {
                         </span>
                       </div>
                     </a>
-                    <AnimateHeight duration={300} height={currentMenu === "wallet" ? "auto" : 0}>
+                    <AnimateHeight
+                      duration={300}
+                      height={currentMenu === "wallet" ? "auto" : 0}
+                    >
                       <ul className="sub-menu p-0 pt-0">
                         <li className="nav-item">
                           <Link href="/apps/user-wallet" className="group">
-                            <div className="flex items-center w-full">
-                              <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark w-full">
+                            <div className="flex w-full items-center">
+                              <span className="w-full text-white dark:text-[#fff] dark:group-hover:text-white-dark">
                                 {t("User Wallet")}
                               </span>
                             </div>
@@ -335,9 +342,11 @@ const Sidebar = () => {
                         </li>
 
                         <li className="nav-item ">
-                          <Link href="/apps/withdraw-requests" className="group">
-                            <div className="flex items-center w-full">
-
+                          <Link
+                            href="/apps/withdraw-requests"
+                            className="group"
+                          >
+                            <div className="flex w-full items-center">
                               <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-0 rtl:pr-0">
                                 {t("Withdraw Requests")}
                               </span>
@@ -347,8 +356,7 @@ const Sidebar = () => {
 
                         <li className="nav-item ">
                           <Link href="/apps/settings" className="group">
-                            <div className="flex items-center w-full">
-
+                            <div className="flex w-full items-center">
                               <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-0 rtl:pr-0">
                                 {t("Settings")}
                               </span>
@@ -373,7 +381,7 @@ const Sidebar = () => {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
-                           stroke="white"
+                          stroke="white"
                           className="h-6 w-6"
                         >
                           <path
@@ -387,12 +395,15 @@ const Sidebar = () => {
                         </span>
                       </div>
                     </a>
-                    <AnimateHeight duration={300} height={currentMenu === "User" ? "auto" : 0}>
+                    <AnimateHeight
+                      duration={300}
+                      height={currentMenu === "User" ? "auto" : 0}
+                    >
                       <ul className="sub-menu p-0 pt-0">
                         <li className="nav-item">
                           <Link href="/apps/user-list" className="group">
-                            <div className="flex items-center w-full">
-                              <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark w-full">
+                            <div className="flex w-full items-center">
+                              <span className="w-full text-white dark:text-[#fff] dark:group-hover:text-white-dark">
                                 {t("User List")}
                               </span>
                             </div>
@@ -401,8 +412,8 @@ const Sidebar = () => {
 
                         <li className="nav-item">
                           <Link href="/apps/KycUser" className="group">
-                            <div className="flex items-center w-full">
-                              <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark w-full">
+                            <div className="flex w-full items-center">
+                              <span className="w-full text-white dark:text-[#fff] dark:group-hover:text-white-dark">
                                 {t("KYC")}
                               </span>
                             </div>
@@ -411,8 +422,8 @@ const Sidebar = () => {
 
                         <li className="nav-item">
                           <Link href="/apps/bankUserDetails" className="group">
-                            <div className="flex items-center w-full">
-                              <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark w-full">
+                            <div className="flex w-full items-center">
+                              <span className="w-full text-white dark:text-[#fff] dark:group-hover:text-white-dark">
                                 {t("Bank Details")}
                               </span>
                             </div>
@@ -448,7 +459,7 @@ const Sidebar = () => {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
-                           stroke="white"
+                          stroke="white"
                           className="h-6 w-6"
                         >
                           <path
@@ -462,22 +473,24 @@ const Sidebar = () => {
                         </span>
                       </div>
                     </a>
-                    <AnimateHeight duration={300} height={currentMenu === "Marketing" ? "auto" : 0}>
+                    <AnimateHeight
+                      duration={300}
+                      height={currentMenu === "Marketing" ? "auto" : 0}
+                    >
                       <ul className="sub-menu p-0 pt-0">
                         <li className="nav-item">
                           <Link href="/apps/campaigns" className="group">
-                            <div className="flex items-center w-full">
-                              <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark w-full">
+                            <div className="flex w-full items-center">
+                              <span className="w-full text-white dark:text-[#fff] dark:group-hover:text-white-dark">
                                 {t("Campaigns")}
                               </span>
                             </div>
                           </Link>
                         </li>
-                        
+
                         <li className="nav-item ">
                           <Link href="/apps/categories" className="group">
-                            <div className="flex items-center w-full">
-
+                            <div className="flex w-full items-center">
                               <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-0 rtl:pr-0">
                                 {t("Categories")}
                               </span>
@@ -503,7 +516,7 @@ const Sidebar = () => {
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
-                           stroke="white"
+                          stroke="white"
                           className="h-6 w-6"
                         >
                           <path
@@ -517,12 +530,15 @@ const Sidebar = () => {
                         </span>
                       </div>
                     </a>
-                    <AnimateHeight duration={300} height={currentMenu === "Activity" ? "auto" : 0}>
+                    <AnimateHeight
+                      duration={300}
+                      height={currentMenu === "Activity" ? "auto" : 0}
+                    >
                       <ul className="sub-menu p-0 pt-0">
                         <li className="nav-item">
                           <Link href="/apps/UserStatistic" className="group">
-                            <div className="flex items-center w-full">
-                              <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark w-full">
+                            <div className="flex w-full items-center">
+                              <span className="w-full text-white dark:text-[#fff] dark:group-hover:text-white-dark">
                                 {t("Users Statistics")}
                               </span>
                             </div>
@@ -530,9 +546,12 @@ const Sidebar = () => {
                         </li>
 
                         <li className="nav-item">
-                          <Link href="/apps/TransactionsReport" className="group">
-                            <div className="flex items-center w-full">
-                              <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark w-full">
+                          <Link
+                            href="/apps/TransactionsReport"
+                            className="group"
+                          >
+                            <div className="flex w-full items-center">
+                              <span className="w-full text-white dark:text-[#fff] dark:group-hover:text-white-dark">
                                 {t("Transactions Report")}
                               </span>
                             </div>
@@ -541,8 +560,6 @@ const Sidebar = () => {
                       </ul>
                     </AnimateHeight>
                   </li>
-
-
                 </ul>
               </li>
             </ul>
