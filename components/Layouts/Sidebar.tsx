@@ -363,17 +363,6 @@ const Sidebar = () => {
                             </div>
                           </Link>
                         </li>
-
-                        <li className="nav-item ">
-                          <Link href="/apps/Tds" className="group">
-                            <div className="flex items-center w-full">
-
-                              <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-0 rtl:pr-0">
-                                {t("TDS")}
-                              </span>
-                            </div>
-                          </Link>
-                        </li>
                       </ul>
                     </AnimateHeight>
                   </li>

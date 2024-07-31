@@ -16,7 +16,6 @@ import axios from "axios";
 import { showAlert } from "@/components/showAlert";
 import moment from "moment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import ModelDetails from "@/components/ModelDetails";
 
 export default function UserWallet() {
   const data = {
@@ -29,18 +28,10 @@ export default function UserWallet() {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [changeData, setchangeData] = useState(data);
-  const [modelDetails, setModelDetails] = useState(false);
-  const [modelData, setModelData] = useState([]);
-
 
   useEffect(() => {
     getWallet();
   }, [changeData]);
-
-  const handleVisibility = (data: any) => {
-    setModelDetails(true);
-    setModelData(data)
-  }
 
   const getWallet = async () => {
     setLoading(true);
@@ -291,8 +282,8 @@ export default function UserWallet() {
                         </td>
                         <td className="text-center">
                           <div className="dropdown">
-                            {/* <DeleteIcon /> */}
-                            <VisibilityIcon onClick={() => handleVisibility(data)}/>
+                            <DeleteIcon />
+                            <VisibilityIcon />
                           </div>
                         </td>
                       </tr>
@@ -304,8 +295,6 @@ export default function UserWallet() {
           </div>
         </div>
       </div>
-      
-      {modelDetails && <ModelDetails setModelDetails={setModelDetails} modelData={modelData}/>}
     </div>
   );
 }
