@@ -39,7 +39,6 @@ const UserList = () => {
   const [mobileNo, setMobileNo] = useState("");
   const [email, setEmail] = useState("");
   const [editId, setEditId] = useState("");
-  const [infoData, setInfoData] = useState([]);
 
   const handleEdit = (data: any) => {
     setEdit(true);
@@ -145,11 +144,6 @@ const UserList = () => {
     }
   };
 
-  const handleIcon = (data: any) => {
-    setInfoData(data)
-    setModal(true)
-  }
-
   console.log("edit", edit);
 
   return loading ? (
@@ -251,10 +245,11 @@ const UserList = () => {
 
                         <td>
                           <span
-                            className={`badge whitespace-nowrap ${data?.isBlocked === false
+                            className={`badge whitespace-nowrap ${
+                              data?.isBlocked === false
                                 ? "bg-danger"
                                 : "bg-primary"
-                              }`}
+                            }`}
                           >
                             {data?.isBlocked.toString() || "-"}
                           </span>
@@ -262,7 +257,7 @@ const UserList = () => {
                         <td className="text-center">
                           <div className="flex w-full justify-between">
                             <ModeEditIcon onClick={() => handleEdit(data)} />
-                            <InfoIcon onClick={() => handleIcon(data)} />
+                            <InfoIcon onClick={() => setModal(true)} />
                             <DeleteIcon onClick={() => deleteData(data?._id)} />
                             <LockIcon onClick={() => lockData(data)} />
                             {/* <ExitToAppIcon /> */}
@@ -278,7 +273,7 @@ const UserList = () => {
         </div>
       )}
 
-      {modal && <ModelPaymentDetails modal={modal} setModal={setModal} infoData={infoData}/>}
+      {modal && <ModelPaymentDetails modal={modal} setModal={setModal} />}
 
       {edit && (
         <div className="m-0 p-0">
@@ -312,10 +307,11 @@ const UserList = () => {
                 <Tab as={Fragment}>
                   {({ selected }: any) => (
                     <button
-                      className={`${selected
+                      className={`${
+                        selected
                           ? "bg-primary text-white !outline-none dark:bg-[#FE6C00]"
                           : ""
-                        }
+                      }
         -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
                     >
                       User
@@ -330,8 +326,6 @@ const UserList = () => {
                     setEdit={setEdit}
                     getUserList={getUserList}
                     editId={editId}
-                    model={false}
-                    
                   />
                 </Tab.Panel>
               </Tab.Panels>
