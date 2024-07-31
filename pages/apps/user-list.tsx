@@ -26,9 +26,8 @@ import User from "@/pages/apps/user-userList";
 import BankDetails from "@/pages/apps/BankDetails";
 import AddTransaction from "@/pages/apps/AddTransaction";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import auth from "../utils/auth";
 
-const UserList = () => {
+export default function UserList() {
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [tableData, setTableData] = useState([]);
@@ -207,6 +206,9 @@ const UserList = () => {
               <table>
                 <thead>
                   <tr>
+                    <th>
+                      <input type="checkbox" className="form-checkbox" />
+                    </th>
                     <th>Image</th>
                     <th>Name</th>
                     <th>Mobile No.</th>
@@ -219,6 +221,9 @@ const UserList = () => {
                   {tableData?.map((data) => {
                     return (
                       <tr key={data.id}>
+                        <td>
+                          <input type="checkbox" className="form-checkbox" />
+                        </td>
                         <td>
                           <div
                             style={{
@@ -337,6 +342,4 @@ const UserList = () => {
       )}
     </div>
   );
-};
-
-export default auth(UserList);
+}
