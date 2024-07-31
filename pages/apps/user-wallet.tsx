@@ -96,38 +96,6 @@ export default function UserWallet() {
     });
   };
 
-  const exportCSV = () => {
-    const headers = [
-      "Lead ID",
-      "Date",
-      "Amount",
-      "Paid For",
-      "Amount Status",
-      "Status",
-    ];
-
-    const rows = tableData?.map((data) => [
-      data?.lead_id,
-      data?.date,
-      data?.amount,
-      data?.lead_name,
-      data?.status,
-      data?.status, // Adjust as per your data structure
-    ]);
-
-    let csvContent =
-      "data:text/csv;charset=utf-8," +
-      [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "wallet_transactions.csv");
-    document.body.appendChild(link);
-
-    link.click();
-  };
-
   return loading ? (
     <div>
       <Loader />
@@ -210,11 +178,7 @@ export default function UserWallet() {
           </div>
 
           <div className="xs:px-5 lg:px-0 ">
-            <button
-              type="submit"
-              className="btn btn-primary my-6"
-              onClick={exportCSV}
-            >
+            <button type="submit" className="btn btn-primary my-6">
               Export Transaction
             </button>
           </div>
@@ -247,23 +211,24 @@ export default function UserWallet() {
                         <td>{data.lead_name}</td>
                         <td>
                           <span
-                            className={`badge whitespace-nowrap ${
-                              data.status === "completed"
+                            className={`badge whitespace-nowrap ${data.status === "completed"
                                 ? "bg-primary   "
                                 : data.status === "Pending"
-                                ? "bg-secondary"
-                                : data.status === "In Progress"
-                                ? "bg-success"
-                                : data.status === "Canceled"
-                                ? "bg-danger"
-                                : "bg-primary"
-                            }`}
+                                  ? "bg-secondary"
+                                  : data.status === "In Progress"
+                                    ? "bg-success"
+                                    : data.status === "Canceled"
+                                      ? "bg-danger"
+                                      : "bg-primary"
+                              }`}
                           >
                             {data.status}
                           </span>
                         </td>
                         <td>
-                          <span className={`badge whitespace-nowrap `}>
+                          <span
+                            className={`badge whitespace-nowrap `}
+                          >
                             {/* {data.status} */}
                             <select
                               id="Type"

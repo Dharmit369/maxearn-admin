@@ -14,7 +14,6 @@ export default function Resources() {
   const [replyId, setReplyId] = useState("");
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
-  const [dropdownValue, setDropdownValue] = useState("otherIssue");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -25,15 +24,15 @@ export default function Resources() {
   }, []);
 
   useEffect(() => {
-    getData(dropdownValue);
-  }, [dropdownValue]);
+    getData();
+  }, []);
 
-  const getData = async (dropdown: any) => {
+  const getData = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
-    console.log(`${BASE_URL}/ticket/${dropdown}`);
+    console.log(`${BASE_URL}/ticket/leadIssue`);
     try {
-      const res = await axios.get(`${BASE_URL}/ticket/${dropdown}`, {
+      const res = await axios.get(`${BASE_URL}/ticket/leadIssue`, {
         maxBodyLength: Infinity,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -54,7 +53,7 @@ export default function Resources() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const submitData = async () => {
     setLoading(true);
@@ -62,19 +61,15 @@ export default function Resources() {
     console.log(`${BASE_URL}/ticket/${replyId}?name=${name}`);
     const _data = {
       reply: reply,
-      status: status,
-    };
+      status: status
+    }
     try {
-      const res = await axios.put(
-        `${BASE_URL}/ticket/${replyId}?name=${name}`,
-        _data,
-        {
-          maxBodyLength: Infinity,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.put(`${BASE_URL}/ticket/${replyId}?name=${name}`, _data, {
+        maxBodyLength: Infinity,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(res.data, "data response");
       if (res) {
         setReplyOpen(false);
@@ -95,31 +90,28 @@ export default function Resources() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.delete(`${BASE_URL}/ticket/${id}?name=${issue}`, {
-        maxBodyLength: Infinity,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(res, "daaaaaaaaaaaaa");
-      console.log(res.data, "edit traning response");
-      if (res.data) {
-        showAlert(15, res.data.message, "success");
-        getData(dropdownValue);
-      } else {
-        showAlert(15, res.data.message, "error");
-      }
+        const res = await axios.delete(`${BASE_URL}/ticket/${id}?name=${issue}`, {
+            maxBodyLength: Infinity,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(res, "daaaaaaaaaaaaa");
+        console.log(res.data, "edit traning response");
+        if (res.data) {
+            showAlert(15, res.data.message, "success");
+            getData();
+        } else {
+            showAlert(15, res.data.message, "error");
+        }
     } catch (e) {
-      console.error(e, "edit traning create error");
-      showAlert(15, "An error occurred while submitting data", "error");
+        console.error(e, "edit traning create error");
+        showAlert(15, "An error occurred while submitting data", "error");
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+}
 
-  const handleDropdownChange = (e) => {
-    setDropdownValue(e.target.value);
-  };
 
   return loading ? (
     <div>
@@ -127,24 +119,9 @@ export default function Resources() {
     </div>
   ) : (
     <div>
-      <div className="mb-6 flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
-        <select
-          id="filterStatus"
-          className="form-select h-10 w-[120px] text-white-dark dark:border-none dark:bg-[#1E1611]"
-          name="status"
-          onChange={handleDropdownChange}
-          value={dropdownValue}
-        >
-          <option key={"withdrawalIssue"} value={"withdrawalIssue"}>
-            withdrawalIssue
-          </option>
-          <option value={"leadIssue"}>leadIssue</option>
-          <option value={"otherIssue"}>otherIssue</option>
-        </select>
-      </div>
       <div>
-        {replyData === false && (
-          <div className="table-responsive mb-5 xs:px-5 lg:px-0">
+        {replyData === false &&
+          <div className="table-responsive mb-5">
             <table>
               <thead>
                 <tr>
@@ -152,7 +129,6 @@ export default function Resources() {
                   <th>UserName</th>
                   <th>Mobile No.</th>
                   <th>Title</th>
-                  <th>Ticket Name</th>
                   <th>Status</th>
                   <th className="text-center">Action</th>
                 </tr>
@@ -162,50 +138,35 @@ export default function Resources() {
                   return (
                     <tr key={data?.id}>
                       <td>
-                        <div className="whitespace-nowrap">
-                          {data?.ticket_id}
-                        </div>
+                        <div className="whitespace-nowrap">{data?.ticket_id}</div>
                       </td>
-                      <td>{data?.lead_name || "-"}</td>
-                      <td>{data?.lead_mobileNo || "-"}</td>
-                      <td>{data?.ticketName || "-"}</td>
-                      <td>{data?.issue || "-"}</td>
-
+                      <td>{data?.lead_name}</td>
+                      <td>{data?.lead_mobileNo}</td>
+                      <td>{data?.issue}</td>
                       <td>
                         <span
-                          className={`badge whitespace-nowrap ${
-                            data?.status === "Active"
-                              ? "bg-success"
-                              : data?.status === "DeActive"
-                              ? "bg-danger"
-                              : "bg-primary"
-                          }`}
+                          className={`badge whitespace-nowrap ${data?.status === 'Active'
+                            ? 'bg-success'
+                            : data?.status === 'DeActive'
+                              ? 'bg-danger'
+                              : 'bg-primary'
+                            }`}
                         >
                           {data?.status?.toUpperCase()}
                         </span>
                       </td>
                       <td className="text-center">
                         <div className="dropdown">
-                          <span
-                            className="badge cursor-pointer bg-secondary"
-                            onClick={() => {
-                              setReplyOpen(true);
-                              setName(data?.ticketName);
-                              setReplyId(data?._id);
-                              setReply(data?.reply);
-                              setStatus(data?.status);
-                            }}
-                          >
-                            REPLAY
-                          </span>
-                          <span
-                            className="badge ml-5 cursor-pointer bg-info"
-                            onClick={() => {
-                              deleteData(data?._id, data?.ticketName);
-                            }}
-                          >
-                            DELETE
-                          </span>
+                          <span className="badge bg-secondary cursor-pointer" onClick={() => {
+                            setReplyOpen(true);
+                            setName(data?.ticketName);
+                            setReplyId(data?._id);
+                            setReply(data?.reply);
+                            setStatus(data?.status);
+                          }}>REPLAY</span>
+                          <span className="badge bg-info ml-5 cursor-pointer" onClick={() => {
+                            deleteData(data?._id, data?.ticketName)
+                          }}>DELETE</span>
                         </div>
                       </td>
                     </tr>
@@ -213,11 +174,11 @@ export default function Resources() {
                 })}
               </tbody>
             </table>
-          </div>
-        )}
+          </div>}
       </div>
 
-      {replyData && (
+      {replyData &&
+
         <div className="m-0 p-0">
           <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:w-[78.5vw]">
             <div className="p-8">
@@ -246,34 +207,20 @@ export default function Resources() {
                 </button>
               </div>
               <form className="space-y-5">
+
                 <div className="my-6">
-                  <h3 className="mb-5 text-xl font-semibold dark:text-white">
+                  <h3 className="text-xl font-semibold dark:text-white mb-5">
                     Problem
                   </h3>
-                  <span className=" mt-11 font-normal text-black">{issue}</span>
+                  <span className=" text-black font-normal mt-11">{issue}</span>
                 </div>
                 <div>
-                  <label
-                    htmlFor="yourAnswer"
-                    className="mb-2 block text-black dark:text-white"
-                  >
-                    Your Answer
-                  </label>
-                  <textarea
-                    id="yourAnswer"
-                    placeholder="Your Answer"
-                    className="form-input w-full dark:border-none dark:bg-[#261C16]"
-                    onChange={(e) => setReply(e.target.value)}
-                    value={reply}
-                  />
+                  <label htmlFor="yourAnswer" className="block text-black mb-2 dark:text-white">Your Answer</label>
+                  <textarea id="yourAnswer" placeholder="Your Answer" className="form-input w-full dark:bg-[#261C16] dark:border-none" onChange={(e) => setReply(e.target.value)} value={reply} />
                 </div>
 
                 <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="btn btn-primary mt-6 w-fit"
-                    onClick={() => submitData()}
-                  >
+                  <button type="submit" className="btn btn-primary w-fit mt-6" onClick={() => submitData()}>
                     Submit
                   </button>
                 </div>
@@ -281,7 +228,7 @@ export default function Resources() {
             </div>
           </div>
         </div>
-      )}
+      }
     </div>
   );
 }
