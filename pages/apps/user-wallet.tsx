@@ -17,8 +17,9 @@ import { showAlert } from "@/components/showAlert";
 import moment from "moment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ModelDetails from "@/components/ModelDetails";
+import auth from "../utils/auth";
 
-export default function UserWallet() {
+const UserWallet = () => {
   const data = {
     affiliate_id: "",
     start_date: "",
@@ -26,12 +27,11 @@ export default function UserWallet() {
     status: "",
   };
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [changeData, setchangeData] = useState(data);
   const [modelDetails, setModelDetails] = useState(false);
   const [modelData, setModelData] = useState([]);
-
 
   useEffect(() => {
     getWallet();
@@ -39,11 +39,11 @@ export default function UserWallet() {
 
   const handleVisibility = (data: any) => {
     setModelDetails(true);
-    setModelData(data)
-  }
+    setModelData(data);
+  };
 
   const getWallet = async () => {
-    setLoading(true);
+    // setLoading(true);
     const token = localStorage.getItem("token");
     console.log(`${BASE_URL}/withdraw`);
     try {
@@ -59,14 +59,14 @@ export default function UserWallet() {
       console.log(res.data, "data response");
       if (res) {
         setTableData(res?.data?.data);
-        setLoading(false);
+        // setLoading(false);
       } else {
         showAlert(15, res?.data?.message, "error");
       }
     } catch (e) {
       console.error(e, "login error");
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -176,7 +176,7 @@ export default function UserWallet() {
             <input
               id="userId"
               type="text"
-              placeholder="User Id"
+              placeholder="affiliate id"
               className="form-input mt-4 h-10 dark:border-none dark:bg-[#1E1611]"
               name="affiliate_id"
               onChange={(e) => handleChange(e)}
@@ -292,7 +292,9 @@ export default function UserWallet() {
                         <td className="text-center">
                           <div className="dropdown">
                             {/* <DeleteIcon /> */}
-                            <VisibilityIcon onClick={() => handleVisibility(data)}/>
+                            <VisibilityIcon
+                              onClick={() => handleVisibility(data)}
+                            />
                           </div>
                         </td>
                       </tr>
@@ -304,8 +306,12 @@ export default function UserWallet() {
           </div>
         </div>
       </div>
-      
-      {modelDetails && <ModelDetails setModelDetails={setModelDetails} modelData={modelData}/>}
+
+      {modelDetails && (
+        <ModelDetails setModelDetails={setModelDetails} modelData={modelData} />
+      )}
     </div>
   );
-}
+};
+
+export default auth(UserWallet);

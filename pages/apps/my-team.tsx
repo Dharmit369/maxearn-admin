@@ -10,8 +10,9 @@ import Loader from "@/components/Layouts/Loader";
 import { ReactSortable } from "react-sortablejs";
 import Select from "react-select";
 import { Tab } from "@headlessui/react";
+import auth from "../utils/auth";
 
-export default function Payout() {
+const Payout = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -30,4 +31,6 @@ export default function Payout() {
       <h1 className="text-xl font-bold ">My Team</h1>
     </div>
   );
-}
+};
+
+export default auth(Payout);

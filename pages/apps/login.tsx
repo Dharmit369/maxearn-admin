@@ -60,6 +60,9 @@ const signin = () => {
       );
       console.log(res.data, "login response");
       localStorage?.setItem("token", res?.data?.data?.token);
+      localStorage?.setItem("username", res?.data?.data?.username);
+      localStorage?.setItem("email", res?.data?.data?.email);
+
       router.push("/dashboard/dashboard");
       const toast = Swal.mixin({
         toast: true,
@@ -184,14 +187,34 @@ const signin = () => {
 
       <div>
         <div className="absolute inset-0">
-          <img src="/assets/images/bg-gradient.png" alt="image" className="h-full w-full object-cover" />
+          <img
+            src="/assets/images/bg-gradient.png"
+            alt="image"
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div className="relative flex min-h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
-          <img src="/assets/images/coming-soon-object1.png" alt="image" className="absolute left-0 top-1/2 h-full max-h-[893px] -translate-y-1/2" />
-          <img src="/assets/images/coming-soon-object2.png" alt="image" className="absolute left-24 top-0 h-40 md:left-[30%]" />
-          <img src="/assets/images/coming-soon-object3.png" alt="image" className="absolute right-0 top-0 h-[300px]" />
-          <img src="/assets/images/polygon-object.svg" alt="image" className="absolute bottom-0 end-[28%]" />
+          <img
+            src="/assets/images/coming-soon-object1.png"
+            alt="image"
+            className="absolute left-0 top-1/2 h-full max-h-[893px] -translate-y-1/2"
+          />
+          <img
+            src="/assets/images/coming-soon-object2.png"
+            alt="image"
+            className="absolute left-24 top-0 h-40 md:left-[30%]"
+          />
+          <img
+            src="/assets/images/coming-soon-object3.png"
+            alt="image"
+            className="absolute right-0 top-0 h-[300px]"
+          />
+          <img
+            src="/assets/images/polygon-object.svg"
+            alt="image"
+            className="absolute bottom-0 end-[28%]"
+          />
           <div className="relative w-full max-w-[870px] rounded-md bg-[linear-gradient(45deg,#fff9f9_0%,rgba(255,255,255,0)_25%,rgba(255,255,255,0)_75%,_#fff9f9_100%)] p-2 dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]">
             <div className="relative flex flex-col justify-center rounded-md bg-white/60 px-6 py-20 backdrop-blur-lg dark:bg-black/50 lg:min-h-[758px]">
               {/* <div className="absolute end-6 top-6">
@@ -244,10 +267,14 @@ const signin = () => {
               </div> */}
               <div className="mx-auto w-full max-w-[440px]">
                 <div className="mb-10">
-                  <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign in</h1>
-                  <p className="text-base font-bold leading-normal text-white-dark">Enter your email and password to login</p>
+                  <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">
+                    Sign in
+                  </h1>
+                  <p className="text-base font-bold leading-normal text-white-dark">
+                    Enter your email and password to login
+                  </p>
                 </div>
-                <form className="space-y-5 dark:text-white" >
+                <form className="space-y-5 dark:text-white">
                   <div>
                     <label htmlFor="Email">Email</label>
                     <div className="relative text-white-dark">
@@ -260,7 +287,12 @@ const signin = () => {
                         className="form-input ps-10 placeholder:text-white-dark"
                       />
                       <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 18 18"
+                          fill="none"
+                        >
                           <path
                             opacity="0.5"
                             d="M10.65 2.25H7.35C4.23873 2.25 2.6831 2.25 1.71655 3.23851C0.75 4.22703 0.75 5.81802 0.75 9C0.75 12.182 0.75 13.773 1.71655 14.7615C2.6831 15.75 4.23873 15.75 7.35 15.75H10.65C13.7613 15.75 15.3169 15.75 16.2835 14.7615C17.25 13.773 17.25 12.182 17.25 9C17.25 5.81802 17.25 4.22703 16.2835 3.23851C15.3169 2.25 13.7613 2.25 10.65 2.25Z"
@@ -286,7 +318,12 @@ const signin = () => {
                         className="form-input ps-10 placeholder:text-white-dark ltr:rounded-r-none rtl:rounded-l-none"
                       />
                       <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 18 18"
+                          fill="none"
+                        >
                           <path
                             opacity="0.5"
                             d="M1.5 12C1.5 9.87868 1.5 8.81802 2.15901 8.15901C2.81802 7.5 3.87868 7.5 6 7.5H12C14.1213 7.5 15.182 7.5 15.841 8.15901C16.5 8.81802 16.5 9.87868 16.5 12C16.5 14.1213 16.5 15.182 15.841 15.841C15.182 16.5 14.1213 16.5 12 16.5H6C3.87868 16.5 2.81802 16.5 2.15901 15.841C1.5 15.182 1.5 14.1213 1.5 12Z"
@@ -318,9 +355,12 @@ const signin = () => {
                       <span className="text-white-dark">Subscribe to weekly newsletter</span>
                     </label>
                   </div> */}
-                  <button type="submit"
+                  <button
+                    type="submit"
                     onClick={() => login()}
-                    disabled={email == "" || password == ""} className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                    disabled={email == "" || password == ""}
+                    className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
+                  >
                     Sign in
                   </button>
                 </form>
@@ -434,7 +474,6 @@ signin.getLayout = (page: any) => {
   return <BlankLayout>{page}</BlankLayout>;
 };
 export default signin;
-
 
 // {/* <div className="relative flex min-h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#010314] sm:px-16">
 //         <div className="relative w-full max-w-[870px] rounded-md bg-[linear-gradient(45deg,#fff9f9_0%,rgba(255,255,255,0)_25%,rgba(255,255,255,0)_75%,_#fff9f9_100%)] dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]">

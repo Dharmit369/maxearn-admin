@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { Tab } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Tab } from "@headlessui/react";
+import { Fragment } from "react";
 import Loader from "@/components/Layouts/Loader";
 import React from "react";
 import SiteSettingForm from "./siteSetting-form";
 import EmailSettingForm from "./emailSettingForm";
 import TermAndCondition from "./termAndCondition";
 import UserDashboard from "./userDashboard";
+import auth from "../utils/auth";
 
-export default function Reports() {
+const Reports = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -109,4 +110,6 @@ export default function Reports() {
       </div>
     </div>
   );
-}
+};
+
+export default auth(Reports);

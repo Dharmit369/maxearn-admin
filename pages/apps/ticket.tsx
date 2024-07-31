@@ -4,8 +4,9 @@ import React from "react";
 import { BASE_URL } from "@/constants";
 import axios from "axios";
 import { showAlert } from "@/components/showAlert";
+import auth from "../utils/auth";
 
-export default function Resources() {
+const Resources = () => {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [replyData, setReplyOpen] = useState(false);
@@ -284,4 +285,6 @@ export default function Resources() {
       )}
     </div>
   );
-}
+};
+
+export default auth(Resources);

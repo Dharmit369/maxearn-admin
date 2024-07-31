@@ -92,17 +92,17 @@ const UserStatistics = () => {
     <h2 className="text-lg  xs:px-5 lg:px-0">All withdraw request List</h2>
   </div> */}
       <div className="my-6 flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
-        <select
+        {/* <select
           id="categories"
           className="form-select mt-4 h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
-        >
-          <option value={""}>All</option>
-          {/* {categoryOptionData?.map((itm) => (
+        > */}
+        {/* <option value={""}>All</option> */}
+        {/* {categoryOptionData?.map((itm) => (
                     <option value={itm?.id} >{itm?.name}</option>
                 ))} */}
-        </select>
+        {/* </select> */}
 
-        <input
+        {/* <input
           id="campaign"
           type="date"
           placeholder="Enter Campaign name"
@@ -111,7 +111,7 @@ const UserStatistics = () => {
 
         <button type="submit" className="btn btn-primary my-6 h-9 w-fit">
           Search
-        </button>
+        </button> */}
 
         <button
           type="submit"

@@ -21,8 +21,9 @@ import LocationCampaign from "./LocationCampaign";
 import VideoCampaign from "./VideoCampaign";
 import { Tooltip } from "@mui/material";
 import moment from "moment";
+import auth from "../utils/auth";
 
-export default function Campaigns() {
+const Campaigns = () => {
   const data = {
     name: "",
     title: "",
@@ -79,12 +80,12 @@ export default function Campaigns() {
   }, []);
 
   const handleClose = () => {
-    setIsEdit(false)
+    setIsEdit(false);
     setCreateCampaigns(false);
     setCampaignData(data);
     setContent("");
     setShareContent("");
-  }
+  };
 
   useEffect(() => {
     getData();
@@ -331,13 +332,17 @@ export default function Campaigns() {
       formData.append("offer_description", shareContent);
 
       console.log("formData: ", formData);
-      const res = await axios.put(`${BASE_URL}/marketing/campaign/${editId}`, formData, {
-        maxBodyLength: Infinity,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.put(
+        `${BASE_URL}/marketing/campaign/${editId}`,
+        formData,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res.data, "create response");
       if (res.data) {
         setCreateCampaigns(false);
@@ -481,13 +486,13 @@ export default function Campaigns() {
   };
 
   const handleDetails = (data: any) => {
-    setIsEdit(true)
+    setIsEdit(true);
     setCreateCampaigns(true);
     // setCampaignData(data);
-    setContent(data?.content)
-    setShareContent(data?.offer_description)
-    setEditId(data?._id)
-  }
+    setContent(data?.content);
+    setShareContent(data?.offer_description);
+    setEditId(data?._id);
+  };
 
   console.log("id", campaignData);
   console.log("createCampaigns", createCampaigns);
@@ -576,16 +581,17 @@ export default function Campaigns() {
                           </td>
                           <td>
                             <span
-                              className={`badge whitespace-nowrap ${data?.status === "in_review"
+                              className={`badge whitespace-nowrap ${
+                                data?.status === "in_review"
                                   ? "bg-primary   "
                                   : data?.status === "Pending"
-                                    ? "bg-secondary"
-                                    : data?.status === "In Progress"
-                                      ? "bg-success"
-                                      : data?.status === "Canceled"
-                                        ? "bg-danger"
-                                        : "bg-primary"
-                                }`}
+                                  ? "bg-secondary"
+                                  : data?.status === "In Progress"
+                                  ? "bg-success"
+                                  : data?.status === "Canceled"
+                                  ? "bg-danger"
+                                  : "bg-primary"
+                              }`}
                             >
                               {data?.status?.toUpperCase()}
                             </span>
@@ -692,4 +698,6 @@ export default function Campaigns() {
       {videoOpen && <VideoCampaign setVideoOpen={setVideoOpen} rowId={rowId} />}
     </div>
   );
-}
+};
+
+export default auth(Campaigns);
