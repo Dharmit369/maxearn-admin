@@ -32,9 +32,9 @@ const UserWallet = () => {
   const [modelData, setModelData] = useState([]);
   const router = useRouter();
 
-  useEffect(() => {
-    statusOption();
-  }, []);
+  // useEffect(() => {
+  //   statusOption();
+  // }, []);
 
   useEffect(() => {
     getWithdrawalRequest();
@@ -92,30 +92,30 @@ const UserWallet = () => {
     }
   };
 
-  const statusOption = async () => {
-    setLoading(true);
-    const token = localStorage.getItem("token");
-    console.log(`${BASE_URL}/lead`);
-    try {
-      const res = await axios.get(`${BASE_URL}/withdraw/status/dropdown`, {
-        maxBodyLength: Infinity,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(res.data, "data response");
-      if (res) {
-        setUserDropdownData(res?.data?.data);
-        setLoading(false);
-      } else {
-        showAlert(15, res?.data?.message, "error");
-      }
-    } catch (e) {
-      console.error(e, "login error");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const statusOption = async () => {
+  //   setLoading(true);
+  //   const token = localStorage.getItem("token");
+  //   console.log(`${BASE_URL}/lead`);
+  //   try {
+  //     const res = await axios.get(`${BASE_URL}/withdraw/status/dropdown`, {
+  //       maxBodyLength: Infinity,
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     console.log(res.data, "data response");
+  //     if (res) {
+  //       setUserDropdownData(res?.data?.data);
+  //       setLoading(false);
+  //     } else {
+  //       showAlert(15, res?.data?.message, "error");
+  //     }
+  //   } catch (e) {
+  //     console.error(e, "login error");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleChange = (e) => {
     setchangeData({
@@ -328,11 +328,17 @@ const UserWallet = () => {
                               <option key={"all"} value={"all"}>
                                 Please Select
                               </option>
-                              {userDropdownData?.map((option) => (
+                              <option key={"Hold"} value={"Hold"}>
+                                Hold
+                              </option>
+                              <option key={"InWallet"} value={"InWallet"}>
+                              InWallet
+                              </option>
+                              {/* {userDropdownData?.map((option) => (
                                 <option key={option} value={option}>
                                   {option}
                                 </option>
-                              ))}
+                              ))} */}
                             </select>
                           </span>
                         </td>
