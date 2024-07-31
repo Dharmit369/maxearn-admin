@@ -12,8 +12,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import StatusModel from "@/components/statusModel";
 import ModelDetails from "@/components/ModelDetails";
 import ModelDetailsNew from "@/components/ModelDetailsNew";
+import auth from "../utils/auth";
 
-export default function UserWallet() {
+const UserWallet = () => {
   const data = {
     affiliate_id: "",
     start_date: "",
@@ -135,9 +136,8 @@ export default function UserWallet() {
     console.log(`${BASE_URL}/kyc/updateKycStatus/${selectedId}`);
     const _data = {
       status: status,
-      note: "withdrow for user"
-
-    }
+      note: "withdrow for user",
+    };
     try {
       const res = await axios.put(`${BASE_URL}/withdraw/${selectedId}`, _data, {
         maxBodyLength: Infinity,
@@ -153,19 +153,25 @@ export default function UserWallet() {
         setLoading(false);
       } else {
         showAlert(15, res?.data?.message, "error");
+        setStatusModelOpen(false);
       }
-    } catch (e) {
-      console.error(e, "login error");
+    } catch (error) {
+      console.error(error?.response?.data?.message, "login error");
+      showAlert(15, error?.response?.data?.message, "error");
+
+      // showAlert(15, error, "error");
+
+      setStatusModelOpen(false);
     } finally {
       setLoading(false);
+      setStatusModelOpen(false);
     }
   };
 
   const handleVisibility = (data: any) => {
     setModelDetails(true);
-    setModelData(data)
-  }
-
+    setModelData(data);
+  };
 
   return loading ? (
     <div>
@@ -292,30 +298,31 @@ export default function UserWallet() {
                         <td>{data?.username}</td>
                         <td>
                           <span
-                            className={`badge whitespace-nowrap ${data?.status === "in_review"
-                              ? "bg-primary   "
-                              : data?.status === "Pending"
+                            className={`badge whitespace-nowrap ${
+                              data?.status === "in_review"
+                                ? "bg-primary   "
+                                : data?.status === "Pending"
                                 ? "bg-secondary"
                                 : data?.status === "In Progress"
-                                  ? "bg-success"
-                                  : data?.status === "Canceled"
-                                    ? "bg-danger"
-                                    : "bg-primary"
-                              }`}
+                                ? "bg-success"
+                                : data?.status === "Canceled"
+                                ? "bg-danger"
+                                : "bg-primary"
+                            }`}
                           >
                             {data?.status?.toUpperCase()}
                           </span>
                         </td>
 
                         <td>
-                          <span
-                            className={`badge whitespace-nowrap `}
-                          >
+                          <span className={`badge whitespace-nowrap `}>
                             {/* {data.status} */}
                             <select
                               id="Type"
                               className="form-select w-32 text-white-dark dark:border-none dark:bg-[#1E1611]"
-                              onChange={(e) => handleStatus(data?._id, e.target.value)}
+                              onChange={(e) =>
+                                handleStatus(data?._id, e.target.value)
+                              }
                               value={status}
                             >
                               <option key={"all"} value={"all"}>
@@ -354,7 +361,10 @@ export default function UserWallet() {
                             >
                               REVERT
                             </span>
-                            <VisibilityIcon className="ml-5" onClick={() => handleVisibility(data)} />
+                            <VisibilityIcon
+                              className="ml-5"
+                              onClick={() => handleVisibility(data)}
+                            />
                           </div>
                         </td>
                       </tr>
@@ -373,7 +383,14 @@ export default function UserWallet() {
         />
       )}
 
-      {modelDetails && <ModelDetailsNew setModelDetails={setModelDetails} modelData={modelData} />}
+      {modelDetails && (
+        <ModelDetailsNew
+          setModelDetails={setModelDetails}
+          modelData={modelData}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default auth(UserWallet);
