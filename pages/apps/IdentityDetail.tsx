@@ -12,7 +12,7 @@ import Select from "react-select";
 import { Tab } from "@headlessui/react";
 import auth from "../utils/auth";
 
-const IdentityDetail = () => {
+const IdentityDetail = ({model, infoData} :any) => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -45,27 +45,26 @@ const IdentityDetail = () => {
             </select>
           </div>
 
-          <div>
-            <label
-              htmlFor="sessionTimeout"
-              className="mb-2 block text-black dark:text-white"
-            >
-              Message
-            </label>
-            <textarea
-              id="sessionTimeout"
-              placeholder="Enter Message"
-              className="form-input w-full dark:border-none dark:bg-[#261C16]"
-            />
-          </div>
+                <div>
+                    <label htmlFor="gridState" className="dark:text-white">Status</label>
+                    <select id="gridState" className="form-select text-white-dark dark:bg-[#261C16] dark:border-none" disabled={model} value={infoData?.isBlocked}>
+                        <option value={false}>false</option>
+                        <option value={true}>true</option>
+                    </select>
+                </div>
 
-          <div className="flex justify-end">
-            <button type="submit" className="btn btn-primary mt-6 w-fit">
-              Submit Setting
-            </button>
-          </div>
-        </form>
-      </div>
+                {/* <div>
+                    <label htmlFor="sessionTimeout" className="block text-black mb-2 dark:text-white">Message</label>
+                    <textarea id="sessionTimeout" placeholder="Enter Message" className="form-input w-full dark:bg-[#261C16] dark:border-none" disabled={model}/>
+                </div> */}
+
+                {model === false && <div className="flex justify-end">
+                    <button type="submit" className="btn btn-primary w-fit mt-6">
+                        Submit Setting
+                    </button>
+                </div>}
+            </form>
+        </div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 import BankDetails from '@/pages/apps/BankDetails';
 import AddTransaction from '@/pages/apps/AddTransaction';
 
-const ModelPaymentDetails = ({ setModal }: any) => {
+const ModelPaymentDetails = ({ setModal, infoData }: any) => {
     return (
         <div>
             <div className="fixed inset-0 bg-black opacity-50 z-50 overflow-auto"></div>
@@ -62,7 +62,7 @@ const ModelPaymentDetails = ({ setModal }: any) => {
                                             </button>
                                         )}
                                     </Tab>
-                                    <Tab as={Fragment}>
+                                    {/* <Tab as={Fragment}>
                                         {({ selected }: any) => (
                                             <button
                                                 className={`${selected
@@ -74,25 +74,25 @@ const ModelPaymentDetails = ({ setModal }: any) => {
                                                 Add Transaction
                                             </button>
                                         )}
-                                    </Tab>
+                                    </Tab> */}
                                 </Tab.List>
 
                                 <Tab.Panels>
                                     <Tab.Panel>
-                                        <User />
+                                        <User model={true} infoData={infoData}/>
                                     </Tab.Panel>
 
                                     <Tab.Panel>
-                                        <IdentityDetail />
+                                        <IdentityDetail model={true} infoData={infoData}/>
                                     </Tab.Panel>
 
                                     <Tab.Panel>
-                                        <BankDetails />
+                                        <BankDetails model={true} infoData={infoData}/>
                                     </Tab.Panel>
 
-                                    <Tab.Panel>
-                                        <AddTransaction />
-                                    </Tab.Panel>
+                                    {/* <Tab.Panel>
+                                        <AddTransaction model={true} infoData={infoData}/>
+                                    </Tab.Panel> */}
                                 </Tab.Panels>
                             </Tab.Group>
                         </div>
