@@ -10,8 +10,9 @@ import Loader from "@/components/Layouts/Loader";
 import { ReactSortable } from "react-sortablejs";
 import Select from "react-select";
 import { Tab } from "@headlessui/react";
+import auth from "../utils/auth";
 
-export default function IdentityDetail() {
+const IdentityDetail = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,32 +28,46 @@ export default function IdentityDetail() {
     </div>
   ) : (
     <div>
-       <div className="p-10 rounded-lg">
-            <form className="space-y-6">
-                
+      <div className="rounded-lg p-10">
+        <form className="space-y-6">
+          <div>
+            <label htmlFor="gridState" className="dark:text-white">
+              Status
+            </label>
+            <select
+              id="gridState"
+              className="form-select text-white-dark dark:border-none dark:bg-[#261C16]"
+            >
+              <option>Selected</option>
+              <option>Submitted</option>
+              <option>approve</option>
+              <option>reject</option>
+            </select>
+          </div>
 
-                <div>
-                    <label htmlFor="gridState" className="dark:text-white">Status</label>
-                    <select id="gridState" className="form-select text-white-dark dark:bg-[#261C16] dark:border-none">
-                        <option>Selected</option>
-                        <option>Submitted</option>
-                        <option>approve</option>
-                        <option>reject</option>
-                    </select>
-                </div>
+          <div>
+            <label
+              htmlFor="sessionTimeout"
+              className="mb-2 block text-black dark:text-white"
+            >
+              Message
+            </label>
+            <textarea
+              id="sessionTimeout"
+              placeholder="Enter Message"
+              className="form-input w-full dark:border-none dark:bg-[#261C16]"
+            />
+          </div>
 
-                <div>
-                    <label htmlFor="sessionTimeout" className="block text-black mb-2 dark:text-white">Message</label>
-                    <textarea id="sessionTimeout" placeholder="Enter Message" className="form-input w-full dark:bg-[#261C16] dark:border-none" />
-                </div>
-
-                <div className="flex justify-end">
-                    <button type="submit" className="btn btn-primary w-fit mt-6">
-                        Submit Setting
-                    </button>
-                </div>
-            </form>
-        </div>
+          <div className="flex justify-end">
+            <button type="submit" className="btn btn-primary mt-6 w-fit">
+              Submit Setting
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
-}
+};
+
+export default auth(IdentityDetail);

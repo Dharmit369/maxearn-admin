@@ -17,6 +17,8 @@ import { useTranslation } from "react-i18next";
 
 const Header = () => {
   const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     const selector = document.querySelector(
@@ -49,6 +51,13 @@ const Header = () => {
       }
     }
   }, [router.pathname]);
+
+  useEffect(() => {
+    const username = localStorage.getItem("username");
+    const email = localStorage.getItem("email");
+    setEmail(email);
+    setUsername(username);
+  }, []);
 
   const isRtl =
     useSelector((state: IRootState) => state.themeConfig.rtlClass) === "rtl"
@@ -333,7 +342,7 @@ const Header = () => {
               )}
             </div>
 
-            <div className="dropdown flex shrink-0">
+            <div className="dropdown z-[1000px] flex shrink-0">
               <Dropdown
                 offset={[0, 8]}
                 placement={`${isRtl ? "bottom-start" : "bottom-end"}`}
@@ -346,7 +355,7 @@ const Header = () => {
                   />
                 }
               >
-                <ul className="w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
+                <ul className="z-50 w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
                   <li>
                     <div className="flex items-center px-4 py-4">
                       <img
@@ -356,7 +365,7 @@ const Header = () => {
                       />
                       <div className="truncate ltr:pl-4 rtl:pr-4">
                         <h4 className="text-base">
-                          John Doe
+                          {username}
                           {/* <span className="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">
                             Pro
                           </span> */}
@@ -365,41 +374,12 @@ const Header = () => {
                           type="button"
                           className="text-black/60 hover:text-[#8D3F42] dark:text-dark-light/60 dark:hover:text-white"
                         >
-                          johndoe@gmail.com
+                          {email}
                         </button>
                       </div>
                     </div>
                   </li>
-                  <li>
-                    <Link
-                      href="/users/profile"
-                      className="dark:hover:text-white"
-                    >
-                      <svg
-                        className="shrink-0 ltr:mr-2 rtl:ml-2"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle
-                          cx="12"
-                          cy="6"
-                          r="4"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                        />
-                        <path
-                          opacity="0.5"
-                          d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                        />
-                      </svg>
-                      Profile
-                    </Link>
-                  </li>
+
                   {/* <li>
                     <Link
                       href="/apps/mailbox"

@@ -7,10 +7,11 @@ import { showAlert } from "@/components/showAlert";
 import { BASE_URL } from "@/constants";
 import axios from "axios";
 import Swal from "sweetalert2";
+import auth from "../utils/auth";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-export default function TermAndCondition() {
+const TermAndCondition = () => {
   const [loading, setLoading] = useState(true);
   const [termsAndCondition, setTermsAndCondition] = useState(true);
   const [value, setValue] = useState(``);
@@ -18,7 +19,7 @@ export default function TermAndCondition() {
 
   useEffect(() => {
     getTermsAndCondition();
-  },[]);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -75,10 +76,8 @@ export default function TermAndCondition() {
       });
       console.log(res.data, "data response");
 
-      setValue(res?.data?.data[0]?.
-        description);
-        setPageTitle(res?.data?.data[0]?.
-        pageTitle);
+      setValue(res?.data?.data[0]?.description);
+      setPageTitle(res?.data?.data[0]?.pageTitle);
       setLoading(false);
     } catch (e) {
       console.error(e, "Total Lead Data");
@@ -115,7 +114,11 @@ export default function TermAndCondition() {
           <ReactQuill theme="snow" value={value} onChange={setValue} />
 
           <div className="flex justify-end">
-            <button type="submit" className="btn btn-primary w-fit mt-6" onClick={() => submitData()}>
+            <button
+              type="submit"
+              className="btn btn-primary mt-6 w-fit"
+              onClick={() => submitData()}
+            >
               Submit Setting
             </button>
           </div>
@@ -123,4 +126,6 @@ export default function TermAndCondition() {
       </form>
     </div>
   );
-}
+};
+
+export default auth(TermAndCondition);
