@@ -70,8 +70,9 @@ const Sidebar = () => {
   return (
     <div className={semidark ? "dark" : ""}>
       <nav
-        className={`sidebar shadow-[5px_0_25px_0_rgba(94,92,154,0.1)]- fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] transition-all duration-300 ${semidark ? "text-white-dark" : ""
-          }`}
+        className={`sidebar shadow-[5px_0_25px_0_rgba(94,92,154,0.1)]- fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] transition-all duration-300 ${
+          semidark ? "text-white-dark" : ""
+        }`}
       >
         <div className="h-full bg-[#FF4400] dark:bg-[#29221d] ">
           <div className="flex items-center justify-between px-4 py-3">
@@ -217,7 +218,11 @@ const Sidebar = () => {
                             d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                           />
                         </svg> */}
-                        <img src={Images?.TICKET} alt="" className="h-[20px] w-[20px] filter invert-[1] sepia-[1] saturate-[5] hue-rotate-[190deg] brightness-[1.2] contrast-[1.1]" />
+                        <img
+                          src={Images?.TICKET}
+                          alt=""
+                          className="h-[20px] w-[20px] brightness-[1.2] contrast-[1.1] hue-rotate-[190deg] invert-[1] saturate-[5] sepia-[1] filter"
+                        />
                         <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
                           {t("TICKET")}
                         </span>
@@ -320,7 +325,11 @@ const Sidebar = () => {
                             d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
                           />
                         </svg> */}
-                        <img src={Images?.WALLET} alt="" className="h-[20px] w-[20px] filter invert-[1] sepia-[1] saturate-[5] hue-rotate-[190deg] brightness-[1.2] contrast-[1.1]" />
+                        <img
+                          src={Images?.WALLET}
+                          alt=""
+                          className="h-[20px] w-[20px] brightness-[1.2] contrast-[1.1] hue-rotate-[190deg] invert-[1] saturate-[5] sepia-[1] filter"
+                        />
                         <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
                           {t("Wallet")}
                         </span>
@@ -366,10 +375,19 @@ const Sidebar = () => {
 
                         <li className="nav-item ">
                           <Link href="/apps/Tds" className="group">
-                            <div className="flex items-center w-full">
-
+                            <div className="flex w-full items-center">
                               <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-0 rtl:pr-0">
-                                {t("TDS")}
+                                {t("Tds")}
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
+
+                        <li className="nav-item ">
+                          <Link href="/apps/commission" className="group">
+                            <div className="flex w-full items-center">
+                              <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-0 rtl:pr-0">
+                                {t("Commission")}
                               </span>
                             </div>
                           </Link>
@@ -401,7 +419,11 @@ const Sidebar = () => {
                             d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
                           />
                         </svg> */}
-                        <img src={Images?.USERS} alt="" className="h-[20px] w-[20px] filter invert-[1] sepia-[1] saturate-[5] hue-rotate-[190deg] brightness-[1.2] contrast-[1.1]" />
+                        <img
+                          src={Images?.USERS}
+                          alt=""
+                          className="h-[20px] w-[20px] brightness-[1.2] contrast-[1.1] hue-rotate-[190deg] invert-[1] saturate-[5] sepia-[1] filter"
+                        />
                         <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
                           {t("User")}
                         </span>
@@ -480,7 +502,11 @@ const Sidebar = () => {
                             d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
                           />
                         </svg> */}
-                        <img src={Images?.MARKETING} alt="" className="h-[20px] w-[20px] filter invert-[1] sepia-[1] saturate-[5] hue-rotate-[190deg] brightness-[1.2] contrast-[1.1]" />
+                        <img
+                          src={Images?.MARKETING}
+                          alt=""
+                          className="h-[20px] w-[20px] brightness-[1.2] contrast-[1.1] hue-rotate-[190deg] invert-[1] saturate-[5] sepia-[1] filter"
+                        />
                         <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
                           {t("Marketing")}
                         </span>
@@ -538,7 +564,12 @@ const Sidebar = () => {
                             d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
                           />
                         </svg> */}
-                        <img src={Images?.ACTIVITY} alt="" className="h-[20px] w-[20px] filter invert-[1] sepia-[1] saturate-[5] hue-rotate-[190deg] brightness-[1.2] contrast-[1.1]" />
+                        <img
+                          src={Images?.ACTIVITY}
+                          alt=""
+                          className="h-[20px] w-[20px] brightness-[1.2] contrast-[1.1] hue-rotate-[190deg] invert-[1] saturate-[5] sepia-[1] filter"
+                        />
+                        ''{" "}
                         <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
                           {t("Activity")}
                         </span>

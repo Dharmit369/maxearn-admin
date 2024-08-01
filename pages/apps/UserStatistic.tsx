@@ -16,6 +16,7 @@ import axios from "axios";
 const UserStatistics = () => {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -26,19 +27,22 @@ const UserStatistics = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedDate]);
 
   const getData = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.get(`${BASE_URL}/activity/statstic`, {
-        maxBodyLength: Infinity,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        `${BASE_URL}/activity/statstic?date=${selectedDate}`,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res.data, "data response");
 
       setTableData(res?.data?.data);
@@ -89,29 +93,25 @@ const UserStatistics = () => {
   ) : (
     <div className="group relative w-full cursor-pointer items-center overflow-hidden border-none  bg-white ring-1 ring-gray-900/5 dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-5 ">
       {/* <div className="my-6">
-    <h2 className="text-lg  xs:px-5 lg:px-0">All withdraw request List</h2>
-  </div> */}
-      <div className="my-6 flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
-        {/* <select
-          id="categories"
-          className="form-select mt-4 h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
-        > */}
-        {/* <option value={""}>All</option> */}
-        {/* {categoryOptionData?.map((itm) => (
-                    <option value={itm?.id} >{itm?.name}</option>
-                ))} */}
-        {/* </select> */}
-
-        {/* <input
+        <h2 className="text-lg  xs:px-5 lg:px-0">All withdraw request List</h2>
+      </div> */}
+      <div className="x my-6 flex items-center  xs:flex-col xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
+        <input
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
           id="campaign"
           type="date"
-          placeholder="Enter Campaign name"
-          className="form-input h-10 dark:border-none dark:bg-[#1E1611]"
+          placeholder="Enter date"
+          className="form-input h-10 w-64 dark:border-none dark:bg-[#1E1611]"
         />
 
-        <button type="submit" className="btn btn-primary my-6 h-9 w-fit">
+        <button
+          type="submit"
+          className="btn btn-primary my-6 h-9 w-fit"
+          onClick={() => getData()}
+        >
           Search
-        </button> */}
+        </button>
 
         <button
           type="submit"
@@ -144,7 +144,7 @@ const UserStatistics = () => {
                     <td>{data?.username}</td>
                     <td>{data?.lead_payment}</td>
                     <td>{data?.refral_payment}</td>
-                    <td>{data?.totalmemo}</td>
+                    <td>{data?.total_amount}</td>
                   </tr>
                 );
               })}

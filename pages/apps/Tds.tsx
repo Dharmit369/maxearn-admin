@@ -146,14 +146,46 @@ const Tds = () => {
     }
   };
 
+  const exportCSV = () => {
+    const headers = [
+      "name",
+      "mobileNo",
+      "emailId",
+      "pancardNo",
+      "tds_amount",
+      "date",
+    ];
+
+    const rows = filteredData?.map((data) => [
+      data?.user_name,
+      data?.mobile_num,
+      data?.email,
+      data?.pan_card_number,
+      data?.amount,
+      data?.date, // Adjust as per your data structure
+    ]);
+
+    let csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "tds.csv");
+    document.body.appendChild(link);
+
+    link.click();
+  };
+
   return loading ? (
     <div>
       <Loader />
     </div>
   ) : (
     <div>
-      <div className="mb-6 flex flex-col lg:flex-row lg:gap-3">
-        <div className="flex w-full flex-col lg:w-1/2">
+      <div className="mb-6 flex flex-col items-center   lg:flex-row lg:gap-3">
+        <div className="flex w-64 flex-col ">
           <label htmlFor="from_date" className="mb-1">
             From Date
           </label>
@@ -161,13 +193,13 @@ const Tds = () => {
             id="from_date"
             type="date"
             placeholder="from Date"
-            className="form-input mt-1 h-10 w-full dark:border-none dark:bg-[#1E1611]"
+            className="form-input mt-1 h-10 w-64 dark:border-none dark:bg-[#1E1611]"
             name="from_date"
             onChange={(e) => setFromDate(e.target.value)}
             value={fromDate}
           />
         </div>
-        <div className="mt-4 flex w-full flex-col lg:mt-0 lg:w-1/2">
+        <div className="mt-4 flex w-64 flex-col lg:mt-0 ">
           <label htmlFor="to_date" className="mb-1">
             To Date
           </label>
@@ -175,12 +207,19 @@ const Tds = () => {
             id="to_date"
             type="date"
             placeholder="to date"
-            className="form-input mt-1 h-10 w-full dark:border-none dark:bg-[#1E1611]"
+            className="form-input mt-1 h-10 w-64 dark:border-none dark:bg-[#1E1611]"
             name="to_date"
             onChange={(e) => setToDate(e.target.value)}
             value={toDate}
           />
         </div>
+        <button
+          type="submit"
+          className="btn btn-primary mb-[-4.5vh]  h-9 w-fit"
+          onClick={exportCSV}
+        >
+          Export
+        </button>
       </div>
 
       <div>

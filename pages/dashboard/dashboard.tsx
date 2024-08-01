@@ -705,15 +705,12 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="mt-6 items-center justify-between gap-4 xs:mt-3 sm:flex">
-              {/* <div className="flex w-full justify-between xs:flex-col xs:space-y-2 lg:flex-row lg:space-x-4 lg:space-y-0">
-            <Table header={"TOP 10 ADMIN"} />
-          </div> */}
+            <div className="mt-6 flex-col  gap-4 xs:mt-3 sm:flex">
+              <h5 className="px-4 pt-5 text-2xl font-semibold text-[#3b3f5c] dark:text-white-light">
+                TOP 10 AFFILIATES
+              </h5>
               <div className="flex w-full justify-between xs:flex-col xs:space-x-0 xs:space-y-1 sm:space-x-0 lg:flex-row lg:space-x-4 lg:space-y-0">
-                <Table
-                  header={"TOP 10 AFFILIATES"}
-                  tableData={topAffiliateData}
-                />
+                <Table tableData={topAffiliateData} />
               </div>
             </div>
           </div>
