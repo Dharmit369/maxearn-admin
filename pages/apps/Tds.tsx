@@ -229,10 +229,11 @@ const Tds = () => {
               <thead>
                 <tr>
                   <th>name</th>
-                  <th>mobileNo</th>
-                  <th>emailId</th>
-                  <th>pancardNo</th>
-                  <th>tds_amount</th>
+                  <th>mobile No</th>
+                  <th>email Id</th>
+                  <th>pancard No</th>
+                  <th>TDS amount</th>
+                  <th>Withdraw amount</th>
                   <th>date</th>
                 </tr>
               </thead>
@@ -245,6 +246,7 @@ const Tds = () => {
                       <td>{data?.email || "-"}</td>
                       <td>{data?.pan_card_number || "-"}</td>
                       <td>{data?.amount || "-"}</td>
+                      <td>{data?.withdraw_amount || "-"}</td>
                       <td>{moment(data?.date || "-")?.format("DD/MM/YYYY")}</td>
 
                       {/* <td className="text-center">

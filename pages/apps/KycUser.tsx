@@ -1,28 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-
-import Dropdown from "@/components/Dropdown";
-import { Fragment } from "react";
-import Image from "next/image";
-import { BASE_URL, Images } from "@/constants";
-import Link from "next/link";
-import Loader from "@/components/Layouts/Loader";
-import { ReactSortable } from "react-sortablejs";
-import Select from "react-select";
+import { useEffect, useState, Fragment } from "react";
 import { Tab } from "@headlessui/react";
-import auth from "../utils/auth";
+import axios from "axios";
+import Loader from "@/components/Layouts/Loader";
 import StatusModel from "@/components/statusModel";
 import { showAlert } from "@/components/showAlert";
-import axios from "axios";
-
-// const tableData = [
-//     {
-//         affiliate_id: "456",
-//         pan_card: "abc",
-//         adhar_card_front: "abc",
-//         adhar_card_back: "aed",
-//     }
-// ]
+import auth from "../utils/auth";
+import { BASE_URL } from "@/constants";
 
 const KycUser = () => {
   const [loading, setLoading] = useState(true);
@@ -30,20 +13,25 @@ const KycUser = () => {
   const [statusModelOpen, setStatusModelOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [statusId, setStatusId] = useState("");
-
-  console.log("hiiiii i am from kycUser");
-
-  useEffect(() => {
-    getKyc();
-  }, []);
+  const [pendingKycData, setPendingKycData] = useState([]);
+  const [submittedKycData, setSubmittedKycData] = useState([]);
+  const [approveKycData, setApproveKycData] = useState([]);
+  const [rejectedKycData, setRejectedKycData] = useState([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
+    getKycData();
   }, []);
+
+  const getKycData = async () => {
+    await Promise.all([
+      getKyc(),
+      getPendingKycData(),
+      getsubmittedKycData(),
+      getApprovedKycData(),
+      getRejectedKycData(),
+    ]);
+    setLoading(false);
+  };
 
   const handleStatus = (e, id) => {
     setStatus(e.target.value);
@@ -57,27 +45,99 @@ const KycUser = () => {
   };
 
   const getKyc = async () => {
-    setLoading(true);
     const token = localStorage.getItem("token");
-    console.log(`${BASE_URL}/banner`);
     try {
       const res = await axios.get(`${BASE_URL}/kyc/getKycWithBankDetails`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTableData(res?.data?.data);
+    } catch (e) {
+      console.error(e);
+      showAlert(15, e.message, "error");
+    }
+  };
+
+  const getsubmittedKycData = async () => {
+    debugger
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(`${BASE_URL}/admin/KYCDataCount/Submitted`, {
         maxBodyLength: Infinity,
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       console.log(res.data, "data response");
-      if (res) {
-        // router.push("/dashboard/dashboard");
-        setTableData(res?.data?.data);
-        setStatusModelOpen(false);
-        setLoading(false);
-      } else {
-        showAlert(15, res?.data?.message, "error");
-      }
+
+      setSubmittedKycData(res?.data?.data?.userData);
+      setLoading(false);
     } catch (e) {
-      console.error(e, "login error");
+      console.error(e, "reject kyc error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getPendingKycData = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(`${BASE_URL}/admin/pendingKYCData`, {
+        maxBodyLength: Infinity,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data, "data response");
+
+      setPendingKycData(res?.data?.data?.userData);
+      setLoading(false);
+    } catch (e) {
+      console.error(e, "peding kyc error");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const getApprovedKycData = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(`${BASE_URL}/admin/KYCDataCount/Approved`, {
+        maxBodyLength: Infinity,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data, "data response");
+
+      setApproveKycData(res?.data?.data?.userData);
+      setLoading(false);
+    } catch (e) {
+      console.error(e, "Approved kyc error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getRejectedKycData = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(`${BASE_URL}/admin/KYCDataCount/Rejected`, {
+        maxBodyLength: Infinity,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data, "data response");
+
+      setRejectedKycData(res?.data?.data?.userData);
+      setLoading(false);
+    } catch (e) {
+      console.error(e, "reject kyc error");
     } finally {
       setLoading(false);
     }
@@ -88,125 +148,85 @@ const KycUser = () => {
       <Loader />
     </div>
   ) : (
-    <div>
-      <div className="mb-6 flex justify-between">
-        {/* <h2 className="text-xl font-semibold dark:text-white">
-                </h2>
+    <div className="m-0 p-0">
+      <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:w-[78.5vw]">
+        <Tab.Group>
+          <Tab.List className="mt-5 flex flex-wrap">
+            <Tab as={Fragment}>
+              {({ selected }) => (
                 <button
-                    className="text-gray-500 hover:text-gray-700 dark:text-white"
-                    // onClick={() => setClose(false)}
+                  className={`${
+                    selected
+                      ? "bg-primary text-white !outline-none dark:bg-[#FE6C00]"
+                      : ""
+                  }
+                -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    </svg>
-                </button> */}
-      </div>
-      <div className="table-responsive mb-5 max-h-96">
-        <table className="   scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941]">
-          <thead className="sticky top-0 z-50">
-            <tr>
-              <th>ID</th>
-              <th>AFFILIATE ID</th>
-              <th>PAN CARD</th>
-              <th>AADHAR CARD FRONT</th>
-              <th>AADHAR CARD BACK</th>
-              <th>CHEQUE BOOK</th>
-              <th>PASS BOOK</th>
-              <th>STATUS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tableData?.map((data, index) => {
-              return (
-                <tr key={data?._id}>
-                  <td>{index + 1}</td>
-                  <td>
-                    <div className="whitespace-nowrap">
-                      {data?.affiliate_id || "-"}
-                    </div>
-                  </td>
-                  <a
-                    href={`${data.pan_card}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="PAN Card"
-                  >
-                    {data.pan_card || "-"}
-                  </a>
-                  <td>
-                    {/* <div className="whitespace-nowrap">{data?.adhar_card_front}</div> */}
-                    <a
-                      href={`${data.adhar_card_front}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Aadhar Card Front"
-                    >
-                      {data.adhar_card_front || "-"}
-                    </a>
-                  </td>
-                  <td>
-                    {/* <div className="whitespace-nowrap">{data?.adhar_card_back}</div> */}
-                    <a
-                      href={`${data.adhar_card_back}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Aadhar Card Front"
-                    >
-                      {data.adhar_card_back || "-"}
-                    </a>
-                  </td>
-                  <td>
-                    {/* <div className="whitespace-nowrap">{data?.adhar_card_back}</div> */}
-                    <a
-                      href={`${data.chequebook}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Aadhar Card Front"
-                    >
-                      {data.chequebook || "-"}
-                    </a>
-                  </td>
-                  <td>
-                    {/* <div className="whitespace-nowrap">{data?.adhar_card_back}</div> */}
-                    <a
-                      href={`${data.passbook}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Aadhar Card Front"
-                    >
-                      {data.passbook || "-"}
-                    </a>
-                  </td>
-                  <td>
-                    {/* <div className="whitespace-nowrap"> */}
-                    <select
-                      id="Type"
-                      className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
-                      onChange={(e) => handleStatus(e, data?._id)}
-                      value={data?.status}
-                    >
-                      <option value={""}>Please Select</option>
-                      <option value={"Submitted"}>Submitted</option>
-                      <option value={"Approved"}>Approved</option>
-                      <option value={"Rejected"}>Rejected</option>
-                    </select>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                  Pending KYC
+                </button>
+              )}
+            </Tab>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`${
+                    selected
+                      ? "bg-primary text-white !outline-none dark:bg-[#FE6C00]"
+                      : ""
+                  }
+                -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
+                >
+                  Submitted KYC
+                </button>
+              )}
+            </Tab>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`${
+                    selected
+                      ? "bg-primary text-white !outline-none dark:bg-[#FE6C00]"
+                      : ""
+                  }
+                -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
+                >
+                  Approved KYC
+                </button>
+              )}
+            </Tab>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`${
+                    selected
+                      ? "bg-primary text-white !outline-none dark:bg-[#FE6C00]"
+                      : ""
+                  }
+                -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
+                >
+                  Rejected KYC
+                </button>
+              )}
+            </Tab>
+          </Tab.List>
+
+          <Tab.Panels>
+            <Tab.Panel>
+              <KycTable KycData={pendingKycData} handleStatus={handleStatus} />
+            </Tab.Panel>
+            <Tab.Panel>
+              <KycTable KycData={submittedKycData} handleStatus={handleStatus} />
+            </Tab.Panel>
+            <Tab.Panel>
+              <KycTable KycData={approveKycData} handleStatus={handleStatus} />
+            </Tab.Panel>
+            <Tab.Panel>
+              <KycTable KycData={rejectedKycData} handleStatus={handleStatus} />
+            </Tab.Panel>
+          </Tab.Panels>
+        </Tab.Group>
+
+        <div className="flex justify-between px-4 py-7 xs:flex-col lg:flex-row "></div>
       </div>
 
       {statusModelOpen && (
@@ -220,5 +240,99 @@ const KycUser = () => {
     </div>
   );
 };
+
+const KycTable = ({ KycData, handleStatus }: any) => (
+  <div className="table-responsive mb-5 max-h-96">
+    <table className="w-full scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941]">
+      <thead className="sticky top-0 z-50 bg-gray-200">
+        <tr>
+          <th>ID</th>
+          <th>AFFILIATE ID</th>
+          <th>PAN CARD</th>
+          <th>AADHAR CARD FRONT</th>
+          <th>AADHAR CARD BACK</th>
+          <th>CHEQUE BOOK</th>
+          <th>PASS BOOK</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {KycData?.map((data, index) => (
+          <tr key={data?._id}>
+            <td>{index + 1}</td>
+            <td>
+              <div className="whitespace-nowrap">
+                {data?.user?.kycData[0]?.affiliate_id || "-"}
+              </div>
+            </td>
+            <td>
+              <a
+                href={`${data.pan_card}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="PAN Card"
+              >
+                {data.pan_card || "-"}
+              </a>
+            </td>
+            <td>
+              <a
+                href={`${data.adhar_card_front}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Aadhar Card Front"
+              >
+                {data.adhar_card_front || "-"}
+              </a>
+            </td>
+            <td>
+              <a
+                href={`${data.adhar_card_back}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Aadhar Card Back"
+              >
+                {data.adhar_card_back || "-"}
+              </a>
+            </td>
+            <td>
+              <a
+                href={`${data.chequebook}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Cheque Book"
+              >
+                {data.chequebook || "-"}
+              </a>
+            </td>
+            <td>
+              <a
+                href={`${data.passbook}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Pass Book"
+              >
+                {data.passbook || "-"}
+              </a>
+            </td>
+            <td>
+              <select
+                id="Type"
+                className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                onChange={(e) => handleStatus(e, data?._id)}
+                value={data?.status}
+              >
+                <option value={""}>Please Select</option>
+                <option value={"Submitted"}>Submitted</option>
+                <option value={"Approved"}>Approved</option>
+                <option value={"Rejected"}>Rejected</option>
+              </select>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
 
 export default auth(KycUser);
