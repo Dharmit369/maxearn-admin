@@ -6,6 +6,7 @@ import StatusModel from "@/components/statusModel";
 import { showAlert } from "@/components/showAlert";
 import auth from "../utils/auth";
 import { BASE_URL } from "@/constants";
+import KycTable from "./kyc-table";
 
 const KycUser = () => {
   const [loading, setLoading] = useState(true);
@@ -17,6 +18,8 @@ const KycUser = () => {
   const [submittedKycData, setSubmittedKycData] = useState([]);
   const [approveKycData, setApproveKycData] = useState([]);
   const [rejectedKycData, setRejectedKycData] = useState([]);
+  const [kycCompletedOpen, setKycCompletedOpen] = useState(true);
+  const [kycSubmittedOpen, setKycSubmittedOpen] = useState(false);
 
   useEffect(() => {
     getKycData();
@@ -60,7 +63,6 @@ const KycUser = () => {
   };
 
   const getsubmittedKycData = async () => {
-    debugger
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
@@ -72,7 +74,8 @@ const KycUser = () => {
       });
       console.log(res.data, "data response");
 
-      setSubmittedKycData(res?.data?.data?.userData);
+      setSubmittedKycData(res?.data?.data);
+
       setLoading(false);
     } catch (e) {
       console.error(e, "reject kyc error");
@@ -93,7 +96,7 @@ const KycUser = () => {
       });
       console.log(res.data, "data response");
 
-      setPendingKycData(res?.data?.data?.userData);
+      setPendingKycData(res?.data?.data);
       setLoading(false);
     } catch (e) {
       console.error(e, "peding kyc error");
@@ -113,7 +116,7 @@ const KycUser = () => {
       });
       console.log(res.data, "data response");
 
-      setApproveKycData(res?.data?.data?.userData);
+      setApproveKycData(res?.data?.data);
       setLoading(false);
     } catch (e) {
       console.error(e, "Approved kyc error");
@@ -134,7 +137,7 @@ const KycUser = () => {
       });
       console.log(res.data, "data response");
 
-      setRejectedKycData(res?.data?.data?.userData);
+      setRejectedKycData(res?.data?.data);
       setLoading(false);
     } catch (e) {
       console.error(e, "reject kyc error");
@@ -152,6 +155,20 @@ const KycUser = () => {
       <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:w-[78.5vw]">
         <Tab.Group>
           <Tab.List className="mt-5 flex flex-wrap">
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`${
+                    selected
+                      ? "bg-primary text-white !outline-none dark:bg-[#FE6C00]"
+                      : ""
+                  }
+                -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
+                >
+                  All
+                </button>
+              )}
+            </Tab>
             <Tab as={Fragment}>
               {({ selected }) => (
                 <button
@@ -212,16 +229,611 @@ const KycUser = () => {
 
           <Tab.Panels>
             <Tab.Panel>
-              <KycTable KycData={pendingKycData} handleStatus={handleStatus} />
+              <div className="table-responsive mb-5 max-h-96">
+                <table className="   scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941]">
+                  <thead className="sticky top-0 z-50">
+                    <tr>
+                      <th>ID</th>
+                      <th>AFFILIATE ID</th>
+                      <th>PAN CARD</th>
+                      <th>AADHAR CARD FRONT</th>
+                      <th>AADHAR CARD BACK</th>
+                      <th>CHEQUE BOOK</th>
+                      <th>PASS BOOK</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tableData?.map((data, index) => {
+                      return (
+                        <tr key={data?._id}>
+                          <td>{index + 1}</td>
+                          <td>
+                            <div className="whitespace-nowrap">
+                              {data?.affiliate_id || "-"}
+                            </div>
+                          </td>
+                          <a
+                            href={`${data.pan_card}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="PAN Card"
+                          >
+                            {data.pan_card || "-"}
+                          </a>
+                          <td>
+                            {/* <div className="whitespace-nowrap">{data?.adhar_card_front}</div> */}
+                            <a
+                              href={`${data.adhar_card_front}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Front"
+                            >
+                              {data.adhar_card_front || "-"}
+                            </a>
+                          </td>
+                          <td>
+                            {/* <div className="whitespace-nowrap">{data?.adhar_card_back}</div> */}
+                            <a
+                              href={`${data.adhar_card_back}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Front"
+                            >
+                              {data.adhar_card_back || "-"}
+                            </a>
+                          </td>
+                          <td>
+                            {/* <div className="whitespace-nowrap">{data?.adhar_card_back}</div> */}
+                            <a
+                              href={`${data.chequebook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Front"
+                            >
+                              {data.chequebook || "-"}
+                            </a>
+                          </td>
+                          <td>
+                            {/* <div className="whitespace-nowrap">{data?.adhar_card_back}</div> */}
+                            <a
+                              href={`${data.passbook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Front"
+                            >
+                              {data.passbook || "-"}
+                            </a>
+                          </td>
+                          <td>
+                            {/* <div className="whitespace-nowrap"> */}
+                            <select
+                              id="Type"
+                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                              onChange={(e) => handleStatus(e, data?._id)}
+                              value={data?.status}
+                            >
+                              <option value={""}>Please Select</option>
+                              <option value={"Submitted"}>Submitted</option>
+                              <option value={"Approved"}>Approved</option>
+                              <option value={"Rejected"}>Rejected</option>
+                            </select>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </Tab.Panel>
             <Tab.Panel>
-              <KycTable KycData={submittedKycData} handleStatus={handleStatus} />
+              {/* <KycTable KycData={pendingKycData} handleStatus={handleStatus} /> */}
+              <div className="table-responsive mb-5 max-h-96">
+                <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
+                  <thead className="sticky top-0 z-50 bg-gray-200">
+                    <tr>
+                      <th>ID</th>
+                      <th>AFFILIATE ID</th>
+                      <th>PAN CARD</th>
+                      <th>AADHAR CARD FRONT</th>
+                      <th>AADHAR CARD BACK</th>
+                      <th>CHEQUE BOOK</th>
+                      <th>PASS BOOK</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pendingKycData?.userData?.map((user, userIndex) =>
+                      user?.user?.kycData?.map((data, index) => (
+                        <tr key={data?._id}>
+                          <td>{userIndex + 1}</td>
+                          <td>
+                            <div className="whitespace-nowrap">
+                              {user?.user?.affiliate_id || "-"}
+                            </div>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.pan_card}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="PAN Card"
+                            >
+                              {data?.pan_card ? (
+                                <img
+                                  src={data?.pan_card}
+                                  alt="PAN Card"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.adhar_card_front}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Front"
+                            >
+                              {data?.adhar_card_front ? (
+                                <img
+                                  src={data?.adhar_card_front}
+                                  alt="Aadhar Card Front"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.adhar_card_back}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Back"
+                            >
+                              {data?.adhar_card_back ? (
+                                <img
+                                  src={data?.adhar_card_back}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.chequebook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Back"
+                            >
+                              {data?.chequebook ? (
+                                <img
+                                  src={data?.chequebook}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.passbook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Pass Book"
+                            >
+                              {data?.passbook || "-"}
+                            </a>
+                          </td>
+                          <td>
+                            <select
+                              id="Type"
+                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                              onChange={(e) => handleStatus(e, data?._id)}
+                              value={data?.status}
+                            >
+                              <option value={""}>Please Select</option>
+                              <option value={"Submitted"}>Submitted</option>
+                              <option value={"Approved"}>Approved</option>
+                              <option value={"Rejected"}>Rejected</option>
+                            </select>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </Tab.Panel>
             <Tab.Panel>
-              <KycTable KycData={approveKycData} handleStatus={handleStatus} />
+              <div className="table-responsive mb-5 max-h-96">
+                <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
+                  <thead className="sticky top-0 z-50 bg-gray-200">
+                    <tr>
+                      <th>ID</th>
+                      <th>AFFILIATE ID</th>
+                      <th>PAN CARD</th>
+                      <th>AADHAR CARD FRONT</th>
+                      <th>AADHAR CARD BACK</th>
+                      <th>CHEQUE BOOK</th>
+                      <th>PASS BOOK</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {submittedKycData?.userData?.map((user, userIndex) =>
+                      user?.user?.kycData?.map((data, index) => (
+                        <tr key={data?._id}>
+                          <td>{userIndex + 1}</td>
+                          <td>
+                            <div className="whitespace-nowrap">
+                              {user?.user?.affiliate_id || "-"}
+                            </div>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.pan_card}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="PAN Card"
+                            >
+                              {data?.pan_card ? (
+                                <img
+                                  src={data?.pan_card}
+                                  alt="PAN Card"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.adhar_card_front}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Front"
+                            >
+                              {data?.adhar_card_front ? (
+                                <img
+                                  src={data?.adhar_card_front}
+                                  alt="Aadhar Card Front"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.adhar_card_back}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Back"
+                            >
+                              {data?.adhar_card_back ? (
+                                <img
+                                  src={data?.adhar_card_back}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.chequebook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Back"
+                            >
+                              {data?.chequebook ? (
+                                <img
+                                  src={data?.chequebook}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.passbook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Pass Book"
+                            >
+                              {data?.passbook || "-"}
+                            </a>
+                          </td>
+                          <td>
+                            <select
+                              id="Type"
+                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                              onChange={(e) => handleStatus(e, data?._id)}
+                              value={data?.status}
+                            >
+                              <option value={""}>Please Select</option>
+                              <option value={"Submitted"}>Submitted</option>
+                              <option value={"Approved"}>Approved</option>
+                              <option value={"Rejected"}>Rejected</option>
+                            </select>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </Tab.Panel>
             <Tab.Panel>
-              <KycTable KycData={rejectedKycData} handleStatus={handleStatus} />
+              <div className="table-responsive mb-5 max-h-96">
+                <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
+                  <thead className="sticky top-0 z-50 bg-gray-200">
+                    <tr>
+                      <th>ID</th>
+                      <th>AFFILIATE ID</th>
+                      <th>PAN CARD</th>
+                      <th>AADHAR CARD FRONT</th>
+                      <th>AADHAR CARD BACK</th>
+                      <th>CHEQUE BOOK</th>
+                      <th>PASS BOOK</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {approveKycData?.userData?.map((user, userIndex) =>
+                      user?.user?.kycData?.map((data, index) => (
+                        <tr key={data?._id}>
+                          <td>{userIndex + 1}</td>
+                          <td>
+                            <div className="whitespace-nowrap">
+                              {user?.user?.affiliate_id || "-"}
+                            </div>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.pan_card}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="PAN Card"
+                            >
+                              {data?.pan_card ? (
+                                <img
+                                  src={data?.pan_card}
+                                  alt="PAN Card"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.adhar_card_front}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Front"
+                            >
+                              {data?.adhar_card_front ? (
+                                <img
+                                  src={data?.adhar_card_front}
+                                  alt="Aadhar Card Front"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.adhar_card_back}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Back"
+                            >
+                              {data?.adhar_card_back ? (
+                                <img
+                                  src={data?.adhar_card_back}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.chequebook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Back"
+                            >
+                              {data?.chequebook ? (
+                                <img
+                                  src={data?.chequebook}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.passbook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Pass Book"
+                            >
+                              {data?.passbook || "-"}
+                            </a>
+                          </td>
+                          <td>
+                            <select
+                              id="Type"
+                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                              onChange={(e) => handleStatus(e, data?._id)}
+                              value={data?.status}
+                            >
+                              <option value={""}>Please Select</option>
+                              <option value={"Submitted"}>Submitted</option>
+                              <option value={"Approved"}>Approved</option>
+                              <option value={"Rejected"}>Rejected</option>
+                            </select>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </Tab.Panel>
+            <Tab.Panel>
+              <div className="table-responsive mb-5 max-h-96">
+                <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
+                  <thead className="sticky top-0 z-50 bg-gray-200">
+                    <tr>
+                      <th>ID</th>
+                      <th>AFFILIATE ID</th>
+                      <th>PAN CARD</th>
+                      <th>AADHAR CARD FRONT</th>
+                      <th>AADHAR CARD BACK</th>
+                      <th>CHEQUE BOOK</th>
+                      <th>PASS BOOK</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rejectedKycData?.userData?.map((user, userIndex) =>
+                      user?.user?.kycData?.map((data, index) => (
+                        <tr key={data?._id}>
+                          <td>{userIndex + 1}</td>
+                          <td>
+                            <div className="whitespace-nowrap">
+                              {user?.user?.affiliate_id || "-"}
+                            </div>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.pan_card}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="PAN Card"
+                            >
+                              {data?.pan_card ? (
+                                <img
+                                  src={data?.pan_card}
+                                  alt="PAN Card"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.adhar_card_front}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Front"
+                            >
+                              {data?.adhar_card_front ? (
+                                <img
+                                  src={data?.adhar_card_front}
+                                  alt="Aadhar Card Front"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.adhar_card_back}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Back"
+                            >
+                              {data?.adhar_card_back ? (
+                                <img
+                                  src={data?.adhar_card_back}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.chequebook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Aadhar Card Back"
+                            >
+                              {data?.chequebook ? (
+                                <img
+                                  src={data?.chequebook}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.passbook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Pass Book"
+                            >
+                              {data?.passbook || "-"}
+                            </a>
+                          </td>
+                          <td>
+                            <select
+                              id="Type"
+                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                              onChange={(e) => handleStatus(e, data?._id)}
+                              value={data?.status}
+                            >
+                              <option value={""}>Please Select</option>
+                              <option value={"Submitted"}>Submitted</option>
+                              <option value={"Approved"}>Approved</option>
+                              <option value={"Rejected"}>Rejected</option>
+                            </select>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>{" "}
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
@@ -240,99 +852,5 @@ const KycUser = () => {
     </div>
   );
 };
-
-const KycTable = ({ KycData, handleStatus }: any) => (
-  <div className="table-responsive mb-5 max-h-96">
-    <table className="w-full scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941]">
-      <thead className="sticky top-0 z-50 bg-gray-200">
-        <tr>
-          <th>ID</th>
-          <th>AFFILIATE ID</th>
-          <th>PAN CARD</th>
-          <th>AADHAR CARD FRONT</th>
-          <th>AADHAR CARD BACK</th>
-          <th>CHEQUE BOOK</th>
-          <th>PASS BOOK</th>
-          <th>STATUS</th>
-        </tr>
-      </thead>
-      <tbody>
-        {KycData?.map((data, index) => (
-          <tr key={data?._id}>
-            <td>{index + 1}</td>
-            <td>
-              <div className="whitespace-nowrap">
-                {data?.user?.kycData[0]?.affiliate_id || "-"}
-              </div>
-            </td>
-            <td>
-              <a
-                href={`${data.pan_card}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="PAN Card"
-              >
-                {data.pan_card || "-"}
-              </a>
-            </td>
-            <td>
-              <a
-                href={`${data.adhar_card_front}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Aadhar Card Front"
-              >
-                {data.adhar_card_front || "-"}
-              </a>
-            </td>
-            <td>
-              <a
-                href={`${data.adhar_card_back}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Aadhar Card Back"
-              >
-                {data.adhar_card_back || "-"}
-              </a>
-            </td>
-            <td>
-              <a
-                href={`${data.chequebook}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Cheque Book"
-              >
-                {data.chequebook || "-"}
-              </a>
-            </td>
-            <td>
-              <a
-                href={`${data.passbook}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Pass Book"
-              >
-                {data.passbook || "-"}
-              </a>
-            </td>
-            <td>
-              <select
-                id="Type"
-                className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
-                onChange={(e) => handleStatus(e, data?._id)}
-                value={data?.status}
-              >
-                <option value={""}>Please Select</option>
-                <option value={"Submitted"}>Submitted</option>
-                <option value={"Approved"}>Approved</option>
-                <option value={"Rejected"}>Rejected</option>
-              </select>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
 
 export default auth(KycUser);
