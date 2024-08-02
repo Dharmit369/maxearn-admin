@@ -229,9 +229,9 @@ const KycUser = () => {
 
           <Tab.Panels>
             <Tab.Panel>
-              <div className="table-responsive mb-5 max-h-96">
+              <div className="table-responsive mb-5 mt-5 max-h-96">
                 <table className="   scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941]">
-                  <thead className="sticky top-0 z-50">
+                  <thead className="sticky top-0 bg-blue-100 ">
                     <tr>
                       <th>ID</th>
                       <th>AFFILIATE ID</th>
@@ -328,9 +328,9 @@ const KycUser = () => {
             </Tab.Panel>
             <Tab.Panel>
               {/* <KycTable KycData={pendingKycData} handleStatus={handleStatus} /> */}
-              <div className="table-responsive mb-5 max-h-96">
+              <div className="table-responsive mb-5  mt-5 max-h-96">
                 <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
-                  <thead className="sticky top-0 z-50 bg-gray-200">
+                  <thead className="sticky top-0 bg-blue-100 ">
                     <tr>
                       <th>ID</th>
                       <th>AFFILIATE ID</th>
@@ -455,9 +455,9 @@ const KycUser = () => {
               </div>
             </Tab.Panel>
             <Tab.Panel>
-              <div className="table-responsive mb-5 max-h-96">
+              <div className="table-responsive mb-5  mt-5 max-h-96">
                 <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
-                  <thead className="sticky top-0 z-50 bg-gray-200">
+                  <thead className="sticky top-0 bg-blue-100 ">
                     <tr>
                       <th>ID</th>
                       <th>AFFILIATE ID</th>
@@ -582,9 +582,9 @@ const KycUser = () => {
               </div>
             </Tab.Panel>
             <Tab.Panel>
-              <div className="table-responsive mb-5 max-h-96">
+              <div className="table-responsive mb-5  mt-5 max-h-96">
                 <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
-                  <thead className="sticky top-0 z-50 bg-gray-200">
+                  <thead className="sticky top-0 bg-blue-100 ">
                     <tr>
                       <th>ID</th>
                       <th>AFFILIATE ID</th>
@@ -709,9 +709,9 @@ const KycUser = () => {
               </div>
             </Tab.Panel>
             <Tab.Panel>
-              <div className="table-responsive mb-5 max-h-96">
+              <div className="table-responsive mb-5  mt-5 max-h-96">
                 <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
-                  <thead className="sticky top-0 z-50 bg-gray-200">
+                  <thead className="sticky top-0  bg-blue-100">
                     <tr>
                       <th>ID</th>
                       <th>AFFILIATE ID</th>
