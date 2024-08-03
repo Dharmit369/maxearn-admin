@@ -15,7 +15,7 @@ const Resources = () => {
   const [replyId, setReplyId] = useState("");
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
-  const [dropdownValue, setDropdownValue] = useState("otherIssue");
+  const [dropdownValue, setDropdownValue] = useState("AllTickets");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -136,6 +136,9 @@ const Resources = () => {
           onChange={handleDropdownChange}
           value={dropdownValue}
         >
+          <option key={"AllTickets"} value={"AllTickets"}>
+            AllTickets
+          </option>
           <option key={"withdrawalIssue"} value={"withdrawalIssue"}>
             withdrawalIssue
           </option>

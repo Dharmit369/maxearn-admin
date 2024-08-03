@@ -253,56 +253,94 @@ const KycUser = () => {
                               {data?.affiliate_id || "-"}
                             </div>
                           </td>
-                          <a
-                            href={`${data.pan_card}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="PAN Card"
-                          >
-                            {data.pan_card || "-"}
-                          </a>
                           <td>
-                            {/* <div className="whitespace-nowrap">{data?.adhar_card_front}</div> */}
                             <a
-                              href={`${data.adhar_card_front}`}
+                              href={`${data?.pan_card}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              aria-label="Aadhar Card Front"
+                              aria-label="PAN Card"
                             >
-                              {data.adhar_card_front || "-"}
+                              {data?.pan_card ? (
+                                <img
+                                  src={data?.pan_card}
+                                  alt="PAN Card"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
                             </a>
                           </td>
                           <td>
-                            {/* <div className="whitespace-nowrap">{data?.adhar_card_back}</div> */}
                             <a
-                              href={`${data.adhar_card_back}`}
+                              href={`${data?.adhar_card_front}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label="Aadhar Card Front"
                             >
-                              {data.adhar_card_back || "-"}
+                              {data?.adhar_card_front ? (
+                                <img
+                                  src={data?.adhar_card_front}
+                                  alt="Aadhar Card Front"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
                             </a>
                           </td>
                           <td>
-                            {/* <div className="whitespace-nowrap">{data?.adhar_card_back}</div> */}
                             <a
-                              href={`${data.chequebook}`}
+                              href={`${data?.adhar_card_back}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              aria-label="Aadhar Card Front"
+                              aria-label="Aadhar Card Back"
                             >
-                              {data.chequebook || "-"}
+                              {data?.adhar_card_back ? (
+                                <img
+                                  src={data?.adhar_card_back}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
                             </a>
                           </td>
                           <td>
-                            {/* <div className="whitespace-nowrap">{data?.adhar_card_back}</div> */}
                             <a
-                              href={`${data.passbook}`}
+                              href={`${data?.chequebook}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              aria-label="Aadhar Card Front"
+                              aria-label="Aadhar Card Back"
                             >
-                              {data.passbook || "-"}
+                              {data?.chequebook ? (
+                                <img
+                                  src={data?.chequebook}
+                                  alt="Aadhar Card Back"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href={`${data?.passbook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Pass Book"
+                            >
+                              {data?.passbook ? (
+                                <img
+                                  src={data?.passbook}
+                                  alt="passbook"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
                             </a>
                           </td>
                           <td>
@@ -431,7 +469,15 @@ const KycUser = () => {
                               rel="noopener noreferrer"
                               aria-label="Pass Book"
                             >
-                              {data?.passbook || "-"}
+                              {data?.passbook ? (
+                                <img
+                                  src={data?.passbook}
+                                  alt="passbook"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
                             </a>
                           </td>
                           <td>
@@ -558,7 +604,15 @@ const KycUser = () => {
                               rel="noopener noreferrer"
                               aria-label="Pass Book"
                             >
-                              {data?.passbook || "-"}
+                              {data?.passbook ? (
+                                <img
+                                  src={data?.passbook}
+                                  alt="passbook"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
                             </a>
                           </td>
                           <td>
@@ -685,7 +739,15 @@ const KycUser = () => {
                               rel="noopener noreferrer"
                               aria-label="Pass Book"
                             >
-                              {data?.passbook || "-"}
+                              {data?.passbook ? (
+                                <img
+                                  src={data?.passbook}
+                                  alt="passbook"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
                             </a>
                           </td>
                           <td>
@@ -812,7 +874,15 @@ const KycUser = () => {
                               rel="noopener noreferrer"
                               aria-label="Pass Book"
                             >
-                              {data?.passbook || "-"}
+                              {data?.passbook ? (
+                                <img
+                                  src={data?.passbook}
+                                  alt="passbook"
+                                  className="h-16 w-16 object-contain"
+                                />
+                              ) : (
+                                "-"
+                              )}
                             </a>
                           </td>
                           <td>

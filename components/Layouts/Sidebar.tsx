@@ -387,7 +387,7 @@ const Sidebar = () => {
                           <Link href="/apps/commission" className="group">
                             <div className="flex w-full items-center">
                               <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-0 rtl:pr-0">
-                                {t("Commission")}
+                                {t("Admin-Setting")}
                               </span>
                             </div>
                           </Link>
