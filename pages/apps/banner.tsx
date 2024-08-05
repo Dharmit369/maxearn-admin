@@ -179,6 +179,11 @@ const Banner = () => {
     </div>
   ) : (
     <div>
+       <div className="my-6">
+              <h2 className="text-xl font-semibold dark:text-white">
+                Banner
+              </h2>
+            </div>
       <div className="table-responsive mb-5">
         <table>
           <thead>
