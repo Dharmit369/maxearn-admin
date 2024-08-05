@@ -31,7 +31,7 @@ const CreateCampaigns = ({
   setContent,
   handleClose,
   isEdit,
-  updateData
+  updateData,
 }: any) => {
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState(``);
@@ -57,14 +57,13 @@ const CreateCampaigns = ({
     console.log("add goals");
   };
 
-
   return (
     <div className="group relative w-full cursor-pointer items-center overflow-hidden border-none  bg-white ring-1 ring-gray-900/5 dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-5 ">
       <div className="p-8">
         <form className="space-y-5">
           <div className="mb-6 flex justify-between">
             <h2 className="text-xl font-semibold dark:text-white">
-            {isEdit ? "Edit Campaign" : "Add Campaign"}
+              {isEdit ? "Edit Campaign" : "Add Campaign"}
             </h2>
             <button
               className="text-gray-500 hover:text-gray-700 dark:text-white"
@@ -444,13 +443,19 @@ const CreateCampaigns = ({
           </div>
 
           {/* <div>
-                        <label htmlFor="Price">Price</label>
-                        <input id="Price" type="text" placeholder="Price" className="form-input dark:bg-[#1E1611] dark:border-none" name="price" onChange={(e) => handleChange(e)} />
-                    </div> */}
-          {/* <div>
-                        <label htmlFor="Status">Status</label>
-                        <input id="Status" type="text" placeholder="Status" className="form-input dark:bg-[#1E1611] dark:border-none" name="status" onChange={(e) => handleChange(e)} value={campaignData?.name}/>
-                    </div> */}
+            <label htmlFor="Status">Status</label>
+            <select
+              id="Type"
+              className="form-select w-44 text-white-dark dark:border-none dark:bg-[#261C16]"
+              onChange={(e) => handleChange(e, campaignData?._id)}
+              value={campaignData?.status}
+            >
+              <option value={""}>Please Select</option>
+              <option value={"InReview"}>InReview</option>
+              <option value={"Approved"}>Approved</option>
+              <option value={"Ended"}>Ended</option>
+            </select>
+          </div> */}
 
           <div>
             <label htmlFor="Content">Content</label>

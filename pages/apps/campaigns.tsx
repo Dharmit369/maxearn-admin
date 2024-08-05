@@ -22,6 +22,7 @@ import VideoCampaign from "./VideoCampaign";
 import { Tooltip } from "@mui/material";
 import moment from "moment";
 import auth from "../utils/auth";
+import StatusModel from "@/components/statusModel";
 
 const Campaigns = () => {
   const data = {
@@ -70,6 +71,9 @@ const Campaigns = () => {
   const [shareContent, setShareContent] = useState(``);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState("");
+  const [status, setStatus] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [statusModelOpen, setStatusModelOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -168,6 +172,12 @@ const Campaigns = () => {
     });
   };
 
+  const handleStatus = (id, newStatus) => {
+    // setStatus(newStatus);
+    // setSelectedId(id); // Set the selected id
+    // setStatusModelOpen(true);
+    updateStatus({ id: selectedId, status: status });
+  };
   function handleMultipleChange(event: any, name: any) {
     if (name === "featured_image") {
       setFeatured_image(event?.target?.files[0]);
@@ -180,7 +190,7 @@ const Campaigns = () => {
     }
   }
 
-  const submitData = async () => {
+  const submitStatusData = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
@@ -485,6 +495,54 @@ const Campaigns = () => {
     }
   };
 
+  const updateStatus = async ({ id, status }) => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+
+    const data = {
+      status: status,
+    };
+    try {
+      const res = await axios.put(
+        `${BASE_URL}/marketing/campaignStatus/${id}`,
+        data,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res.data, "ssssssssssssssssssssssssssssssssssssssssssssss");
+      if (res) {
+        // setTableData(res?.data?.data);
+        setLoading(false);
+        showAlert(15, res?.data?.message, "success");
+        setStatusModelOpen(false);
+
+        getData();
+      } else {
+        showAlert(15, res?.data?.message, "error");
+        setStatusModelOpen(false);
+
+        getData();
+      }
+    } catch (e) {
+      console.error(e, "login error");
+      setStatusModelOpen(false);
+    } finally {
+      setLoading(false);
+      setStatusModelOpen(false);
+    }
+  };
+
+  const submitData = () => {
+    if (selectedId && status) {
+      updateStatus({ id: selectedId, status: status });
+    }
+    setStatusModelOpen(false);
+  };
+
   const handleDetails = (data: any) => {
     setIsEdit(true);
     setCreateCampaigns(true);
@@ -559,6 +617,8 @@ const Campaigns = () => {
                       <th>Campaign Name</th>
                       <th>Created At</th>
                       <th>Status</th>
+                      <th>Update Status</th>
+
                       <th className="text-center">Action</th>
                     </tr>
                   </thead>
@@ -596,17 +656,21 @@ const Campaigns = () => {
                               {data?.status?.toUpperCase()}
                             </span>
                           </td>
+                          <select
+                            id="Type"
+                            className="form-select mt-2 w-36 text-white-dark dark:border-none dark:bg-[#261C16]"
+                            onChange={(e) =>
+                              handleStatus(data?._id, e.target.value)
+                            }
+                            value={data?.status}
+                          >
+                            <option value={""}>Please Select</option>
+                            <option value={"InReview"}>InReview</option>
+                            <option value={"Approved"}>Approved</option>
+                            <option value={"Ended"}>Ended</option>
+                          </select>
                           <td className="text-center">
                             <div className="flex w-full justify-between">
-                              {/* <Tooltip title="details" placement="top">
-                                                        <InfoIcon />
-                                                    </Tooltip> */}
-                              {/* <Tooltip title="Terms" placement="top">
-                                                        <DescriptionIcon />
-                                                    </Tooltip> */}
-                              {/* <Tooltip title="Duplicate" placement="top">
-                                                        <FileCopyIcon />
-                                                    </Tooltip> */}
                               <Tooltip title="Edit" placement="top">
                                 <ModeEditIcon
                                   onClick={() => handleDetails(data)}
@@ -692,6 +756,13 @@ const Campaigns = () => {
           setLocationOpen={setLocationOpen}
           tableData={tableData}
           rowId={rowId}
+        />
+      )}
+
+      {statusModelOpen && (
+        <StatusModel
+          setStatusModelOpen={setStatusModelOpen}
+          submitData={() => submitStatusData()}
         />
       )}
 
