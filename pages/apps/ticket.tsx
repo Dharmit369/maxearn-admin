@@ -128,6 +128,11 @@ const Resources = () => {
     </div>
   ) : (
     <div>
+       <div className="my-6">
+              <h2 className="text-xl font-semibold dark:text-white">
+               Ticket
+              </h2>
+            </div>
       <div className="mb-6 flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
         <select
           id="filterStatus"

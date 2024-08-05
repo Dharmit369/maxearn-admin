@@ -148,7 +148,7 @@ const Campaigns = () => {
   //             });
   //             //   console.log(res.data, "data response");
   //             if (res) {
-  // debugger
+  // 
   //                 // router.push("/dashboard/dashboard");
   //                 setCategoryOptionData(res?.data?.data);
   //                 setStatusDropdown(res?.data?.data?.status);

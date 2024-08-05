@@ -26,7 +26,13 @@ const Reports = () => {
     </div>
   ) : (
     <div className="m-0 p-0">
+      
       <div className="mb-4 w-full rounded border border-white-light bg-white px-0 shadow-[4px_6px_10px_-3px_#bfc9d4] dark:border-none dark:bg-[#29221C] dark:shadow-custom sm:w-[78.5vw]">
+      <div className="my-6 mx-5">
+              <h2 className="text-xl font-semibold dark:text-white">
+                SMTP
+              </h2>
+            </div>
         <Tab.Group>
           <Tab.List className="mt-5 flex flex-wrap">
             {/* <Tab as={Fragment}>
