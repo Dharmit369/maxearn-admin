@@ -566,9 +566,11 @@ const Campaigns = () => {
         locationOpen === false &&
         videoOpen === false && (
           <div className="group relative w-full cursor-pointer items-center overflow-hidden border-none  bg-white ring-1 ring-gray-900/5 dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-5 ">
-            {/* <div className="my-6">
-            <h2 className="text-lg  xs:px-5 lg:px-0">All withdraw request List</h2>
-          </div> */}
+            <div className="my-6">
+              <h2 className="text-xl font-semibold dark:text-white">
+                Campaigns
+              </h2>
+            </div>
             <div className="my-6 flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
               <select
                 id="categories"
@@ -641,17 +643,16 @@ const Campaigns = () => {
                           </td>
                           <td>
                             <span
-                              className={`badge whitespace-nowrap ${
-                                data?.status === "in_review"
+                              className={`badge whitespace-nowrap ${data?.status === "in_review"
                                   ? "bg-primary   "
                                   : data?.status === "Pending"
-                                  ? "bg-secondary"
-                                  : data?.status === "In Progress"
-                                  ? "bg-success"
-                                  : data?.status === "Canceled"
-                                  ? "bg-danger"
-                                  : "bg-primary"
-                              }`}
+                                    ? "bg-secondary"
+                                    : data?.status === "In Progress"
+                                      ? "bg-success"
+                                      : data?.status === "Canceled"
+                                        ? "bg-danger"
+                                        : "bg-primary"
+                                }`}
                             >
                               {data?.status?.toUpperCase()}
                             </span>

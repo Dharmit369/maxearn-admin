@@ -184,6 +184,11 @@ const Tds = () => {
     </div>
   ) : (
     <div>
+       <div className="my-6">
+              <h2 className="text-xl font-semibold dark:text-white">
+                TDS
+              </h2>
+            </div>
       <div className="mb-6 flex flex-col items-center   lg:flex-row lg:gap-3">
         <div className="flex w-64 flex-col ">
           <label htmlFor="from_date" className="mb-1">

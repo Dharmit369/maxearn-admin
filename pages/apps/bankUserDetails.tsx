@@ -110,6 +110,11 @@ const BankUserDetails = () => {
   ) : (
     <div>
       <div className="mb-6 flex justify-between">
+      <div className="my-6">
+              <h2 className="text-xl font-semibold dark:text-white">
+               Bank Details
+              </h2>
+            </div>
         {/* <h2 className="text-xl font-semibold dark:text-white">
         </h2>
         <button

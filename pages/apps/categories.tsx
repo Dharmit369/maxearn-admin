@@ -226,6 +226,11 @@ const Categories = () => {
         </div>
     ) : (
         <div>
+            <div className="my-6">
+              <h2 className="text-xl font-semibold dark:text-white">
+                Categories
+              </h2>
+            </div>
             {addCategory === false && <div>
                 <div className="table-responsive mb-5">
                     <table>
