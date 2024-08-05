@@ -95,6 +95,11 @@ const UserStatistics = () => {
       {/* <div className="my-6">
         <h2 className="text-lg  xs:px-5 lg:px-0">All withdraw request List</h2>
       </div> */}
+        <div className="my-6 flex justify-between">
+        <h2 className="text-xl font-semibold dark:text-white">
+          User Statistics
+        </h2>
+      </div>
       <div className="x my-6 flex items-center  xs:flex-col xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
         <input
           value={selectedDate}

@@ -158,8 +158,14 @@ const UserList = () => {
     </div>
   ) : (
     <div>
+     
       {edit === false && (
         <div className="relative w-full cursor-pointer items-center overflow-hidden border-none  bg-white ring-1 ring-gray-900/5 dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-5 ">
+           <div className="my-6">
+              <h2 className="text-xl font-semibold dark:text-white">
+                User List
+              </h2>
+            </div>
           <div className="flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
             <input
               id="userId"
@@ -218,6 +224,7 @@ const UserList = () => {
                     <th>Mobile No.</th>
                     <th>Reffered By</th>
                     <th>Status</th>
+                    <th>Referral Active</th>
                     <th className="text-center">Action</th>
                   </tr>
                 </thead>
@@ -257,6 +264,16 @@ const UserList = () => {
                               }`}
                           >
                             {data?.isBlocked.toString() || "-"}
+                          </span>
+                        </td>
+                        <td>
+                          <span
+                            className={`badge whitespace-nowrap ${data?.referralActive === false
+                                ? "bg-danger"
+                                : "bg-primary"
+                              }`}
+                          >
+                            {data?.referralActive.toString() || "-"}
                           </span>
                         </td>
                         <td className="text-center">

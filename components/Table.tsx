@@ -7,41 +7,74 @@ import { useDispatch } from "react-redux";
 
 const Table = ({ header, tableData }: any) => {
   return (
-    <div className="table-responsive mb-5 w-full border-main_dark bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] dark:shadow-custom">
-      <table className="w-full" align="center">
+    // <div className="table-responsive mb-5 w-full border-main_dark bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] dark:shadow-custom">
+    //   <table className="w-full" align="center">
+    //     <thead>
+    //       <tr></tr>
+    //       <tr>
+    //         <th className="text-center text-lg text-[#3b3f5c] dark:bg-[#302924] dark:text-white-light">
+    //           #
+    //         </th>
+    //         <th className="text-center text-lg text-[#3b3f5c] dark:bg-[#302924] dark:text-white-light">
+    //           NAME
+    //         </th>
+    //         <th className="text-center text-lg text-[#3b3f5c] dark:bg-[#302924] dark:text-white-light">
+    //           MOBILE NO.
+    //         </th>
+    //       </tr>
+    //     </thead>
+    //     <tbody>
+    //       {tableData?.map((data, index) => {
+    //         return (
+    //           <>
+    //             <tr key={data.id} className="border-0">
+    //               <td className="text-center text-lg">{index + 1}</td>
+    //               <td>
+    //                 <div className="whitespace-nowrap text-center text-lg">
+    //                   {data.username}
+    //                 </div>
+    //               </td>
+    //               <td className="text-center text-lg">{data.mobile}</td>
+    //             </tr>
+    //           </>
+    //         );
+    //       })}
+    //     </tbody>
+    //   </table>
+    // </div>
+    <div className="table-responsive mb-5 w-full">
+    <table className="table-striped">
         <thead>
-          <tr></tr>
-          <tr>
-            <th className="text-center text-lg text-[#3b3f5c] dark:bg-[#302924] dark:text-white-light">
-              #
-            </th>
-            <th className="text-center text-lg text-[#3b3f5c] dark:bg-[#302924] dark:text-white-light">
-              NAME
-            </th>
-            <th className="text-center text-lg text-[#3b3f5c] dark:bg-[#302924] dark:text-white-light">
-              MOBILE NO.
-            </th>
-          </tr>
+            <tr>
+                <th>#</th>
+                <th>NAME</th>
+                <th>MOBILE NO.</th>
+                {/* <th>Sale</th> */}
+                <th></th>
+            </tr>
         </thead>
         <tbody>
-          {tableData?.map((data, index) => {
-            return (
-              <>
-                <tr key={data.id} className="border-0">
-                  <td className="text-center text-lg">{index + 1}</td>
-                  <td>
-                    <div className="whitespace-nowrap text-center text-lg">
-                      {data.username}
-                    </div>
-                  </td>
-                  <td className="text-center text-lg">{data.mobile}</td>
-                </tr>
-              </>
-            );
-          })}
+            {tableData.map((data, index) => {
+                return (
+                    <tr key={data.id}>
+                        <td>
+                            <div className="whitespace-nowrap">{index + 1}</div>
+                        </td>
+                        <td>{data.username}</td>
+                        <td>{data.mobile}</td>
+                        {/* <td className="text-center">
+                            <Tippy content="Delete">
+                                <button type="button">
+                                    <svg>...</svg>
+                                </button>
+                            </Tippy>
+                        </td> */}
+                    </tr>
+                );
+            })}
         </tbody>
-      </table>
-    </div>
+    </table>
+</div>
   );
 };
 
