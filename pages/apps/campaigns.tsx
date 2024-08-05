@@ -190,7 +190,7 @@ const Campaigns = () => {
     }
   }
 
-  const submitStatusData = async () => {
+  const submitData = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
@@ -253,7 +253,7 @@ const Campaigns = () => {
       });
       console.log(res.data, "create response");
       if (res.data) {
-        // setCreateCampaigns(false);
+        setCreateCampaigns(false);
         showAlert(15, res.data.message, "success");
         setCampaignData({
           name: "",
@@ -536,7 +536,7 @@ const Campaigns = () => {
     }
   };
 
-  const submitData = () => {
+  const submitStatusData = () => {
     if (selectedId && status) {
       updateStatus({ id: selectedId, status: status });
     }

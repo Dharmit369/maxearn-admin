@@ -179,7 +179,7 @@ const KycUser = () => {
                   }
                 -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
                 >
-                  Pending KYC
+                  Pending User
                 </button>
               )}
             </Tab>
@@ -381,121 +381,119 @@ const KycUser = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {pendingKycData?.userData?.map((user, userIndex) =>
-                      user?.user?.kycData?.map((data, index) => (
-                        <tr key={data?._id}>
-                          <td>{userIndex + 1}</td>
-                          <td>
-                            <div className="whitespace-nowrap">
-                              {user?.user?.affiliate_id || "-"}
-                            </div>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.pan_card}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="PAN Card"
-                            >
-                              {data?.pan_card ? (
-                                <img
-                                  src={data?.pan_card}
-                                  alt="PAN Card"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.adhar_card_front}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Aadhar Card Front"
-                            >
-                              {data?.adhar_card_front ? (
-                                <img
-                                  src={data?.adhar_card_front}
-                                  alt="Aadhar Card Front"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.adhar_card_back}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Aadhar Card Back"
-                            >
-                              {data?.adhar_card_back ? (
-                                <img
-                                  src={data?.adhar_card_back}
-                                  alt="Aadhar Card Back"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.chequebook}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Aadhar Card Back"
-                            >
-                              {data?.chequebook ? (
-                                <img
-                                  src={data?.chequebook}
-                                  alt="Aadhar Card Back"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.passbook}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Pass Book"
-                            >
-                              {data?.passbook ? (
-                                <img
-                                  src={data?.passbook}
-                                  alt="passbook"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <select
-                              id="Type"
-                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
-                              onChange={(e) => handleStatus(e, data?._id)}
-                              value={data?.status}
-                            >
-                              <option value={""}>Please Select</option>
-                              <option value={"Submitted"}>Submitted</option>
-                              <option value={"Approved"}>Approved</option>
-                              <option value={"Rejected"}>Rejected</option>
-                            </select>
-                          </td>
-                        </tr>
-                      ))
-                    )}
+                    {pendingKycData?.userData?.map((data, userIndex) => (
+                      <tr key={data?._id}>
+                        <td>{userIndex + 1}</td>
+                        <td>
+                          <div className="whitespace-nowrap">
+                            {data?.affiliate_id || "-"}
+                          </div>
+                        </td>
+                        <td>
+                          <a
+                            href={`${data?.pan_card}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="PAN Card"
+                          >
+                            {data?.pan_card ? (
+                              <img
+                                src={data?.pan_card}
+                                alt="PAN Card"
+                                className="h-16 w-16 object-contain"
+                              />
+                            ) : (
+                              "-"
+                            )}
+                          </a>
+                        </td>
+                        <td>
+                          <a
+                            href={`${data?.adhar_card_front}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Aadhar Card Front"
+                          >
+                            {data?.adhar_card_front ? (
+                              <img
+                                src={data?.adhar_card_front}
+                                alt="Aadhar Card Front"
+                                className="h-16 w-16 object-contain"
+                              />
+                            ) : (
+                              "-"
+                            )}
+                          </a>
+                        </td>
+                        <td>
+                          <a
+                            href={`${data?.adhar_card_back}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Aadhar Card Back"
+                          >
+                            {data?.adhar_card_back ? (
+                              <img
+                                src={data?.adhar_card_back}
+                                alt="Aadhar Card Back"
+                                className="h-16 w-16 object-contain"
+                              />
+                            ) : (
+                              "-"
+                            )}
+                          </a>
+                        </td>
+                        <td>
+                          <a
+                            href={`${data?.chequebook}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Aadhar Card Back"
+                          >
+                            {data?.chequebook ? (
+                              <img
+                                src={data?.chequebook}
+                                alt="Aadhar Card Back"
+                                className="h-16 w-16 object-contain"
+                              />
+                            ) : (
+                              "-"
+                            )}
+                          </a>
+                        </td>
+                        <td>
+                          <a
+                            href={`${data?.passbook}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Pass Book"
+                          >
+                            {data?.passbook ? (
+                              <img
+                                src={data?.passbook}
+                                alt="passbook"
+                                className="h-16 w-16 object-contain"
+                              />
+                            ) : (
+                              "-"
+                            )}
+                          </a>
+                        </td>
+                        <td>
+                          <select
+                            id="Type"
+                            className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                            onChange={(e) => handleStatus(e, data?._id)}
+                            value={data?.status}
+                          >
+                            <option value={""}>Please Select</option>
+                            <option value={"Submitted"}>Submitted</option>
+                            <option value={"Approved"}>Approved</option>
+                            <option value={"Rejected"}>Rejected</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

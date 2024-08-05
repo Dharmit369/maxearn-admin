@@ -163,28 +163,27 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
   const exportTableData = () => {
     const headers = [
       "ID",
+      "Campaign Id",
       "Created By",
-      "Name",
       "Date",
       "Email",
       "Phone number",
       "Status",
-      "Action",
     ];
 
-    const csvData = tableData?.map((row) => ({
-      ID: row?.id,
-      "Created By": row?.name,
-      Name: row?.name,
-      Date: row?.date,
-      Email: row?.email,
-      "Phone Number": row?.phone_num,
-      Status: row?.status,
-    }));
+    const rows = tableData?.map((data, index) => [
+      index + 1,
+      data?.campaign_id,
+      data?.name,
+      data?.created_timestamp,
+      data?.email,
+      data?.phone_num,
+      data?.status,
+    ]);
 
     let csvContent =
       "data:text/csv;charset=utf-8," +
-      [headers.join(","), ...csvData?.map((row) => row?.join(","))].join("\n");
+      [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
@@ -326,9 +325,9 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
           </div>
 
           <div className="flex xs:px-5 lg:px-0 ">
-            <button type="submit" className="btn btn-primary my-6 mr-3">
+            {/* <button type="submit" className="btn btn-primary my-6 mr-3">
               Delete All
-            </button>
+            </button> */}
             <button
               type="submit"
               className="btn btn-primary my-6"

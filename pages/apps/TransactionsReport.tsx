@@ -14,10 +14,11 @@ import auth from "../utils/auth";
 import axios from "axios";
 import moment from "moment";
 
-
 const TransactionsReport = () => {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -27,8 +28,8 @@ const TransactionsReport = () => {
   }, []);
 
   useEffect(() => {
-    getData()
-  },[])
+    getData();
+  }, [fromDate, toDate]);
 
   const getData = async () => {
     setLoading(true);
@@ -42,8 +43,20 @@ const TransactionsReport = () => {
         },
       });
       console.log(res.data, "data response");
+      let filteredData = res?.data?.data;
+      if (fromDate && toDate) {
+        filteredData = filteredData.filter((data) =>
+          moment(data.date).isBetween(
+            moment(fromDate),
+            moment(toDate),
+            null,
+            "[]"
+          )
+        );
+      }
 
-      setTableData(res?.data?.data);
+      setTableData(filteredData);
+
       setLoading(false);
     } catch (e) {
       console.error(e, "Total Lead Data");
@@ -52,20 +65,89 @@ const TransactionsReport = () => {
     }
   };
 
+  const exportCSV = () => {
+    const headers = [
+      "Id",
+      "Affiliate ID",
+      "Username",
+      "Commission",
+      "Type",
+      "Comment",
+      "Date",
+    ];
+
+    const rows = tableData?.map((data, index) => [
+      index + 1,
+      data?.affiliate_id,
+      data?.user_name,
+      data?.commission_amount,
+      data?.type,
+      data?.comment,
+      data?.date,
+    ]);
+
+    let csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "user-statistic.csv");
+    document.body.appendChild(link);
+
+    link.click();
+  };
+
   return loading ? (
     <div>
       <Loader />
     </div>
   ) : (
-    <div className="group relative cursor-pointer overflow-hidden bg-white dark:bg-[#261C16] border-none  ring-1 ring-gray-900/5 dark:ring-gray-700 w-full items-center sm:rounded-lg sm:px-5 ">
+    <div className="group relative w-full cursor-pointer items-center overflow-hidden border-none  bg-white ring-1 ring-gray-900/5 dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-5 ">
       <div className="my-6 flex justify-between">
         <h2 className="text-xl font-semibold dark:text-white">
           All Transactions
         </h2>
       </div>
 
-      <div>
+      <div className="x my-6 flex items-center  xs:flex-col xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
+        <input
+          value={fromDate}
+          onChange={(e) => setFromDate(e.target.value)}
+          id="fromDate"
+          type="date"
+          placeholder="From date"
+          className="form-input h-10 w-64 dark:border-none dark:bg-[#1E1611]"
+        />
 
+        <input
+          value={toDate}
+          onChange={(e) => setToDate(e.target.value)}
+          id="toDate"
+          type="date"
+          placeholder="To date"
+          className="form-input h-10 w-64 dark:border-none dark:bg-[#1E1611]"
+        />
+
+        <button
+          type="submit"
+          className="btn btn-primary my-6 h-9 w-fit"
+          onClick={getData}
+        >
+          Search
+        </button>
+
+        <button
+          type="submit"
+          className="btn btn-primary my-6 h-9 w-fit"
+          onClick={exportCSV}
+        >
+          Export
+        </button>
+      </div>
+
+      <div>
         <div className="table-responsive mb-5  xs:px-5 lg:px-0">
           <table>
             <thead>
@@ -96,7 +178,7 @@ const TransactionsReport = () => {
                     <td>{moment(data?.date).format("DD/MM/YYYY")}</td>
                     {/* <td>{data?.price}</td> */}
                     {/* <td>{data?.price}</td> */}
-                    
+
                     {/* <td>{data?.date}</td> */}
                   </tr>
                 );
@@ -105,9 +187,8 @@ const TransactionsReport = () => {
           </table>
         </div>
       </div>
-
     </div>
   );
-}
+};
 
 export default auth(TransactionsReport);
