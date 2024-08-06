@@ -148,7 +148,7 @@ const Campaigns = () => {
   //             });
   //             //   console.log(res.data, "data response");
   //             if (res) {
-  // 
+  //
   //                 // router.push("/dashboard/dashboard");
   //                 setCategoryOptionData(res?.data?.data);
   //                 setStatusDropdown(res?.data?.data?.status);
@@ -173,10 +173,7 @@ const Campaigns = () => {
   };
 
   const handleStatus = (id, newStatus) => {
-    // setStatus(newStatus);
-    // setSelectedId(id); // Set the selected id
-    // setStatusModelOpen(true);
-    updateStatus({ id: selectedId, status: status });
+    updateStatus({ id: id, status: newStatus });
   };
   function handleMultipleChange(event: any, name: any) {
     if (name === "featured_image") {
@@ -643,16 +640,17 @@ const Campaigns = () => {
                           </td>
                           <td>
                             <span
-                              className={`badge whitespace-nowrap ${data?.status === "in_review"
+                              className={`badge whitespace-nowrap ${
+                                data?.status === "in_review"
                                   ? "bg-primary   "
                                   : data?.status === "Pending"
-                                    ? "bg-secondary"
-                                    : data?.status === "In Progress"
-                                      ? "bg-success"
-                                      : data?.status === "Canceled"
-                                        ? "bg-danger"
-                                        : "bg-primary"
-                                }`}
+                                  ? "bg-secondary"
+                                  : data?.status === "In Progress"
+                                  ? "bg-success"
+                                  : data?.status === "Canceled"
+                                  ? "bg-danger"
+                                  : "bg-primary"
+                              }`}
                             >
                               {data?.status?.toUpperCase()}
                             </span>
