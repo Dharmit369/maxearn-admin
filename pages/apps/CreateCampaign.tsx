@@ -165,6 +165,7 @@ const CreateCampaigns = ({
                     <option value={"EMI CARD"}>EMI CARD</option>
                     <option value={"PERSONAL LOAN"}>PERSONAL LOAN</option>
                     <option value={"CREDIT CARD"}>CREDIT CARD</option> */}
+              <option value={""}>Please Select</option>
               {categoryOptionData?.map((itm) => (
                 <option value={itm?.id}>{itm?.name}</option>
               ))}
@@ -234,6 +235,7 @@ const CreateCampaigns = ({
               onChange={(e) => handleChange(e)}
               value={campaignData?.approval_rate}
             >
+              <option value={""}>Please Select</option>
               <option value={"low"}>low</option>
               <option value={"medium"}>medium</option>
               <option value={"excellent"}>excellent</option>
@@ -332,6 +334,7 @@ const CreateCampaigns = ({
               onChange={(e) => handleChange(e)}
               value={campaignData?.pincode_proceed}
             >
+              <option value={""}>Please Select</option>
               <option value={"true"}>true</option>
               <option value={"false"}>false</option>
             </select>
