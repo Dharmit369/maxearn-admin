@@ -235,6 +235,7 @@ const UserWallet = () => {
                   <tr>
                     <th>Lead ID</th>
                     <th>Date</th>
+                    <th>Campaign</th>
                     <th>Amount</th>
                     <th>Paid For</th>
                     <th>Amount Status</th>
@@ -252,6 +253,8 @@ const UserWallet = () => {
                             {moment(data?.date)?.format("DD/MM/YYYY")}
                           </div>
                         </td>
+                        <td>{data.campaign_name}</td>
+
                         <td>{data.amount}</td>
                         <td>{data.lead_name}</td>
                         <td>

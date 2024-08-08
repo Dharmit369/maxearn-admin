@@ -32,6 +32,7 @@ const CreateCampaigns = ({
   handleClose,
   isEdit,
   updateData,
+  ImageData,
 }: any) => {
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState(``);
@@ -95,7 +96,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="name"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.name}
+              value={campaignData?.name || ""}
             />
           </div>
 
@@ -108,7 +109,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="title"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.title}
+              value={campaignData?.title || ""}
             />
           </div>
 
@@ -121,7 +122,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="user_payout"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.user_payout}
+              value={campaignData?.user_payout || ""}
             />
           </div>
 
@@ -134,7 +135,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="advertize_payout"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.advertize_payout}
+              value={campaignData?.advertize_payout || ""}
             />
           </div>
 
@@ -147,7 +148,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="target_link"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.target_link}
+              value={campaignData?.target_link || ""}
             />
           </div>
 
@@ -158,7 +159,7 @@ const CreateCampaigns = ({
               className="form-select text-white-dark dark:border-none dark:bg-[#1E1611]"
               name="category_id"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.category_id}
+              value={campaignData?.category_id || ""}
             >
               {/* <option value={"DEMAT ACCOUNT"}>DEMAT ACCOUNT</option>
                     <option value={"SAVING ACCOUNT"}>SAVING ACCOUNT</option>
@@ -189,7 +190,7 @@ const CreateCampaigns = ({
                 onChange={(event) =>
                   handleMultipleChange(event, "featured_image")
                 }
-                value={campaignData?.featured_image}
+                // value={campaignData?.featured_image || ""}
               />
             </div>
           </div>
@@ -208,7 +209,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="offer_image"
               onChange={(event) => handleMultipleChange(event, "offer_image")}
-              value={campaignData?.offer_image}
+              // value={campaignData?.offer_image || ""}
             />
           </div>
 
@@ -251,7 +252,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="joining_fee"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.joining_fee}
+              value={campaignData?.joining_fee || ""}
             />
           </div>
 
@@ -264,7 +265,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="annual_fee"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.annual_fee}
+              value={campaignData?.annual_fee || ""}
             />
           </div>
 
@@ -277,7 +278,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="info"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.info}
+              value={campaignData?.info || ""}
             />
           </div>
 
@@ -290,7 +291,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="tagline1"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.tagline1}
+              value={campaignData?.tagline1 || ""}
             />
           </div>
 
@@ -303,7 +304,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="tagline2"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.tagline2}
+              value={campaignData?.tagline2 || ""}
             />
           </div>
 
@@ -321,7 +322,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="shared_image"
               onChange={(event) => handleMultipleChange(event, "shared_image")}
-              value={campaignData?.shared_image}
+              // value={campaignData?.shared_image || ""}
             />
           </div>
 
@@ -332,7 +333,7 @@ const CreateCampaigns = ({
               className="form-select text-white-dark dark:border-none dark:bg-[#1E1611]"
               name="pincode_proceed"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.pincode_proceed}
+              value={campaignData?.pincode_proceed || ""}
             >
               <option value={""}>Please Select</option>
               <option value={"true"}>true</option>
@@ -367,7 +368,7 @@ const CreateCampaigns = ({
                 placeholder="description 1"
                 className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
                 name="description1"
-                value={campaignData?.description1}
+                value={campaignData?.description1 || ""}
                 onChange={(e) => handleChange(e)}
               />
               <input
@@ -376,7 +377,7 @@ const CreateCampaigns = ({
                 placeholder="price 1"
                 className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
                 name="price1"
-                value={campaignData?.price1}
+                value={campaignData?.price1 || ""}
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -388,7 +389,7 @@ const CreateCampaigns = ({
                 placeholder="description 2"
                 className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
                 name="description2"
-                value={campaignData?.description2}
+                value={campaignData?.description2 || ""}
                 onChange={(e) => handleChange(e)}
               />
               <input
@@ -397,7 +398,7 @@ const CreateCampaigns = ({
                 placeholder="price 2"
                 className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
                 name="price2"
-                value={campaignData?.price2}
+                value={campaignData?.price2 || ""}
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -409,7 +410,7 @@ const CreateCampaigns = ({
                 placeholder="description 3"
                 className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
                 name="description3"
-                value={campaignData?.description3}
+                value={campaignData?.description3 || " "}
                 onChange={(e) => handleChange(e)}
               />
               <input
@@ -418,7 +419,7 @@ const CreateCampaigns = ({
                 placeholder="price 3"
                 className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
                 name="price3"
-                value={campaignData?.price3}
+                value={campaignData?.price3 || " "}
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -430,7 +431,7 @@ const CreateCampaigns = ({
                 placeholder="description 4"
                 className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
                 name="description4"
-                value={campaignData?.description4}
+                value={campaignData?.description4 || " "}
                 onChange={(e) => handleChange(e)}
               />
               <input
@@ -439,7 +440,7 @@ const CreateCampaigns = ({
                 placeholder="price 4"
                 className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
                 name="price4"
-                value={campaignData?.price4}
+                value={campaignData?.price4 || " "}
                 onChange={(e) => handleChange(e)}
               />
             </div>

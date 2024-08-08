@@ -29,7 +29,10 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
     email: "",
     phone_num: "",
     status: "",
+    amount: "",
+    note: "",
   };
+
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [userDropdownData, setUserDropdownData] = useState([]);
@@ -76,6 +79,10 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
           label: e.email,
         }));
         setUserDropdownData(_data);
+        console.log(
+          res?.data?.data?.status,
+          "res?.data?.data?.statusres?.data?.data?.statusres?.data?.data?.status"
+        );
         setStatus(res?.data?.data?.status);
         setLoading(false);
       } else {
@@ -126,6 +133,7 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
   };
 
   const updateLead = async (id: any) => {
+    console.log(id, "lead_idlead_idlead_idlead_id");
     setLoading(true);
     const token = localStorage.getItem("token");
     const _data = {
@@ -133,15 +141,27 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
       email: changeData?.email,
       phone_num: changeData?.phone_num,
       status: changeData?.status,
+      note: changeData?.note,
+      campaign_id: id,
+      pincode: changeData?.pincode,
     };
 
+    if (changeData?.status === "SaleCompleted") {
+      _data.amount = parseInt(changeData?.amount);
+    }
+    console.log(_data, "dadadsssdsasd");
+
     try {
-      const res = await axios.put(`${BASE_URL}/lead/${id}`, _data, {
-        maxBodyLength: Infinity,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.put(
+        `${BASE_URL}/lead/${changeData?._id}`,
+        _data,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res, "daaaaaaaaaaaaa");
       console.log(res.data, "edit traning response");
       if (res.data) {
@@ -497,6 +517,32 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
                       </option>
                     ))}
                   </select>
+                </div>
+
+                {changeData?.status === "SaleCompleted" && (
+                  <div>
+                    <label htmlFor="amount">Amount</label>
+                    <input
+                      id="amount"
+                      type="tel"
+                      placeholder="amount"
+                      className="form-input dark:border-none dark:bg-[#261C16]"
+                      name="amount"
+                      onChange={handleChange}
+                      value={changeData?.amount}
+                    />
+                  </div>
+                )}
+                <div>
+                  <label htmlFor="commnet">Note</label>
+                  <input
+                    id="note"
+                    placeholder="note"
+                    className="form-input dark:border-none dark:bg-[#261C16]"
+                    name="note"
+                    onChange={handleChange}
+                    value={changeData?.note}
+                  />
                 </div>
 
                 <div className="flex justify-end">

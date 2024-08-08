@@ -100,10 +100,6 @@ const Campaigns = () => {
     getDropdown();
   }, []);
 
-  // useEffect(() => {
-  //     campaignByCategories(categoryId);
-  // }, [categoryId])
-
   const getData = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -122,6 +118,7 @@ const Campaigns = () => {
       if (res) {
         // router.push("/dashboard/dashboard");
         setTableData(res?.data?.data);
+
         // setAddCategory(false);
         setLoading(false);
       } else {
@@ -133,36 +130,6 @@ const Campaigns = () => {
       setLoading(false);
     }
   };
-
-  //     const categoryOption = async () => {
-
-  //         setLoading(true);
-  //         const token = localStorage.getItem("token");
-  //         // console.log(`${BASE_URL}/banner`);
-  //         try {
-  //             const res = await axios.get(`${BASE_URL}/marketing/category`, {
-  //                 maxBodyLength: Infinity,
-  //                 headers: {
-  //                     Authorization: `Bearer ${token}`,
-  //                 },
-  //             });
-  //             //   console.log(res.data, "data response");
-  //             if (res) {
-  //
-  //                 // router.push("/dashboard/dashboard");
-  //                 setCategoryOptionData(res?.data?.data);
-  //                 setStatusDropdown(res?.data?.data?.status);
-  //                 // setAddCategory(false);
-  //                 setLoading(false);
-  //             } else {
-  //                 showAlert(15, res?.data?.message, "error");
-  //             }
-  //         } catch (e) {
-  //             console.error(e, "login error");
-  //         } finally {
-  //             setLoading(false);
-  //         }
-  //     }
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -415,35 +382,6 @@ const Campaigns = () => {
     }
   };
 
-  // const campaignByCategories = async (id: any) => {
-
-  //     setLoading(true);
-  //     const token = localStorage.getItem("token");
-  //     // console.log(`${BASE_URL}/banner`);
-  //     try {
-  //         const res = await axios.get(`${BASE_URL}/marketing/category/${id}`, {
-  //             maxBodyLength: Infinity,
-  //             headers: {
-  //                 Authorization: `Bearer ${token}`,
-  //             },
-  //         });
-  //         //   console.log(res.data, "data response");
-  //         if (res) {
-
-  //             // router.push("/dashboard/dashboard");
-  //             setCategoryOptionData(res?.data?.data);
-  //             // setAddCategory(false);
-  //             setLoading(false);
-  //         } else {
-  //             showAlert(15, res?.data?.message, "error");
-  //         }
-  //     } catch (e) {
-  //         console.error(e, "login error");
-  //     } finally {
-  //         setLoading(false);
-  //     }
-  // }
-
   const handleClick = (expression: any, value: any) => {
     if (expression === "lead") {
       setLeadOpen(true);
@@ -543,7 +481,7 @@ const Campaigns = () => {
   const handleDetails = (data: any) => {
     setIsEdit(true);
     setCreateCampaigns(true);
-    // setCampaignData(data);
+    setCampaignData(data);
     setContent(data?.content);
     setShareContent(data?.offer_description);
     setEditId(data?._id);
