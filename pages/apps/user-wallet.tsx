@@ -32,6 +32,33 @@ const UserWallet = () => {
   const [changeData, setchangeData] = useState(data);
   const [modelDetails, setModelDetails] = useState(false);
   const [modelData, setModelData] = useState([]);
+  const [dataInfo, setDataInfo] = useState([]);
+  const [typeData, setTypeData] = useState("");
+
+  useEffect(() => {
+    filterData();
+  }, [typeData]);
+
+  const filterData = () => {
+    if (typeData === "Reffral") {
+      const filt = dataInfo?.filter((itm) => itm?.type === "Reffral")
+      if (filt) {
+        setTableData(filt)
+      }
+    } else {
+      if (typeData === "all") {
+        const filt = dataInfo
+        if (filt) {
+          setTableData(filt)
+        }
+      } else {
+        const filt = dataInfo?.filter((itm) => itm?.type === "Lead")
+        if (filt) {
+          setTableData(filt)
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     getWallet();
@@ -59,6 +86,7 @@ const UserWallet = () => {
       console.log(res.data, "data response");
       if (res) {
         setTableData(res?.data?.data);
+        setDataInfo(res?.data?.data);
         // setLoading(false);
       } else {
         showAlert(15, res?.data?.message, "error");
@@ -67,6 +95,32 @@ const UserWallet = () => {
       console.error(e, "login error");
     } finally {
       // setLoading(false);
+    }
+  };
+
+  const deleteData = async (id: any) => {
+    const token = localStorage.getItem("token");
+    console.log(`${BASE_URL}/marketing/campaign/${id}`);
+    try {
+      const res = await axios.delete(`${BASE_URL}/wallet/${id}`, {
+        maxBodyLength: Infinity,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data, "delete banner response");
+      if (res) {
+        setTableData(res?.data?.data);
+        // setCreateCampaigns(false);
+        showAlert(15, res.data.message, "success");
+        getWallet();
+      } else {
+        showAlert(15, res?.data?.message, "error");
+      }
+    } catch (e) {
+      console.error(e, "delete banner error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -216,6 +270,20 @@ const UserWallet = () => {
               <option>Debit</option>
               <option>Credit</option>
             </select>
+
+            <select
+              id="filterStatus"
+              className="form-select h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
+              name="type"
+              onChange={(e) => setTypeData(e.target.value)}
+              value={typeData}
+            >
+              <option key={"all"} value={"all"}>
+                All
+              </option>
+              <option value={"Reffral"}>Reffral</option>
+              <option value={"Lead"}>Lead</option>
+            </select>
           </div>
 
           <div className="xs:px-5 lg:px-0 ">
@@ -238,9 +306,9 @@ const UserWallet = () => {
                     <th>Campaign</th>
                     <th>Payment Type</th>
                     <th>Amount</th>
+                    <th>Type</th>
                     <th>Paid For</th>
                     <th>Amount Status</th>
-                    <th>Status</th>
                     <th className="text-center">Action</th>
                   </tr>
                 </thead>
@@ -258,45 +326,62 @@ const UserWallet = () => {
                         <td>{data.type}</td>
 
                         <td>{data.amount}</td>
-                        <td>{data.lead_name}</td>
+                        <td>{data.type}</td>
+                        <td>
+                          <div className="border-t pt-4">
+                            <p className="text-gray-700 font-medium">
+                              <p className="text-gray-700 font-medium">
+                                {data?.type === "Reffral" ? "-" : `${data?.campaign_name} [${data?.advertize_payout} INR]`}
+                              </p>
+                            </p>
+                          </div>
+                          <div className="mt-4">
+                            <p className="text-sm text-gray-500 font-semibold">{data?.type === "Lead" && "Lead Info"}</p>
+                            <p className="text-gray-700 mt-2">
+                              {data?.type === "Lead" && "Phone:"} <span className="font-medium">{data?.type === "Lead" && `${data?.lead_phone}`}</span>
+                            </p>
+                            <p className="text-gray-700 mt-1">
+                              {data?.type === "Lead" && "Email:"} <span className="font-medium">{data?.type === "Lead" && `${data?.lead_email}`}</span>
+                            </p>
+                          </div>
+                        </td>
                         <td>
                           <span
-                            className={`badge whitespace-nowrap ${
-                              data.status === "completed"
-                                ? "bg-primary   "
-                                : data.status === "Pending"
+                            className={`badge whitespace-nowrap ${data.status === "completed"
+                              ? "bg-primary   "
+                              : data.status === "Pending"
                                 ? "bg-secondary"
                                 : data.status === "In Progress"
-                                ? "bg-success"
-                                : data.status === "Canceled"
-                                ? "bg-danger"
-                                : "bg-primary"
-                            }`}
+                                  ? "bg-success"
+                                  : data.status === "Canceled"
+                                    ? "bg-danger"
+                                    : "bg-primary"
+                              }`}
                           >
                             {data.status}
                           </span>
                         </td>
-                        <td>
-                          <span className={`badge whitespace-nowrap `}>
-                            {/* {data.status} */}
-                            <select
-                              id="Type"
-                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#1E1611]"
-                              // onChange={(e) => handleStatus(data?._id, e.target.value)}
-                              // value={data?.status}
-                            >
-                              <option value={""}>Please Select</option>
-                              <option value={"Hold"}>On Hold</option>
-                              <option value={"InWallet"}>In Wallet</option>
-                              <option value={"Requested"}>Requested</option>
-                              <option value={"Paid"}>Paid</option>
-                              <option value={"NotPaid"}>NotPaid</option>
-                            </select>
-                          </span>
-                        </td>
+                        {/* <td> */}
+                        {/* <span className={`badge whitespace-nowrap `}> */}
+                        {/* {data.status} */}
+                        {/* <select */}
+                        {/* id="Type" */}
+                        {/* className="form-select w-32 text-white-dark dark:border-none dark:bg-[#1E1611]" */}
+                        {/* // onChange={(e) => handleStatus(data?._id, e.target.value)} */}
+                        {/* // value={data?.status} */}
+                        {/* > */}
+                        {/* <option value={""}>Please Select</option> */}
+                        {/* <option value={"Hold"}>On Hold</option> */}
+                        {/* <option value={"InWallet"}>In Wallet</option> */}
+                        {/* <option value={"Requested"}>Requested</option> */}
+                        {/* <option value={"Paid"}>Paid</option> */}
+                        {/* <option value={"NotPaid"}>NotPaid</option> */}
+                        {/* </select> */}
+                        {/* // </span> */}
+                        {/* // </td> */}
                         <td className="text-center">
                           <div className="dropdown">
-                            {/* <DeleteIcon /> */}
+                            <DeleteIcon onClick={() => deleteData(data?._id)} />
                             <VisibilityIcon
                               onClick={() => handleVisibility(data)}
                             />
