@@ -462,11 +462,11 @@ const CreateCampaigns = ({
           </div> */}
 
           <div>
-            <label htmlFor="Content">Content</label>
+            <label htmlFor="Content">Share Content</label>
             <ReactQuill theme="snow" value={content} onChange={setContent} />
           </div>
           <div>
-            <label htmlFor="Share content">Share content</label>
+            <label htmlFor="Share content">Content</label>
             <ReactQuill
               theme="snow"
               value={shareContent}
