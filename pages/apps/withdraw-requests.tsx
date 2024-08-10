@@ -26,6 +26,8 @@ const UserWallet = () => {
   const [tableData, setTableData] = useState([]);
   const [userDropdownData, setUserDropdownData] = useState([]);
   const [status, setStatus] = useState("");
+  const [statusMap, setStatusMap] = useState({});
+
   const [statusModelOpen, setStatusModelOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [modelDetails, setModelDetails] = useState(false);
@@ -125,8 +127,11 @@ const UserWallet = () => {
   };
 
   const handleStatus = (id, newStatus) => {
-    setStatus(newStatus);
-    setSelectedId(id); // Set the selected id
+    setStatusMap({
+      ...statusMap,
+      [id]: newStatus,
+    });
+    setSelectedId(id);
     setStatusModelOpen(true);
   };
 
@@ -135,8 +140,8 @@ const UserWallet = () => {
     const token = localStorage.getItem("token");
     console.log(`${BASE_URL}/kyc/updateKycStatus/${selectedId}`);
     const _data = {
-      status: status,
-      note: "withdrow for user",
+      status: statusMap[selectedId],
+      note: "withdrawl for user",
     };
     try {
       const res = await axios.put(`${BASE_URL}/withdraw/${selectedId}`, _data, {
@@ -149,6 +154,7 @@ const UserWallet = () => {
       if (res) {
         // router.push("/dashboard/dashboard");
         // setTableData(res?.data?.data);
+        showAlert(15, res?.data?.message, "success");
         setStatusModelOpen(false);
         setLoading(false);
       } else {
@@ -318,27 +324,18 @@ const UserWallet = () => {
                           <span className={`badge whitespace-nowrap `}>
                             {/* {data.status} */}
                             <select
-                              id="Type"
-                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#1E1611]"
+                              className="form-select h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
+                              name="status"
+                              value={statusMap[data?._id] || data?.status} // Handle status per row
                               onChange={(e) =>
                                 handleStatus(data?._id, e.target.value)
                               }
-                              value={status}
                             >
-                              <option key={"all"} value={"all"}>
-                                Please Select
-                              </option>
-                              <option key={"Hold"} value={"Hold"}>
-                                Hold
-                              </option>
-                              <option key={"InWallet"} value={"InWallet"}>
-                              InWallet
-                              </option>
-                              {/* {userDropdownData?.map((option) => (
+                              {userDropdownData?.map((option) => (
                                 <option key={option} value={option}>
                                   {option}
                                 </option>
-                              ))} */}
+                              ))}
                             </select>
                           </span>
                         </td>

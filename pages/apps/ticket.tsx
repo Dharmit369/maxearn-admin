@@ -5,6 +5,8 @@ import { BASE_URL } from "@/constants";
 import axios from "axios";
 import { showAlert } from "@/components/showAlert";
 import auth from "../utils/auth";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import ModelTicketData from "@/components/ModelTicketData";
 
 const Resources = () => {
   const [loading, setLoading] = useState(true);
@@ -16,6 +18,8 @@ const Resources = () => {
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
   const [dropdownValue, setDropdownValue] = useState("AllTickets");
+  const [visibility, setVisibility] = useState(false);
+  const [visibilityData, setVisibilityData] = useState([]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -122,6 +126,11 @@ const Resources = () => {
     setDropdownValue(e.target.value);
   };
 
+  const handleVisibility = (data: any) => {
+    setVisibility(true);
+    setVisibilityData(data)
+  }
+
   return loading ? (
     <div>
       <Loader />
@@ -195,6 +204,10 @@ const Resources = () => {
                       </td>
                       <td className="text-center">
                         <div className="dropdown">
+                        <VisibilityIcon
+                              onClick={() => handleVisibility(data)}
+                              className="mr-5"
+                            />
                           <span
                             className="badge cursor-pointer bg-secondary"
                             onClick={() => {
@@ -291,6 +304,8 @@ const Resources = () => {
           </div>
         </div>
       )}
+
+      {visibility && <ModelTicketData setVisibility={setVisibility} visibilityData={visibilityData}/>}
     </div>
   );
 };
