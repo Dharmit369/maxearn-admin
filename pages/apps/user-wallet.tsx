@@ -236,6 +236,7 @@ const UserWallet = () => {
                     <th>Lead ID</th>
                     <th>Date</th>
                     <th>Campaign</th>
+                    <th>Payment Type</th>
                     <th>Amount</th>
                     <th>Paid For</th>
                     <th>Amount Status</th>
@@ -254,6 +255,7 @@ const UserWallet = () => {
                           </div>
                         </td>
                         <td>{data.campaign_name}</td>
+                        <td>{data.type}</td>
 
                         <td>{data.amount}</td>
                         <td>{data.lead_name}</td>
