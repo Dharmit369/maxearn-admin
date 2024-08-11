@@ -41,24 +41,24 @@ const UserWallet = () => {
 
   const filterData = () => {
     if (typeData === "Reffral") {
-      const filt = dataInfo?.filter((itm) => itm?.type === "Reffral")
+      const filt = dataInfo?.filter((itm) => itm?.type === "Reffral");
       if (filt) {
-        setTableData(filt)
+        setTableData(filt);
       }
     } else {
       if (typeData === "all") {
-        const filt = dataInfo
+        const filt = dataInfo;
         if (filt) {
-          setTableData(filt)
+          setTableData(filt);
         }
       } else {
-        const filt = dataInfo?.filter((itm) => itm?.type === "Lead")
+        const filt = dataInfo?.filter((itm) => itm?.type === "Lead");
         if (filt) {
-          setTableData(filt)
+          setTableData(filt);
         }
       }
     }
-  }
+  };
 
   useEffect(() => {
     getWallet();
@@ -163,18 +163,16 @@ const UserWallet = () => {
     const headers = [
       "Lead ID",
       "Date",
+      "Payment Type",
       "Amount",
-      "Paid For",
       "Amount Status",
-      "Status",
     ];
 
     const rows = tableData?.map((data) => [
       data?.lead_id,
       data?.date,
+      data?.type,
       data?.amount,
-      data?.lead_name,
-      data?.status,
       data?.status, // Adjust as per your data structure
     ]);
 
@@ -303,10 +301,10 @@ const UserWallet = () => {
                   <tr>
                     <th>Lead ID</th>
                     <th>Date</th>
-                    <th>Campaign</th>
+                    {/* <th>Campaign</th> */}
                     <th>Payment Type</th>
                     <th>Amount</th>
-                    <th>Type</th>
+                    {/* <th>Type</th> */}
                     <th>Paid For</th>
                     <th>Amount Status</th>
                     <th className="text-center">Action</th>
@@ -322,41 +320,52 @@ const UserWallet = () => {
                             {moment(data?.date)?.format("DD/MM/YYYY")}
                           </div>
                         </td>
-                        <td>{data.campaign_name}</td>
+                        {/* <td>{data.campaign_name}</td> */}
                         <td>{data.type}</td>
 
                         <td>{data.amount}</td>
-                        <td>{data.type}</td>
+                        {/* <td>{data.type}</td> */}
                         <td>
-                          <div className="border-t pt-4">
-                            <p className="text-gray-700 font-medium">
-                              <p className="text-gray-700 font-medium">
-                                {data?.type === "Reffral" ? "-" : `${data?.campaign_name} [${data?.advertize_payout} INR]`}
+                          <div className=" pt-4">
+                            <p className="font-medium text-gray-700">
+                              <p className="font-medium text-gray-700">
+                                {data?.type === "Reffral"
+                                  ? "-"
+                                  : `${data?.campaign_name} [${data?.advertize_payout} INR]`}
                               </p>
                             </p>
                           </div>
                           <div className="mt-4">
-                            <p className="text-sm text-gray-500 font-semibold">{data?.type === "Lead" && "Lead Info"}</p>
-                            <p className="text-gray-700 mt-2">
-                              {data?.type === "Lead" && "Phone:"} <span className="font-medium">{data?.type === "Lead" && `${data?.lead_phone}`}</span>
+                            <p className="text-sm font-semibold text-gray-500">
+                              {data?.type === "Lead" && "Lead Info"}
                             </p>
-                            <p className="text-gray-700 mt-1">
-                              {data?.type === "Lead" && "Email:"} <span className="font-medium">{data?.type === "Lead" && `${data?.lead_email}`}</span>
+                            <p className="mt-2 text-gray-700">
+                              {data?.type === "Lead" && "Phone:"}{" "}
+                              <span className="font-medium">
+                                {data?.type === "Lead" && `${data?.lead_phone}`}
+                              </span>
+                            </p>
+                            <p className="mt-1 text-gray-700">
+                              {data?.type === "Lead" && "Email:"}{" "}
+                              <span className="font-medium">
+                                {data?.type === "Lead" && `${data?.lead_email}`}
+                              </span>
                             </p>
                           </div>
                         </td>
                         <td>
                           <span
-                            className={`badge whitespace-nowrap ${data.status === "completed"
-                              ? "bg-primary   "
-                              : data.status === "Pending"
+                            className={`badge whitespace-nowrap ${
+                              data.status === "completed"
+                                ? "bg-primary   "
+                                : data.status === "Pending"
                                 ? "bg-secondary"
                                 : data.status === "In Progress"
-                                  ? "bg-success"
-                                  : data.status === "Canceled"
-                                    ? "bg-danger"
-                                    : "bg-primary"
-                              }`}
+                                ? "bg-success"
+                                : data.status === "Canceled"
+                                ? "bg-danger"
+                                : "bg-primary"
+                            }`}
                           >
                             {data.status}
                           </span>
