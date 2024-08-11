@@ -31,7 +31,7 @@ const Banner = () => {
     getBanner();
   }, []);
 
-  console.log(files)
+  console.log(files);
 
   const submitData = async () => {
     setLoading(true);
@@ -41,7 +41,7 @@ const Banner = () => {
       const formData = new FormData();
       formData.append("file", files);
       formData.append("url", banner?.url);
-      
+
       console.log("formData: ", formData);
       const res = await axios.post(`${BASE_URL}/banner`, formData, {
         maxBodyLength: Infinity,
@@ -101,7 +101,7 @@ const Banner = () => {
       setLoading(false);
     }
   };
-  
+
   const getBanner = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -156,7 +156,7 @@ const Banner = () => {
     }
   };
 
-  const handleEditClick = (banner:any) => {
+  const handleEditClick = (banner: any) => {
     setEditId(banner?._id);
     setEdit(true);
     setModel(true);
@@ -179,11 +179,9 @@ const Banner = () => {
     </div>
   ) : (
     <div>
-       <div className="my-6">
-              <h2 className="text-xl font-semibold dark:text-white">
-                Banner
-              </h2>
-            </div>
+      <div className="my-6">
+        <h2 className="text-xl font-semibold dark:text-white">Banner</h2>
+      </div>
       <div className="table-responsive mb-5">
         <table>
           <thead>
@@ -201,10 +199,18 @@ const Banner = () => {
                 <tr key={data?._id}>
                   <td>{index + 1}</td>
                   <td>
-                    <div className="whitespace-nowrap">{data?.image}</div>
+                    <div className="whitespace-nowrap">
+                      <img
+                        src={data?.image}
+                        alt="/"
+                        className="h-16 w-16 object-contain"
+                      />
+                    </div>
                   </td>
                   <td>
-                    <div className="whitespace-nowrap">{data?.url}</div>
+                    <a href={data?.url} target="_blank">
+                      {data?.url}
+                    </a>
                   </td>
                   <td className="border-b border-[#ebedf2] p-3 text-center dark:border-[#191e3a] md:space-x-4">
                     <ModeEditIcon

@@ -65,6 +65,7 @@ const Campaigns = () => {
   const [rowId, setRowId] = useState();
   const [statusDropdown, setStatusDropdown] = useState([]);
   const [search, setSearch] = useState("");
+
   const [statusChange, setStatusChange] = useState("");
   const [goals, setGoals] = useState([{ description: "", price: "" }]);
   const [content, setContent] = useState(``);
@@ -300,9 +301,18 @@ const Campaigns = () => {
       formData.append("goals", JSON.stringify(goalsData));
       //   formData.append("price", campaignData?.price);
       //   formData.append("status", campaignData?.status);
-      formData.append("featured_image", featured_image);
-      formData.append("offer_image", offer_image);
-      formData.append("shared_image", shared_image);
+      formData.append(
+        "featured_image",
+        featured_image ? featured_image : campaignData?.featured_image
+      );
+      formData.append(
+        "offer_image",
+        offer_image ? offer_image : campaignData?.offer_image
+      );
+      formData.append(
+        "shared_image",
+        shared_image ? shared_image : campaignData?.shared_image
+      );
       formData.append("offer_description", shareContent);
 
       console.log("formData: ", formData);
@@ -521,15 +531,6 @@ const Campaigns = () => {
                   <option value={itm?.id}>{itm?.name}</option>
                 ))}
               </select>
-
-              <input
-                id="campaign"
-                type="text"
-                placeholder="Enter Campaign name"
-                className="form-input h-10 dark:border-none dark:bg-[#1E1611]"
-                onChange={(e) => setSearch(e.target.value)}
-                value={search}
-              />
 
               <select
                 id="status"

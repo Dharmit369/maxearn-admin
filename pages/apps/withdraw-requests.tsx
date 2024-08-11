@@ -84,6 +84,7 @@ const UserWallet = () => {
         },
       });
       console.log(res.data, "delete response");
+      getWithdrawalRequest();
       showAlert(15, res?.data?.message, "success");
 
       setLoading(false);

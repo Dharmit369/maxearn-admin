@@ -153,6 +153,7 @@ const Tds = () => {
       "emailId",
       "pancardNo",
       "tds_amount",
+      "Withdraw_amount",
       "date",
     ];
 
@@ -162,7 +163,8 @@ const Tds = () => {
       data?.email,
       data?.pan_card_number,
       data?.amount,
-      data?.date, // Adjust as per your data structure
+      data?.withdraw_amount,
+      data?.date,
     ]);
 
     let csvContent =
@@ -184,11 +186,9 @@ const Tds = () => {
     </div>
   ) : (
     <div>
-       <div className="my-6">
-              <h2 className="text-xl font-semibold dark:text-white">
-                TDS
-              </h2>
-            </div>
+      <div className="my-6">
+        <h2 className="text-xl font-semibold dark:text-white">TDS</h2>
+      </div>
       <div className="mb-6 flex flex-col items-center   lg:flex-row lg:gap-3">
         <div className="flex w-64 flex-col ">
           <label htmlFor="from_date" className="mb-1">

@@ -54,8 +54,7 @@ const CreateCampaigns = ({
   };
 
   const addGoal = () => {
-    // setGoals([...goals, { description: '', price: '' }]);
-    console.log("add goals");
+    setGoals([...goals, { description: "", price: "" }]);
   };
 
   return (
@@ -174,23 +173,26 @@ const CreateCampaigns = ({
           </div>
 
           <div>
-            <label
-              htmlFor="sessionTimeout"
-              className="mb-2 block text-black dark:text-white"
-            >
-              Featured Image
-            </label>
+            <label htmlFor="FeaturedImage">Featured Image</label>
             <div className="flex justify-between xs:flex-col sm:flex-row">
+              {isEdit && campaignData?.featured_image && (
+                <div className="mb-2">
+                  <img
+                    src={campaignData.featured_image}
+                    alt="Featured Image"
+                    className="h-32 w-32 object-cover"
+                  />
+                </div>
+              )}
               <input
-                id="sessionTimeout"
+                id="FeaturedImage"
                 type="file"
-                placeholder="Enter Session Timeout"
+                placeholder="Upload Featured Image"
                 className="form-input w-full dark:border-none dark:bg-[#1E1611]"
                 name="featured_image"
                 onChange={(event) =>
                   handleMultipleChange(event, "featured_image")
                 }
-                // value={campaignData?.featured_image || ""}
               />
             </div>
           </div>
@@ -202,15 +204,25 @@ const CreateCampaigns = ({
 
           <div>
             <label htmlFor="OfferImage">Offer Image</label>
-            <input
-              id="OfferImage"
-              type="file"
-              placeholder="Offer Image"
-              className="form-input dark:border-none dark:bg-[#1E1611]"
-              name="offer_image"
-              onChange={(event) => handleMultipleChange(event, "offer_image")}
-              // value={campaignData?.offer_image || ""}
-            />
+            <div className="flex justify-between xs:flex-col sm:flex-row">
+              {isEdit && campaignData?.offer_image && (
+                <div className="mb-2">
+                  <img
+                    src={campaignData.offer_image}
+                    alt="Offer Image"
+                    className="h-32 w-32 object-cover"
+                  />
+                </div>
+              )}
+              <input
+                id="OfferImage"
+                type="file"
+                placeholder="Upload Offer Image"
+                className="form-input w-full dark:border-none dark:bg-[#1E1611]"
+                name="offer_image"
+                onChange={(event) => handleMultipleChange(event, "offer_image")}
+              />
+            </div>
           </div>
 
           {/* <div>
@@ -315,15 +327,28 @@ const CreateCampaigns = ({
 
           <div>
             <label htmlFor="SharedImage">Shared Image</label>
-            <input
-              id="SharedImage"
-              type="file"
-              placeholder="Shared Image"
-              className="form-input dark:border-none dark:bg-[#1E1611]"
-              name="shared_image"
-              onChange={(event) => handleMultipleChange(event, "shared_image")}
-              // value={campaignData?.shared_image || ""}
-            />
+            <div className="flex justify-between xs:flex-col sm:flex-row">
+              {isEdit && campaignData?.shared_image && (
+                <div className="mb-2">
+                  <img
+                    src={campaignData.shared_image}
+                    alt="Offer Image"
+                    className="h-32 w-32 object-cover"
+                  />
+                </div>
+              )}
+              <input
+                id="SharedImage"
+                type="file"
+                placeholder="Shared Image"
+                className="form-input dark:border-none dark:bg-[#1E1611]"
+                name="shared_image"
+                onChange={(event) =>
+                  handleMultipleChange(event, "shared_image")
+                }
+                // value={campaignData?.shared_image || ""}
+              />
+            </div>
           </div>
 
           <div>
@@ -358,7 +383,7 @@ const CreateCampaigns = ({
                 <input id="Description" type="text" placeholder="Description" className="form-input dark:bg-[#1E1611] dark:border-none" name="description" onChange={(e) => handleChange(e)} />
             </div>  */}
 
-          <div>
+          {/* <div>
             <label htmlFor="goals">Goal</label>
 
             <div className="flex gap-3">
@@ -444,6 +469,36 @@ const CreateCampaigns = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
+          </div> */}
+          <div>
+            <label htmlFor="goals">Goals</label>
+            {campaignData?.goals?.map((goal, index) => (
+              <div key={index} className="my-5 flex gap-3">
+                <input
+                  type="text"
+                  placeholder={`Description ${index + 1}`}
+                  className="form-input dark:border-none dark:bg-[#1E1611]"
+                  name={`description${index}`}
+                  value={goal?.description || ""}
+                  onChange={(e) => handleGoalChange(index, e)}
+                />
+                <input
+                  type="text"
+                  placeholder={`Price ${index + 1}`}
+                  className="form-input dark:border-none dark:bg-[#1E1611]"
+                  name={`price${index}`}
+                  value={goal?.price || ""}
+                  onChange={(e) => handleGoalChange(index, e)}
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addGoal}
+              className="mt-2 rounded bg-blue-500 px-4 py-2 text-white"
+            >
+              Add Goal
+            </button>
           </div>
 
           {/* <div>

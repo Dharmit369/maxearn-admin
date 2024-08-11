@@ -7,6 +7,7 @@ import { showAlert } from "@/components/showAlert";
 import auth from "../utils/auth";
 import { BASE_URL } from "@/constants";
 import KycTable from "./kyc-table";
+import CustomModal from "@/components/CustomModal";
 
 const KycUser = () => {
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,17 @@ const KycUser = () => {
   const [rejectedKycData, setRejectedKycData] = useState([]);
   const [kycCompletedOpen, setKycCompletedOpen] = useState(true);
   const [kycSubmittedOpen, setKycSubmittedOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedStatusId, setSelectedStatusId] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
 
+  const openModal = () => setStatusModelOpen(true);
+  const closeModal = () => setStatusModelOpen(false);
+  const handleConfirm = () => {
+    // Handle the confirmation action here
+    console.log("Confirmed");
+    closeModal();
+  };
   useEffect(() => {
     getKycData();
   }, []);
@@ -36,16 +47,11 @@ const KycUser = () => {
     setLoading(false);
   };
 
-  const handleStatus = (e, id) => {
-    setStatus(e.target.value);
-    setStatusModelOpen(true);
-    setStatusId(id);
-  };
-
-  const submitData = () => {
-    console.log("submitted");
-    setStatusModelOpen(false);
-  };
+  // const handleStatus = (e, id) => {
+  //   setStatus(e.target.value);
+  //   setStatusModelOpen(true);
+  //   setStatusId(id);
+  // };
 
   const getKyc = async () => {
     const token = localStorage.getItem("token");
@@ -58,7 +64,7 @@ const KycUser = () => {
       setTableData(res?.data?.data);
     } catch (e) {
       console.error(e);
-      showAlert(15, e.message, "error");
+      // showAlert(15, e.message, "error");
     }
   };
 
@@ -138,12 +144,64 @@ const KycUser = () => {
       console.log(res.data, "data response");
 
       setRejectedKycData(res?.data?.data);
+
       setLoading(false);
     } catch (e) {
       console.error(e, "reject kyc error");
     } finally {
       setLoading(false);
     }
+  };
+
+  const submitData = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+
+    const data = {
+      status: selectedStatus,
+      message: modalMessage,
+    };
+
+    try {
+      const res = await axios.put(
+        `${BASE_URL}/kyc/updateKycStatus/${selectedStatusId}`,
+        data,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log(res.data, "data response");
+      if (res) {
+        setLoading(false);
+        showAlert(15, res?.data?.message, "success");
+        getKyc(),
+          getPendingKycData(),
+          getsubmittedKycData(),
+          getApprovedKycData(),
+          getRejectedKycData(),
+          setStatusModelOpen(false);
+      } else {
+        showAlert(15, res?.data?.message, "error");
+        setStatusModelOpen(false);
+        setLoading(false);
+      }
+    } catch (e) {
+      console.error(e, "API error");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStatus = (e, statusId) => {
+    const status = e.target.value;
+    setSelectedStatus(status);
+    setSelectedStatusId(statusId);
+    setStatusModelOpen(true);
   };
 
   return loading ? (
@@ -165,7 +223,7 @@ const KycUser = () => {
                   }
                 -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
                 >
-                  All
+                  All ({tableData.length})
                 </button>
               )}
             </Tab>
@@ -179,7 +237,11 @@ const KycUser = () => {
                   }
                 -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
                 >
-                  Pending User
+                  Pending User (
+                  {pendingKycData?.userData?.length
+                    ? pendingKycData?.userData?.length
+                    : 0}
+                  )
                 </button>
               )}
             </Tab>
@@ -193,7 +255,11 @@ const KycUser = () => {
                   }
                 -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
                 >
-                  Submitted KYC
+                  Submitted KYC (
+                  {submittedKycData?.userData?.length
+                    ? submittedKycData?.userData?.length
+                    : 0}
+                  )
                 </button>
               )}
             </Tab>
@@ -207,11 +273,15 @@ const KycUser = () => {
                   }
                 -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
                 >
-                  Approved KYC
+                  Approved KYC (
+                  {approveKycData?.userData?.length
+                    ? approveKycData?.userData?.length
+                    : 0}
+                  )
                 </button>
               )}
             </Tab>
-            <Tab as={Fragment}>
+            {/* <Tab as={Fragment}>
               {({ selected }) => (
                 <button
                   className={`${
@@ -221,10 +291,14 @@ const KycUser = () => {
                   }
                 -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
                 >
-                  Rejected KYC
+                  Rejected KYC (
+                  {rejectedKycData?.userData?.length
+                    ? rejectedKycData?.userData?.length
+                    : 0}
+                  )
                 </button>
               )}
-            </Tab>
+            </Tab> */}
           </Tab.List>
 
           <Tab.Panels>
@@ -234,6 +308,7 @@ const KycUser = () => {
                   <thead className="sticky top-0 bg-blue-100 ">
                     <tr>
                       <th>ID</th>
+                      <th>User Name</th>
                       <th>AFFILIATE ID</th>
                       <th>PAN CARD</th>
                       <th>AADHAR CARD FRONT</th>
@@ -248,6 +323,7 @@ const KycUser = () => {
                       return (
                         <tr key={data?._id}>
                           <td>{index + 1}</td>
+                          <td>{data?.username}</td>
                           <td>
                             <div className="whitespace-nowrap">
                               {data?.affiliate_id || "-"}
@@ -371,6 +447,8 @@ const KycUser = () => {
                   <thead className="sticky top-0 bg-blue-100 ">
                     <tr>
                       <th>ID</th>
+                      <th>User Name</th>
+
                       <th>AFFILIATE ID</th>
                       <th>PAN CARD</th>
                       <th>AADHAR CARD FRONT</th>
@@ -384,6 +462,7 @@ const KycUser = () => {
                     {pendingKycData?.userData?.map((data, userIndex) => (
                       <tr key={data?._id}>
                         <td>{userIndex + 1}</td>
+                        <td>{data?.username}</td>
                         <td>
                           <div className="whitespace-nowrap">
                             {data?.affiliate_id || "-"}
@@ -504,6 +583,7 @@ const KycUser = () => {
                   <thead className="sticky top-0 bg-blue-100 ">
                     <tr>
                       <th>ID</th>
+                      <th>User Name</th>
                       <th>AFFILIATE ID</th>
                       <th>PAN CARD</th>
                       <th>AADHAR CARD FRONT</th>
@@ -518,6 +598,7 @@ const KycUser = () => {
                       user?.user?.kycData?.map((data, index) => (
                         <tr key={data?._id}>
                           <td>{userIndex + 1}</td>
+                          <td>{user?.user?.username}</td>
                           <td>
                             <div className="whitespace-nowrap">
                               {user?.user?.affiliate_id || "-"}
@@ -639,6 +720,7 @@ const KycUser = () => {
                   <thead className="sticky top-0 bg-blue-100 ">
                     <tr>
                       <th>ID</th>
+                      <th>USER NAME</th>
                       <th>AFFILIATE ID</th>
                       <th>PAN CARD</th>
                       <th>AADHAR CARD FRONT</th>
@@ -653,6 +735,8 @@ const KycUser = () => {
                       user?.user?.kycData?.map((data, index) => (
                         <tr key={data?._id}>
                           <td>{userIndex + 1}</td>
+                          <td>{user?.user?.username}</td>
+
                           <td>
                             <div className="whitespace-nowrap">
                               {user?.user?.affiliate_id || "-"}
@@ -774,6 +858,8 @@ const KycUser = () => {
                   <thead className="sticky top-0  bg-blue-100">
                     <tr>
                       <th>ID</th>
+                      <th>USER NAME</th>
+
                       <th>AFFILIATE ID</th>
                       <th>PAN CARD</th>
                       <th>AADHAR CARD FRONT</th>
@@ -788,6 +874,7 @@ const KycUser = () => {
                       user?.user?.kycData?.map((data, index) => (
                         <tr key={data?._id}>
                           <td>{userIndex + 1}</td>
+                          <td>{user?.user?.username}</td>
                           <td>
                             <div className="whitespace-nowrap">
                               {user?.user?.affiliate_id || "-"}
@@ -910,12 +997,19 @@ const KycUser = () => {
       </div>
 
       {statusModelOpen && (
-        <StatusModel
-          setStatusModelOpen={setStatusModelOpen}
-          submitData={submitData}
-          statusId={statusId}
-          status={status}
-        />
+        <CustomModal
+          isOpen={statusModelOpen}
+          onClose={() => setStatusModelOpen(false)}
+          onConfirm={submitData} // Trigger API call on confirm
+        >
+          <input
+            type="text"
+            placeholder="Enter your message"
+            value={modalMessage}
+            className="px-6 py-3"
+            onChange={(e) => setModalMessage(e.target.value)} // Update message state
+          />
+        </CustomModal>
       )}
     </div>
   );

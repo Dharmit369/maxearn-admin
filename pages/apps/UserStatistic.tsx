@@ -70,7 +70,7 @@ const UserStatistics = () => {
       data?.username,
       data?.lead_payment,
       data?.refral_payment,
-      data?.totalmemo,
+      data?.total_amount,
     ]);
 
     let csvContent =
@@ -95,7 +95,7 @@ const UserStatistics = () => {
       {/* <div className="my-6">
         <h2 className="text-lg  xs:px-5 lg:px-0">All withdraw request List</h2>
       </div> */}
-        <div className="my-6 flex justify-between">
+      <div className="my-6 flex justify-between">
         <h2 className="text-xl font-semibold dark:text-white">
           User Statistics
         </h2>

@@ -7,6 +7,7 @@ import { showAlert } from "@/components/showAlert";
 import auth from "../utils/auth";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ModelTicketData from "@/components/ModelTicketData";
+import StatusModel from "@/components/statusModel";
 
 const Resources = () => {
   const [loading, setLoading] = useState(true);
@@ -17,9 +18,13 @@ const Resources = () => {
   const [replyId, setReplyId] = useState("");
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
+  const [ticketname, setTicketName] = useState("");
+
   const [dropdownValue, setDropdownValue] = useState("AllTickets");
   const [visibility, setVisibility] = useState(false);
   const [visibilityData, setVisibilityData] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
+  const [statusModelOpen, setStatusModelOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -61,6 +66,40 @@ const Resources = () => {
     }
   };
 
+  const updateStatus = async (id, status, name) => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+
+    const data = {
+      status: status,
+    };
+    try {
+      const res = await axios.put(
+        `${BASE_URL}/ticket/updateTicketStatus/${id}?name=${name}`,
+        data,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res.data, "ssssssssssssssssssssssssssssssssssssssssssssss");
+      if (res) {
+        setLoading(false);
+        showAlert(15, res?.data?.message, "success");
+        getData(dropdownValue);
+      } else {
+        showAlert(15, res?.data?.message, "error");
+        getData(dropdownValue);
+      }
+    } catch (e) {
+      console.error(e, "login error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const submitData = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -84,13 +123,20 @@ const Resources = () => {
       if (res) {
         setReplyOpen(false);
         setLoading(false);
+        setStatusModelOpen(false);
         showAlert(15, res.data.message, "success");
       } else {
+        setStatusModelOpen(false);
+
         showAlert(15, res?.data?.message, "error");
       }
     } catch (e) {
+      setStatusModelOpen(false);
+
       console.error(e, "login error");
     } finally {
+      setStatusModelOpen(false);
+
       setLoading(false);
     }
   };
@@ -128,8 +174,14 @@ const Resources = () => {
 
   const handleVisibility = (data: any) => {
     setVisibility(true);
-    setVisibilityData(data)
-  }
+    setVisibilityData(data);
+  };
+
+  const handleStatus = (id, status, name) => {
+    console.log("Status:", status);
+    console.log("Ticket Name:", name);
+    updateStatus(id, status, name);
+  };
 
   return loading ? (
     <div>
@@ -137,11 +189,9 @@ const Resources = () => {
     </div>
   ) : (
     <div>
-       <div className="my-6">
-              <h2 className="text-xl font-semibold dark:text-white">
-               Ticket
-              </h2>
-            </div>
+      <div className="my-6">
+        <h2 className="text-xl font-semibold dark:text-white">Ticket</h2>
+      </div>
       <div className="mb-6 flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
         <select
           id="filterStatus"
@@ -169,8 +219,9 @@ const Resources = () => {
                   <th>Request ID</th>
                   <th>UserName</th>
                   <th>Mobile No.</th>
-                  <th>Title</th>
                   <th>Ticket Name</th>
+
+                  <th>Title</th>
                   <th>Status</th>
                   <th className="text-center">Action</th>
                 </tr>
@@ -190,7 +241,7 @@ const Resources = () => {
                       <td>{data?.issue || "-"}</td>
 
                       <td>
-                        <span
+                        {/* <span
                           className={`badge whitespace-nowrap ${
                             data?.status === "Active"
                               ? "bg-success"
@@ -200,14 +251,29 @@ const Resources = () => {
                           }`}
                         >
                           {data?.status?.toUpperCase()}
-                        </span>
+                        </span> */}
+                        <select
+                          id="Type"
+                          className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                          onChange={(e) =>
+                            handleStatus(
+                              data?._id,
+                              e.target.value,
+                              data?.ticketName
+                            )
+                          }
+                          value={data?.status}
+                        >
+                          <option value={"Active"}>Active</option>
+                          <option value={"DeActive"}>DeActive</option>
+                        </select>
                       </td>
                       <td className="text-center">
                         <div className="dropdown">
-                        <VisibilityIcon
-                              onClick={() => handleVisibility(data)}
-                              className="mr-5"
-                            />
+                          <VisibilityIcon
+                            onClick={() => handleVisibility(data)}
+                            className="mr-5"
+                          />
                           <span
                             className="badge cursor-pointer bg-secondary"
                             onClick={() => {
@@ -305,7 +371,12 @@ const Resources = () => {
         </div>
       )}
 
-      {visibility && <ModelTicketData setVisibility={setVisibility} visibilityData={visibilityData}/>}
+      {visibility && (
+        <ModelTicketData
+          setVisibility={setVisibility}
+          visibilityData={visibilityData}
+        />
+      )}
     </div>
   );
 };

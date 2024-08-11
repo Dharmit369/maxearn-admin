@@ -29,11 +29,15 @@ const UserWallet = () => {
 
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [campagin, setCampagin] = useState([]);
+  const [statusChange, setStatusChange] = useState("");
+
   const [changeData, setchangeData] = useState(data);
   const [modelDetails, setModelDetails] = useState(false);
   const [modelData, setModelData] = useState([]);
   const [dataInfo, setDataInfo] = useState([]);
   const [typeData, setTypeData] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     filterData();
@@ -62,7 +66,44 @@ const UserWallet = () => {
 
   useEffect(() => {
     getWallet();
-  }, [changeData]);
+  }, [changeData, statusChange]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    // console.log(`${BASE_URL}/banner`);
+    try {
+      const res = await axios.get(`${BASE_URL}/marketing/campaign`, {
+        maxBodyLength: Infinity,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      //   console.log(res.data, "data response");
+      if (res) {
+        // router.push("/dashboard/dashboard");
+        console.log(res?.data?.data, "asasasas");
+        setCampagin(res?.data?.data);
+
+        // setAddCategory(false);
+        setLoading(false);
+      } else {
+        showAlert(15, res?.data?.message, "error");
+      }
+    } catch (e) {
+      console.error(e, "login error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDropdown = (text: any, e: any) => {
+    setStatusChange(e.target.value);
+  };
 
   const handleVisibility = (data: any) => {
     setModelDetails(true);
@@ -75,7 +116,7 @@ const UserWallet = () => {
     console.log(`${BASE_URL}/withdraw`);
     try {
       const res = await axios.get(
-        `${BASE_URL}/wallet/?affiliate_id=${changeData?.affiliate_id}&start_date=${changeData?.start_date}&end_date=${changeData?.end_date}&status=${changeData?.status}`,
+        `${BASE_URL}/wallet/?affiliate_id=${changeData?.affiliate_id}&start_date=${changeData?.start_date}&end_date=${changeData?.end_date}&status=${changeData?.status}&campaign_id=${statusChange}`,
         {
           maxBodyLength: Infinity,
           headers: {
@@ -254,7 +295,31 @@ const UserWallet = () => {
               onChange={(e) => handleChange(e)}
               value={changeData?.end_date}
             />
+            {/* <select
+              id="campgain"
+              className="form-select h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
+              name="status"
+              onChange={(e) => handleChange(e)}
+              value={changeData?.status}
+            >
+              <option key={"all"} value={"all"}>
+                All
+              </option>
+              <option>Debit</option>
+              <option>Credit</option>
+            </select> */}
 
+            <select
+              id="campgain"
+              className="form-select h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
+              onChange={(e) => handleDropdown("status", e)}
+              value={statusChange}
+            >
+              <option value={""}>{"All"}</option>
+              {campagin?.map((itm) => (
+                <option value={itm?._id}>{itm?.name}</option>
+              ))}
+            </select>
             <select
               id="filterStatus"
               className="form-select h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
@@ -300,6 +365,8 @@ const UserWallet = () => {
                 <thead>
                   <tr>
                     <th>Lead ID</th>
+                    <th>User Name</th>
+                    <th>Mobile No</th>
                     <th>Date</th>
                     {/* <th>Campaign</th> */}
                     <th>Payment Type</th>
@@ -315,6 +382,9 @@ const UserWallet = () => {
                     return (
                       <tr key={data?._id}>
                         <td>{data?.lead_id}</td>
+                        <td>{data?.user_name}</td>
+                        <td>{data?.user_phone}</td>
+
                         <td>
                           <div className="whitespace-nowrap">
                             {moment(data?.date)?.format("DD/MM/YYYY")}
