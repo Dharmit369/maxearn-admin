@@ -25,7 +25,9 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/apps/todolist.tsx",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    "src",
+    "types"
   ],
   "exclude": ["node_modules"]
 }

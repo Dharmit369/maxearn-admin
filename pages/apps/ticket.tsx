@@ -8,10 +8,12 @@ import auth from "../utils/auth";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ModelTicketData from "@/components/ModelTicketData";
 import StatusModel from "@/components/statusModel";
+import RNFS from "react-native-fs";
 
 const Resources = () => {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [replyData, setReplyOpen] = useState(false);
   const [issue, setIssue] = useState("");
   const [reply, setReply] = useState("");
@@ -21,11 +23,12 @@ const Resources = () => {
   const [ticketname, setTicketName] = useState("");
 
   const [dropdownValue, setDropdownValue] = useState("AllTickets");
+  const [requestIdFilter, setRequestIdFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
   const [visibility, setVisibility] = useState(false);
   const [visibilityData, setVisibilityData] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [statusModelOpen, setStatusModelOpen] = useState(false);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -37,6 +40,10 @@ const Resources = () => {
   useEffect(() => {
     getData(dropdownValue);
   }, [dropdownValue]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [requestIdFilter, statusFilter, tableData]);
 
   const getData = async (dropdown: any) => {
     setLoading(true);
@@ -64,6 +71,22 @@ const Resources = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const applyFilters = () => {
+    let data = tableData;
+
+    if (requestIdFilter) {
+      data = data.filter((item) =>
+        item?.ticket_id.toLowerCase().includes(requestIdFilter.toLowerCase())
+      );
+    }
+
+    if (statusFilter !== "All") {
+      data = data.filter((item) => item?.status === statusFilter);
+    }
+
+    setFilteredData(data);
   };
 
   const updateStatus = async (id, status, name) => {
@@ -172,14 +195,20 @@ const Resources = () => {
     setDropdownValue(e.target.value);
   };
 
-  const handleVisibility = (data: any) => {
+  const handleRequestIdChange = (e) => {
+    setRequestIdFilter(e.target.value);
+  };
+
+  const handleStatusFilterChange = (e) => {
+    setStatusFilter(e.target.value);
+  };
+
+  const handleVisibility = (data) => {
     setVisibility(true);
     setVisibilityData(data);
   };
 
   const handleStatus = (id, status, name) => {
-    console.log("Status:", status);
-    console.log("Ticket Name:", name);
     updateStatus(id, status, name);
   };
 
@@ -192,7 +221,7 @@ const Resources = () => {
       <div className="my-6">
         <h2 className="text-xl font-semibold dark:text-white">Ticket</h2>
       </div>
-      <div className="mb-6 flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
+      <div className="mb-6 flex items-center  xs:flex-col xs:space-y-4 xs:px-5 md:space-y-0 lg:flex-row lg:gap-3 lg:px-0">
         <select
           id="filterStatus"
           className="form-select h-10 w-[120px] text-white-dark dark:border-none dark:bg-[#1E1611]"
@@ -209,7 +238,27 @@ const Resources = () => {
           <option value={"leadIssue"}>leadIssue</option>
           <option value={"otherIssue"}>otherIssue</option>
         </select>
+
+        <select
+          id="Type"
+          className="form-select h-10 w-[120px] text-white-dark dark:border-none dark:bg-[#1E1611]"
+          onChange={handleStatusFilterChange}
+          value={statusFilter}
+        >
+          <option value={"All"}>All</option>
+          <option value={"Active"}>Active</option>
+          <option value={"DeActive"}>DeActive</option>
+        </select>
+        <input
+          id="userId"
+          type="text"
+          placeholder="Request ID"
+          className="form-input mt-4 h-10 w-32 dark:border-none dark:bg-[#1E1611]"
+          onChange={handleRequestIdChange}
+          value={requestIdFilter}
+        />
       </div>
+
       <div>
         {replyData === false && (
           <div className="table-responsive mb-5 xs:px-5 lg:px-0">
@@ -227,7 +276,7 @@ const Resources = () => {
                 </tr>
               </thead>
               <tbody>
-                {tableData?.map((data) => {
+                {filteredData?.map((data) => {
                   return (
                     <tr key={data?.id}>
                       <td>

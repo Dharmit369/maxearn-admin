@@ -8,6 +8,8 @@ import auth from "../utils/auth";
 import { BASE_URL } from "@/constants";
 import KycTable from "./kyc-table";
 import CustomModal from "@/components/CustomModal";
+import ReactPaginate from "react-paginate";
+import { CSVLink } from "react-csv";
 
 const KycUser = () => {
   const [loading, setLoading] = useState(true);
@@ -204,6 +206,138 @@ const KycUser = () => {
     setStatusModelOpen(true);
   };
 
+  const convertTableDataToCSV = (data) => {
+    return data.map((item) => ({
+      ID: item?._id,
+      UserName: item?.username,
+      AffiliateID: item?.affiliate_id || "-",
+      PANCard: item?.pan_card || "-",
+      AadharCardFront: item?.adhar_card_front || "-",
+      AadharCardBack: item?.adhar_card_back || "-",
+      ChequeBook: item?.chequebook || "-",
+      PassBook: item?.passbook || "-",
+      Status: item?.status || "-",
+    }));
+  };
+
+  const convertPendingKycDataToCSV = (data) => {
+    return data?.map((item) => ({
+      ID: item?._id,
+      UserName: item?.username,
+      AffiliateID: item?.affiliate_id || "-",
+      PANCard: item?.pan_card || "-",
+      AadharCardFront: item?.adhar_card_front || "-",
+      AadharCardBack: item?.adhar_card_back || "-",
+      ChequeBook: item?.chequebook || "-",
+      PassBook: item?.passbook || "-",
+      Status: item?.status || "-",
+    }));
+  };
+
+  const convertSubmittedKycDataToCSV = (data) => {
+    return data?.flatMap((user) =>
+      user?.kycData.map((item) => ({
+        ID: item?._id,
+        UserName: user?.user?.username,
+        AffiliateID: user?.user?.affiliate_id || "-",
+        PANCard: item?.pan_card || "-",
+        AadharCardFront: item?.adhar_card_front || "-",
+        AadharCardBack: item?.adhar_card_back || "-",
+        ChequeBook: item?.chequebook || "-",
+        PassBook: item?.passbook || "-",
+        Status: item?.status || "-",
+      }))
+    );
+  };
+
+  const exportTableData = () => {
+    const headers = [
+      "ID",
+      "USER NAME",
+      "AFFILIATE ID",
+      "PAN CARD",
+      "AADHAR CARD FRONT",
+      "AADHAR CARD BACK",
+      "CHEQUE BOOK",
+      "PASS BOOK",
+      "STATUS",
+    ];
+
+    const rows =
+      approveKycData?.userData?.flatMap((user, userIndex) =>
+        user?.user?.kycData?.map((data) => [
+          userIndex + 1,
+          user?.user?.username || "-",
+          user?.user?.affiliate_id || "-",
+          data?.pan_card || "-",
+          data?.adhar_card_front || "-",
+          data?.adhar_card_back || "-",
+          data?.chequebook || "-",
+          data?.passbook || "-",
+          data?.status || "-",
+        ])
+      ) || [];
+
+    let csvContent =
+      "data:text/csv;charset=utf-8," +
+      [
+        headers.join(","),
+        ...rows.map((row) => row.map((item) => `"${item}"`).join(",")),
+      ].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Lead-List.csv");
+    document.body.appendChild(link);
+
+    link.click();
+  };
+
+  const exportSubmitTableData = () => {
+    const headers = [
+      "ID",
+      "USER NAME",
+      "AFFILIATE ID",
+      "PAN CARD",
+      "AADHAR CARD FRONT",
+      "AADHAR CARD BACK",
+      "CHEQUE BOOK",
+      "PASS BOOK",
+      "STATUS",
+    ];
+
+    const rows =
+      submittedKycData?.userData?.flatMap((user, userIndex) =>
+        user?.user?.kycData?.map((data) => [
+          userIndex + 1,
+          user?.user?.username || "-",
+          user?.user?.affiliate_id || "-",
+          data?.pan_card || "-",
+          data?.adhar_card_front || "-",
+          data?.adhar_card_back || "-",
+          data?.chequebook || "-",
+          data?.passbook || "-",
+          data?.status || "-",
+        ])
+      ) || [];
+
+    let csvContent =
+      "data:text/csv;charset=utf-8," +
+      [
+        headers.join(","),
+        ...rows.map((row) => row.map((item) => `"${item}"`).join(",")),
+      ].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Lead-List.csv");
+    document.body.appendChild(link);
+
+    link.click();
+  };
+
   return loading ? (
     <div>
       <Loader />
@@ -303,6 +437,15 @@ const KycUser = () => {
 
           <Tab.Panels>
             <Tab.Panel>
+              <div className="mb-5 mr-10 mt-5 flex justify-end">
+                <CSVLink
+                  data={convertTableDataToCSV(tableData)}
+                  filename={"all-data.csv"}
+                  className="btn btn-primary"
+                >
+                  Export All Data
+                </CSVLink>
+              </div>
               <div className="table-responsive mb-5 mt-5 max-h-96">
                 <table className="   scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941]">
                   <thead className="sticky top-0 bg-blue-100 ">
@@ -442,6 +585,17 @@ const KycUser = () => {
             </Tab.Panel>
             <Tab.Panel>
               {/* <KycTable KycData={pendingKycData} handleStatus={handleStatus} /> */}
+              <div className="mb-5 mr-10 mt-5 flex justify-end">
+                <CSVLink
+                  data={convertPendingKycDataToCSV(
+                    pendingKycData?.userData || []
+                  )}
+                  filename={"pending-kyc-data.csv"}
+                  className="btn btn-primary"
+                >
+                  Export Pending KYC
+                </CSVLink>
+              </div>
               <div className="table-responsive mb-5  mt-5 max-h-96">
                 <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
                   <thead className="sticky top-0 bg-blue-100 ">
@@ -578,6 +732,17 @@ const KycUser = () => {
               </div>
             </Tab.Panel>
             <Tab.Panel>
+              <div className="mb-5 mr-10 mt-5 flex justify-end">
+                <div className="mb-5 mr-10 mt-5 flex justify-end">
+                  <button
+                    type="submit"
+                    className="btn btn-primary my-6"
+                    onClick={exportSubmitTableData}
+                  >
+                    Export
+                  </button>
+                </div>
+              </div>
               <div className="table-responsive mb-5  mt-5 max-h-96">
                 <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
                   <thead className="sticky top-0 bg-blue-100 ">
@@ -715,6 +880,15 @@ const KycUser = () => {
               </div>
             </Tab.Panel>
             <Tab.Panel>
+              <div className="mb-5 mr-10 mt-5 flex justify-end">
+                <button
+                  type="submit"
+                  className="btn btn-primary my-6"
+                  onClick={exportTableData}
+                >
+                  Export
+                </button>
+              </div>
               <div className="table-responsive mb-5  mt-5 max-h-96">
                 <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
                   <thead className="sticky top-0 bg-blue-100 ">
@@ -851,144 +1025,6 @@ const KycUser = () => {
                   </tbody>
                 </table>
               </div>
-            </Tab.Panel>
-            <Tab.Panel>
-              <div className="table-responsive mb-5  mt-5 max-h-96">
-                <table className="scrollbar-thin scrollbar-track-[#010314] scrollbar-thumb-[#1a2941] w-full">
-                  <thead className="sticky top-0  bg-blue-100">
-                    <tr>
-                      <th>ID</th>
-                      <th>USER NAME</th>
-
-                      <th>AFFILIATE ID</th>
-                      <th>PAN CARD</th>
-                      <th>AADHAR CARD FRONT</th>
-                      <th>AADHAR CARD BACK</th>
-                      <th>CHEQUE BOOK</th>
-                      <th>PASS BOOK</th>
-                      <th>STATUS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rejectedKycData?.userData?.map((user, userIndex) =>
-                      user?.user?.kycData?.map((data, index) => (
-                        <tr key={data?._id}>
-                          <td>{userIndex + 1}</td>
-                          <td>{user?.user?.username}</td>
-                          <td>
-                            <div className="whitespace-nowrap">
-                              {user?.user?.affiliate_id || "-"}
-                            </div>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.pan_card}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="PAN Card"
-                            >
-                              {data?.pan_card ? (
-                                <img
-                                  src={data?.pan_card}
-                                  alt="PAN Card"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.adhar_card_front}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Aadhar Card Front"
-                            >
-                              {data?.adhar_card_front ? (
-                                <img
-                                  src={data?.adhar_card_front}
-                                  alt="Aadhar Card Front"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.adhar_card_back}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Aadhar Card Back"
-                            >
-                              {data?.adhar_card_back ? (
-                                <img
-                                  src={data?.adhar_card_back}
-                                  alt="Aadhar Card Back"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.chequebook}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Aadhar Card Back"
-                            >
-                              {data?.chequebook ? (
-                                <img
-                                  src={data?.chequebook}
-                                  alt="Aadhar Card Back"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <a
-                              href={`${data?.passbook}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Pass Book"
-                            >
-                              {data?.passbook ? (
-                                <img
-                                  src={data?.passbook}
-                                  alt="passbook"
-                                  className="h-16 w-16 object-contain"
-                                />
-                              ) : (
-                                "-"
-                              )}
-                            </a>
-                          </td>
-                          <td>
-                            <select
-                              id="Type"
-                              className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
-                              onChange={(e) => handleStatus(e, data?._id)}
-                              value={data?.status}
-                            >
-                              <option value={""}>Please Select</option>
-                              <option value={"Submitted"}>Submitted</option>
-                              <option value={"Approved"}>Approved</option>
-                              <option value={"Rejected"}>Rejected</option>
-                            </select>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>{" "}
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>

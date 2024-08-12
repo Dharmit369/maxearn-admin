@@ -51,7 +51,7 @@ const BankUserDetails = () => {
     }
   };
 
-  const updateStatus = async ({ id, status }) => {
+  const updateStatus = async (id, status) => {
     setLoading(true);
     const token = localStorage.getItem("token");
 
@@ -75,7 +75,6 @@ const BankUserDetails = () => {
       );
       console.log(res.data, "ssssssssssssssssssssssssssssssssssssssssssssss");
       if (res) {
-        setTableData(res?.data?.data);
         setLoading(false);
         showAlert(15, res?.data?.message, "success");
         getBankDetails();
@@ -91,16 +90,7 @@ const BankUserDetails = () => {
   };
 
   const handleStatus = (id, newStatus) => {
-    setStatus(newStatus);
-    setSelectedId(id); // Set the selected id
-    setStatusModelOpen(true);
-  };
-
-  const submitData = () => {
-    if (selectedId && status) {
-      updateStatus({ id: selectedId, status: status });
-    }
-    setStatusModelOpen(false);
+    updateStatus(id, newStatus);
   };
 
   return loading ? (
@@ -110,11 +100,11 @@ const BankUserDetails = () => {
   ) : (
     <div>
       <div className="mb-6 flex justify-between">
-      <div className="my-6">
-              <h2 className="text-xl font-semibold dark:text-white">
-               Bank Details
-              </h2>
-            </div>
+        <div className="my-6">
+          <h2 className="text-xl font-semibold dark:text-white">
+            Bank Details
+          </h2>
+        </div>
         {/* <h2 className="text-xl font-semibold dark:text-white">
         </h2>
         <button
