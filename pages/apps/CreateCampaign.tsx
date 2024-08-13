@@ -11,12 +11,10 @@ import { ReactSortable } from "react-sortablejs";
 import Select from "react-select";
 import { Tab } from "@headlessui/react";
 import auth from "../utils/auth";
-import "react-quill/dist/quill.snow.css";
+
 import dynamic from "next/dynamic";
 
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const CreateCampaigns = ({
   createCampaigns,
@@ -50,13 +48,13 @@ const CreateCampaigns = ({
   // }, []);
 
   console.log("options", categoryOptionData);
+
   const handleGoalChange = (index, e) => {
     const { name, value } = e.target;
     const newGoals = [...goals];
-    newGoals[index][name] = value;
+    newGoals[index] = { ...newGoals[index], [name]: value };
     setGoals(newGoals);
   };
-
   const addGoal = () => {
     setGoals([...goals, { description: "", price: "" }]);
   };
@@ -476,13 +474,13 @@ const CreateCampaigns = ({
           </div> */}
           <div>
             <label htmlFor="goals">Goals</label>
-            {campaignData?.goals?.map((goal, index) => (
+            {goals?.map((goal, index) => (
               <div key={index} className="my-5 flex gap-3">
                 <input
                   type="text"
                   placeholder={`Description ${index + 1}`}
                   className="form-input dark:border-none dark:bg-[#1E1611]"
-                  name={`description${index}`}
+                  name="description"
                   value={goal?.description || ""}
                   onChange={(e) => handleGoalChange(index, e)}
                 />
@@ -490,7 +488,7 @@ const CreateCampaigns = ({
                   type="text"
                   placeholder={`Price ${index + 1}`}
                   className="form-input dark:border-none dark:bg-[#1E1611]"
-                  name={`price${index}`}
+                  name="price"
                   value={goal?.price || ""}
                   onChange={(e) => handleGoalChange(index, e)}
                 />
