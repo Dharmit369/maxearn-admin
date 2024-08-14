@@ -203,18 +203,26 @@ const UserWallet = () => {
   const exportCSV = () => {
     const headers = [
       "Lead ID",
+      "User Name",
+      "Mobile No",
       "Date",
       "Payment Type",
       "Amount",
+      "Paid For",
       "Amount Status",
     ];
 
     const rows = tableData?.map((data) => [
       data?.lead_id,
-      data?.date,
+      data?.user_name,
+      data?.user_phone,
+      moment(data?.date)?.format("DD/MM/YYYY"),
       data?.type,
       data?.amount,
-      data?.status, // Adjust as per your data structure
+      data?.type === "Reffral"
+        ? "-"
+        : `${data?.campaign_name} [${data?.advertize_payout} INR]`,
+      data?.status,
     ]);
 
     let csvContent =
@@ -349,7 +357,7 @@ const UserWallet = () => {
             </select>
           </div>
 
-          <div className="xs:px-5 lg:px-0 ">
+          <div className="flex flex-row items-center xs:px-5 lg:px-0">
             <button
               type="submit"
               className="btn btn-primary my-6"

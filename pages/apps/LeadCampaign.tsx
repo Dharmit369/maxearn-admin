@@ -43,6 +43,9 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
   const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState([]);
   const [changeStatus, setChangeStatus] = useState("");
+  const [linkSharedCount, setLinkSharedCount] = useState(0);
+  const [applicationRejectedCount, setApplicationRejectedCount] = useState(0);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -112,6 +115,15 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
       console.log(res.data, "data response");
       if (res) {
         setTableData(res?.data?.data);
+        const applicationRejectedCount = res?.data?.data?.filter(
+          (item) => item?.status === "ApplicationRejected"
+        ).length;
+
+        setApplicationRejectedCount(applicationRejectedCount);
+        const linkSharedCount = res?.data?.data?.filter(
+          (item) => item?.status === "LinkShared"
+        ).length;
+        setLinkSharedCount(linkSharedCount);
         setLoading(false);
       } else {
         setTableData([]);
@@ -359,6 +371,16 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
 
           <div>
             <div className="table-responsive mb-5  xs:px-5 lg:px-0">
+              <div className="my-4 flex w-full justify-between text-center  xs:flex-col lg:flex-row lg:gap-3">
+                <div className="w-full">
+                  <label>Total Link Shared:</label>
+                  <p>{linkSharedCount}</p>
+                </div>
+                <div className="w-full">
+                  <label>Total Application Rejected:</label>
+                  <p>{applicationRejectedCount}</p>
+                </div>
+              </div>
               <table>
                 <thead>
                   <tr>
