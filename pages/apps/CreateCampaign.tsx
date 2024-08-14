@@ -11,10 +11,11 @@ import { ReactSortable } from "react-sortablejs";
 import Select from "react-select";
 import { Tab } from "@headlessui/react";
 import auth from "../utils/auth";
+import "react-quill/dist/quill.snow.css";
 
 import dynamic from "next/dynamic";
 
-const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const CreateCampaigns = ({
   createCampaigns,
@@ -520,30 +521,14 @@ const CreateCampaigns = ({
 
           <div>
             <label htmlFor="Content">Share Content</label>
-            {/* <ReactQuill theme="snow" value={content} onChange={setContent} /> */}
-            <JoditEditor
-              value={content}
-              onChange={setContent}
-              config={{
-                readonly: false, // all options from https://xdsoft.net/jodit/doc/
-                height: 400,
-              }}
-            />
+            <ReactQuill theme="snow" value={content} onChange={setContent} />
           </div>
           <div>
             <label htmlFor="Share content">Content</label>
-            {/* <ReactQuill
+            <ReactQuill
               theme="snow"
               value={shareContent}
               onChange={setShareContent}
-            /> */}
-            <JoditEditor
-              value={shareContent}
-              onChange={setShareContent}
-              config={{
-                readonly: false,
-                height: 400,
-              }}
             />
           </div>
 
