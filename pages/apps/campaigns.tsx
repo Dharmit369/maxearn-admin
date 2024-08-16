@@ -49,6 +49,8 @@ const Campaigns = () => {
     description3: "",
     price4: "",
     description4: "",
+    interest_rate: "",
+    loan_amount: ""
   };
   const [loading, setLoading] = useState(true);
   const [createCampaigns, setCreateCampaigns] = useState(false);
@@ -195,7 +197,7 @@ const Campaigns = () => {
       formData.append("approval_rate", campaignData?.approval_rate);
       formData.append("joining_fee", campaignData?.joining_fee);
       formData.append("annual_fee", campaignData?.annual_fee);
-      formData.append("info", campaignData?.info);
+      // formData.append("info", campaignData?.info);
       formData.append("tagline1", campaignData?.tagline1);
       formData.append("tagline2", campaignData?.tagline2);
       formData.append("pincode_proceed", campaignData?.pincode_proceed);
@@ -207,6 +209,8 @@ const Campaigns = () => {
       formData.append("offer_image", offer_image);
       formData.append("shared_image", shared_image);
       formData.append("offer_description", shareContent);
+      formData.append("loan_amount", campaignData?.loan_amount);
+      formData.append("interest_rate", campaignData?.interest_rate);
 
       console.log("formData: ", formData);
       const res = await axios.post(`${BASE_URL}/marketing/campaign`, formData, {
@@ -237,6 +241,8 @@ const Campaigns = () => {
           content: "",
           goals: "",
           status: "",
+          interest_rate: "",
+          loan_amount: "",
         });
         setFeatured_image(null);
         setShared_image(null);
@@ -314,6 +320,8 @@ const Campaigns = () => {
         shared_image ? shared_image : campaignData?.shared_image
       );
       formData.append("offer_description", shareContent);
+      formData.append("loan_amount", campaignData?.loan_amount);
+      formData.append("interest_rate", campaignData?.interest_rate);
 
       console.log("formData: ", formData);
       const res = await axios.put(

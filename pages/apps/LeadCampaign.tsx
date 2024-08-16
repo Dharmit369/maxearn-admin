@@ -230,8 +230,12 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
     setLoading(true);
     const token = localStorage.getItem("token");
 
+    const data = {
+      ids: [`${id}`]
+    }
     try {
-      const res = await axios.delete(`${BASE_URL}/lead/${id}`, {
+      const res = await axios.delete(`${BASE_URL}/lead/`, {
+        data: data, // data should be passed as part of the config object
         maxBodyLength: Infinity,
         headers: {
           Authorization: `Bearer ${token}`,
