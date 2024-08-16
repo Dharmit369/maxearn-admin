@@ -176,7 +176,12 @@ const CreateCampaigns = ({
           </div>
 
           <div>
-            <label htmlFor="FeaturedImage">Featured Image</label>
+            <label
+              htmlFor="sessionTimeout"
+              className="mb-2 block text-black dark:text-white"
+            >
+              Offer Image
+            </label>
             <div className="flex justify-between xs:flex-col sm:flex-row">
               {isEdit && campaignData?.featured_image && (
                 <div className="mb-2">
@@ -196,6 +201,7 @@ const CreateCampaigns = ({
                 onChange={(event) =>
                   handleMultipleChange(event, "featured_image")
                 }
+              // value={campaignData?.featured_image || ""}
               />
             </div>
           </div>
@@ -206,26 +212,16 @@ const CreateCampaigns = ({
             </div> */}
 
           <div>
-            <label htmlFor="OfferImage">Offer Image</label>
-            <div className="flex justify-between xs:flex-col sm:flex-row">
-              {isEdit && campaignData?.offer_image && (
-                <div className="mb-2">
-                  <img
-                    src={campaignData.offer_image}
-                    alt="Offer Image"
-                    className="h-32 w-32 object-cover"
-                  />
-                </div>
-              )}
-              <input
-                id="OfferImage"
-                type="file"
-                placeholder="Upload Offer Image"
-                className="form-input w-full dark:border-none dark:bg-[#1E1611]"
-                name="offer_image"
-                onChange={(event) => handleMultipleChange(event, "offer_image")}
-              />
-            </div>
+            <label htmlFor="OfferImage">Featured Image</label>
+            <input
+              id="OfferImage"
+              type="file"
+              placeholder="Offer Image"
+              className="form-input dark:border-none dark:bg-[#1E1611]"
+              name="offer_image"
+              onChange={(event) => handleMultipleChange(event, "offer_image")}
+            // value={campaignData?.offer_image || ""}
+            />
           </div>
 
           {/* <div>
@@ -284,7 +280,7 @@ const CreateCampaigns = ({
             />
           </div>
 
-          <div>
+          {/* <div>
             <label htmlFor="Info">Info</label>
             <input
               id="Info"
@@ -295,7 +291,7 @@ const CreateCampaigns = ({
               onChange={(e) => handleChange(e)}
               value={campaignData?.info || ""}
             />
-          </div>
+          </div> */}
 
           <div>
             <label htmlFor="TagLine1">TagLine 1</label>
@@ -520,11 +516,37 @@ const CreateCampaigns = ({
           </div> */}
 
           <div>
+            <label htmlFor="LoanAmount">Loan Amount</label>
+            <input
+              id="LoanAmount"
+              type="number"
+              placeholder="Loan Amount"
+              className="form-input dark:border-none dark:bg-[#1E1611]"
+              name="loan_amount"
+              onChange={(e) => handleChange(e)}
+              value={campaignData?.loan_amount || ""}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="InterestRate">Interest Rate</label>
+            <input
+              id="InterestRate"
+              type="number"
+              placeholder="Interest Rate"
+              className="form-input dark:border-none dark:bg-[#1E1611]"
+              name="interest_rate"
+              onChange={(e) => handleChange(e)}
+              value={campaignData?.interest_rate || ""}
+            />
+          </div>
+
+          <div>
             <label htmlFor="Content">Share Content</label>
             <ReactQuill theme="snow" value={content} onChange={setContent} />
           </div>
           <div>
-            <label htmlFor="Share content">Content</label>
+            <label htmlFor="Share content">Offer Description</label>
             <ReactQuill
               theme="snow"
               value={shareContent}
