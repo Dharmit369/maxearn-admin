@@ -15,13 +15,18 @@ import ModelDetailsNew from "@/components/ModelDetailsNew";
 import auth from "../utils/auth";
 
 const UserWallet = () => {
+  const currentMonthStart = moment().startOf("month").format("YYYY-MM-DD");
+  const currentMonthEnd = moment().endOf("month").format("YYYY-MM-DD");
+
   const data = {
     affiliate_id: "",
-    start_date: "",
-    end_date: "",
+    start_date: currentMonthStart,
+    end_date: currentMonthEnd,
     status: "",
   };
+
   const [changeData, setchangeData] = useState(data);
+
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [userDropdownData, setUserDropdownData] = useState([]);

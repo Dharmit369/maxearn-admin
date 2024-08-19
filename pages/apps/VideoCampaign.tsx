@@ -114,19 +114,23 @@ const VideoCampaign = ({ setVideoOpen, rowId }: any) => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.delete(`${BASE_URL}/marketing/videoById/${id}`, {
-        maxBodyLength: Infinity,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.delete(
+        `${BASE_URL}/marketing/videoById/${rowId}/${id}`,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res.data, "delete banner response");
       if (res) {
-        setTableData(res?.data?.data);
+        // setTableData(res?.data?.data);
         showAlert(15, res.data.message, "success");
         getVideoData();
       } else {
         showAlert(15, res?.data?.message, "error");
+        getVideoData();
       }
     } catch (e) {
       console.error(e, "delete banner error");

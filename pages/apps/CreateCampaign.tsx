@@ -103,7 +103,7 @@ const CreateCampaigns = ({
           </div>
 
           <div>
-            <label htmlFor="Title">Title</label>
+            <label htmlFor="Title">Campaign Payout</label>
             <input
               id="Title"
               type="text"
@@ -161,13 +161,12 @@ const CreateCampaigns = ({
               className="form-select text-white-dark dark:border-none dark:bg-[#1E1611]"
               name="category_id"
               onChange={(e) => handleChange(e)}
-              value={campaignData?.category_id || ""}
+              value={
+                campaignData?.category_id
+                  ? campaignData?.category_id?._id
+                  : campaignData?.category_id || ""
+              }
             >
-              {/* <option value={"DEMAT ACCOUNT"}>DEMAT ACCOUNT</option>
-                    <option value={"SAVING ACCOUNT"}>SAVING ACCOUNT</option>
-                    <option value={"EMI CARD"}>EMI CARD</option>
-                    <option value={"PERSONAL LOAN"}>PERSONAL LOAN</option>
-                    <option value={"CREDIT CARD"}>CREDIT CARD</option> */}
               <option value={""}>Please Select</option>
               {categoryOptionData?.map((itm) => (
                 <option value={itm?.id}>{itm?.name}</option>
@@ -201,7 +200,7 @@ const CreateCampaigns = ({
                 onChange={(event) =>
                   handleMultipleChange(event, "featured_image")
                 }
-              // value={campaignData?.featured_image || ""}
+                // value={campaignData?.featured_image || ""}
               />
             </div>
           </div>
@@ -220,7 +219,7 @@ const CreateCampaigns = ({
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="offer_image"
               onChange={(event) => handleMultipleChange(event, "offer_image")}
-            // value={campaignData?.offer_image || ""}
+              // value={campaignData?.offer_image || ""}
             />
           </div>
 
@@ -521,7 +520,7 @@ const CreateCampaigns = ({
               id="LoanAmount"
               type="number"
               placeholder="Loan Amount"
-              className="form-input dark:border-none dark:bg-[#1E1611]"
+              className="form-input dark:border-none dark:bg-[#afacaa]"
               name="loan_amount"
               onChange={(e) => handleChange(e)}
               value={campaignData?.loan_amount || ""}

@@ -146,9 +146,9 @@ const UserList = () => {
   };
 
   const handleIcon = (data: any) => {
-    setInfoData(data)
-    setModal(true)
-  }
+    setInfoData(data);
+    setModal(true);
+  };
 
   console.log("edit", edit);
 
@@ -158,14 +158,11 @@ const UserList = () => {
     </div>
   ) : (
     <div>
-     
       {edit === false && (
         <div className="relative w-full cursor-pointer items-center overflow-hidden border-none  bg-white ring-1 ring-gray-900/5 dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-5 ">
-           <div className="my-6">
-              <h2 className="text-xl font-semibold dark:text-white">
-                User List
-              </h2>
-            </div>
+          <div className="my-6">
+            <h2 className="text-xl font-semibold dark:text-white">User List</h2>
+          </div>
           <div className="flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
             <input
               id="userId"
@@ -179,7 +176,7 @@ const UserList = () => {
             <input
               id="userId"
               type="text"
-              placeholder="User Id"
+              placeholder="affiliate Id"
               className="form-input mt-4 h-10 dark:border-none dark:bg-[#1E1611]"
               onChange={(e) => setUserId(e.target.value)}
               value={userId}
@@ -220,6 +217,7 @@ const UserList = () => {
                 <thead>
                   <tr>
                     <th>Image</th>
+                    <th>Affiliate Id</th>
                     <th>Name</th>
                     <th>Mobile No.</th>
                     <th>Reffered By</th>
@@ -250,6 +248,11 @@ const UserList = () => {
                         </td>
                         <td>
                           <div className="whitespace-nowrap">
+                            {data?.affiliate_id || "-"}
+                          </div>
+                        </td>
+                        <td>
+                          <div className="whitespace-nowrap">
                             {data?.username || "-"}
                           </div>
                         </td>
@@ -258,20 +261,22 @@ const UserList = () => {
 
                         <td>
                           <span
-                            className={`badge whitespace-nowrap ${data?.isBlocked === false
+                            className={`badge whitespace-nowrap ${
+                              data?.isBlocked === false
                                 ? "bg-danger"
                                 : "bg-primary"
-                              }`}
+                            }`}
                           >
                             {data?.isBlocked.toString() || "-"}
                           </span>
                         </td>
                         <td>
                           <span
-                            className={`badge whitespace-nowrap ${data?.referralActive === false
+                            className={`badge whitespace-nowrap ${
+                              data?.referralActive === false
                                 ? "bg-danger"
                                 : "bg-primary"
-                              }`}
+                            }`}
                           >
                             {data?.referralActive.toString() || "-"}
                           </span>
@@ -295,7 +300,13 @@ const UserList = () => {
         </div>
       )}
 
-      {modal && <ModelPaymentDetails modal={modal} setModal={setModal} infoData={infoData}/>}
+      {modal && (
+        <ModelPaymentDetails
+          modal={modal}
+          setModal={setModal}
+          infoData={infoData}
+        />
+      )}
 
       {edit && (
         <div className="m-0 p-0">
@@ -329,10 +340,11 @@ const UserList = () => {
                 <Tab as={Fragment}>
                   {({ selected }: any) => (
                     <button
-                      className={`${selected
+                      className={`${
+                        selected
                           ? "bg-primary text-white !outline-none dark:bg-[#FE6C00]"
                           : ""
-                        }
+                      }
         -mb-[1px] ml-5 block rounded p-3.5 py-2 hover:bg-primary hover:text-white dark:hover:bg-[#FE6C00]`}
                     >
                       User
@@ -348,7 +360,6 @@ const UserList = () => {
                     getUserList={getUserList}
                     editId={editId}
                     model={false}
-                    
                   />
                 </Tab.Panel>
               </Tab.Panels>

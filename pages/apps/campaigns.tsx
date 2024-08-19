@@ -50,7 +50,7 @@ const Campaigns = () => {
     price4: "",
     description4: "",
     interest_rate: "",
-    loan_amount: ""
+    loan_amount: "",
   };
   const [loading, setLoading] = useState(true);
   const [createCampaigns, setCreateCampaigns] = useState(false);
@@ -67,6 +67,7 @@ const Campaigns = () => {
   const [rowId, setRowId] = useState();
   const [statusDropdown, setStatusDropdown] = useState([]);
   const [search, setSearch] = useState("");
+  const [selectedData, setSelectedData] = useState(null);
 
   const [statusChange, setStatusChange] = useState("");
   const [goals, setGoals] = useState([{ description: "", price: "" }]);
@@ -400,8 +401,9 @@ const Campaigns = () => {
     }
   };
 
-  const handleClick = (expression: any, value: any) => {
+  const handleClick = (expression: any, value: any, data: any) => {
     if (expression === "lead") {
+      setSelectedData(data);
       setLeadOpen(true);
       setRowId(value);
     }
@@ -629,7 +631,9 @@ const Campaigns = () => {
                               </Tooltip>
                               <Tooltip title="Lead" placement="top">
                                 <PersonIcon
-                                  onClick={() => handleClick("lead", data?._id)}
+                                  onClick={() =>
+                                    handleClick("lead", data?._id, data)
+                                  }
                                 />
                               </Tooltip>
                               {/* <Tooltip title="offer18 campaign" placement="top">
@@ -694,6 +698,8 @@ const Campaigns = () => {
           setLeadOpen={setLeadOpen}
           tableData={tableData}
           rowId={rowId}
+          campname={selectedData?.name}
+          campprice={selectedData?.title}
         />
       )}
 

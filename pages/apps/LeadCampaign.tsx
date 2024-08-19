@@ -23,7 +23,7 @@ interface TableData {
   status: "completed" | "Pending" | "In Progress" | "Canceled"; // or use a string if there are more statuses
 }
 
-const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
+const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
   const data = {
     name: "",
     email: "",
@@ -45,6 +45,9 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
   const [changeStatus, setChangeStatus] = useState("");
   const [linkSharedCount, setLinkSharedCount] = useState(0);
   const [applicationRejectedCount, setApplicationRejectedCount] = useState(0);
+  const [paidLead, setPaidLead] = useState(0);
+
+  const [searchTerm, setSearchTerm] = useState(""); // Search term state
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -98,6 +101,14 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
     }
   };
 
+  const handleSearchChange = (e: any) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredTableData = tableData.filter((item) =>
+    item?.lead_id.toString()?.includes(searchTerm)
+  );
+
   const getLead = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -124,6 +135,10 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
           (item) => item?.status === "LinkShared"
         ).length;
         setLinkSharedCount(linkSharedCount);
+        const PaidlinkSharedCount = res?.data?.data?.filter(
+          (item) => item?.status === ""
+        ).length;
+        setPaidLead(PaidlinkSharedCount);
         setLoading(false);
       } else {
         setTableData([]);
@@ -203,6 +218,37 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
       "Status",
     ];
 
+    // <td>{index + 1}</td>
+    // <td>{data?.lead_id}</td>
+    // <td>{data.name}</td>
+    // <td>{data.name}</td>
+    // <td>
+    //   {moment(data.created_timestamp).format("DD/MM/YYYY")}
+    // </td>
+    // <td>
+    //   <span>{data.email}</span>
+    // </td>
+    // <td>
+    //   <span>{data.phone_num}</span>
+    // </td>
+    // <td>
+    //   <span
+    //     className={`badge whitespace-nowrap ${
+    //       data.status === "completed"
+    //         ? "bg-primary   "
+    //         : data.status === "Pending"
+    //         ? "bg-secondary"
+    //         : data.status === "In Progress"
+    //         ? "bg-success"
+    //         : data.status === "Canceled"
+    //         ? "bg-danger"
+    //         : "bg-primary"
+    //     }`}
+    //   >
+    //     {data.status}
+    //   </span>
+    // </td>
+
     const rows = tableData?.map((data, index) => [
       index + 1,
       data?.campaign_id,
@@ -231,8 +277,8 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
     const token = localStorage.getItem("token");
 
     const data = {
-      ids: [`${id}`]
-    }
+      ids: [`${id}`],
+    };
     try {
       const res = await axios.delete(`${BASE_URL}/lead/`, {
         data: data, // data should be passed as part of the config object
@@ -271,7 +317,11 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
       {leadEditOpen === false && (
         <div className="group relative w-full cursor-pointer items-center overflow-hidden border-none  bg-white ring-1 ring-gray-900/5 dark:bg-[#261C16] dark:ring-gray-700 sm:rounded-lg sm:px-5 ">
           <div className="my-6 flex justify-between">
-            <h2 className="text-xl font-semibold dark:text-white">Lead List</h2>
+            <h2 className="text-xl font-semibold dark:text-white">
+              {`${campname}` + " " + "(" + `${campprice}` + ")"}
+            </h2>
+            <h3 className="text-xl font-semibold dark:text-white">Lead List</h3>
+
             <button
               className="text-gray-500 hover:text-gray-700 dark:text-white"
               onClick={() => {
@@ -298,24 +348,33 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
           <div className="my-6 flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
             <div className="w-full">
               <label htmlFor="User" className="mt-4">
-                User
+                Name
               </label>
-              {/* <input id="User" type="text" placeholder="User" className="form-input h-10 dark:bg-[#1E1611] dark:border-none" /> */}
-              <select
-                id="User"
-                className="form-select h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
-              >
-                <option key={"all"} value={"all"}>
-                  All
-                </option>
-                {userDropdownData?.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+
+              <input
+                id="userId"
+                type="text"
+                placeholder="Created By Name"
+                className="m  form-input h-10  dark:border-none dark:bg-[#1E1611]"
+                name="affiliate_id"
+                onChange={handleSearchChange}
+                value={searchTerm}
+              />
+            </div>
+            <div className="w-full">
+              <label htmlFor="User" className="mt-">
+                Mobile No
+              </label>
+
+              <input
+                id="userId"
+                type="text"
+                placeholder="Mobile No"
+                className="m  form-input h-10  dark:border-none dark:bg-[#1E1611]"
+                name="affiliate_id"
+                onChange={handleSearchChange}
+                value={searchTerm}
+              />
             </div>
 
             <div className="w-full">
@@ -381,14 +440,29 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
                   <p>{linkSharedCount}</p>
                 </div>
                 <div className="w-full">
+                  <label>Total Paid Lead:</label>
+                  <p>{paidLead}</p>
+                </div>
+                <div className="w-full">
                   <label>Total Application Rejected:</label>
                   <p>{applicationRejectedCount}</p>
                 </div>
               </div>
+              <input
+                id="userId"
+                type="text"
+                placeholder="Lead Id"
+                className="form-input my-4 mt-4 h-10 w-64 dark:border-none dark:bg-[#1E1611]"
+                name="affiliate_id"
+                onChange={handleSearchChange}
+                value={searchTerm}
+              />
+
               <table>
                 <thead>
                   <tr>
-                    <th>ID</th>
+                    <th>Sr No</th>
+                    <th>Lead ID</th>
                     <th>Created By</th>
                     <th>Name</th>
                     <th>Date</th>
@@ -399,10 +473,11 @@ const LeadCampaign = ({ setLeadOpen, rowId }: any) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tableData?.map((data: TableData, index) => {
+                  {filteredTableData?.map((data: TableData, index) => {
                     return (
                       <tr key={data.id}>
                         <td>{index + 1}</td>
+                        <td>{data?.lead_id}</td>
                         <td>{data.name}</td>
                         <td>{data.name}</td>
                         <td>

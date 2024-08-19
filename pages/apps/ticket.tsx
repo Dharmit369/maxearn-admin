@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import Loader from "@/components/Layouts/Loader";
 import React from "react";
 import { BASE_URL } from "@/constants";
@@ -9,6 +9,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import ModelTicketData from "@/components/ModelTicketData";
 import StatusModel from "@/components/statusModel";
 import RNFS from "react-native-fs";
+import { Tab } from "@headlessui/react";
 
 const Resources = () => {
   const [loading, setLoading] = useState(true);
@@ -29,6 +30,7 @@ const Resources = () => {
   const [visibilityData, setVisibilityData] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [statusModelOpen, setStatusModelOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -164,6 +166,14 @@ const Resources = () => {
     }
   };
 
+  const getFilteredTabData = () => {
+    if (selectedIndex === 0) {
+      return filteredData?.filter((item) => item?.status === "Active");
+    } else {
+      return filteredData?.filter((item) => item?.status === "DeActive");
+    }
+  };
+
   const deleteData = async (id: any, issue: any) => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -218,79 +228,181 @@ const Resources = () => {
     </div>
   ) : (
     <div>
-      <div className="my-6">
-        <h2 className="text-xl font-semibold dark:text-white">Ticket</h2>
-      </div>
-      <div className="mb-6 flex items-center  xs:flex-col xs:space-y-4 xs:px-5 md:space-y-0 lg:flex-row lg:gap-3 lg:px-0">
-        <select
-          id="filterStatus"
-          className="form-select h-10 w-[120px] text-white-dark dark:border-none dark:bg-[#1E1611]"
-          name="status"
-          onChange={handleDropdownChange}
-          value={dropdownValue}
-        >
-          <option key={"AllTickets"} value={"AllTickets"}>
-            AllTickets
-          </option>
-          <option key={"withdrawalIssue"} value={"withdrawalIssue"}>
-            withdrawalIssue
-          </option>
-          <option value={"leadIssue"}>leadIssue</option>
-          <option value={"otherIssue"}>otherIssue</option>
-        </select>
+      {replyData === false && (
+        <div className="my-6">
+          <h2 className="text-xl font-semibold dark:text-white">Ticket</h2>
+        </div>
+      )}
+      {replyData === false && (
+        <div className="mb-6 flex items-center  xs:flex-col xs:space-y-4 xs:px-5 md:space-y-0 lg:flex-row lg:gap-3 lg:px-0">
+          <select
+            id="filterStatus"
+            className="form-select h-10 w-[120px] text-white-dark dark:border-none dark:bg-[#1E1611]"
+            name="status"
+            onChange={handleDropdownChange}
+            value={dropdownValue}
+          >
+            <option key={"AllTickets"} value={"AllTickets"}>
+              AllTickets
+            </option>
+            <option key={"withdrawalIssue"} value={"withdrawalIssue"}>
+              withdrawalIssue
+            </option>
+            <option value={"leadIssue"}>leadIssue</option>
+            <option value={"otherIssue"}>otherIssue</option>
+          </select>
 
-        <select
-          id="Type"
-          className="form-select h-10 w-[120px] text-white-dark dark:border-none dark:bg-[#1E1611]"
-          onChange={handleStatusFilterChange}
-          value={statusFilter}
-        >
-          <option value={"All"}>All</option>
-          <option value={"Active"}>Active</option>
-          <option value={"DeActive"}>DeActive</option>
-        </select>
-        <input
-          id="userId"
-          type="text"
-          placeholder="Request ID"
-          className="form-input mt-4 h-10 w-32 dark:border-none dark:bg-[#1E1611]"
-          onChange={handleRequestIdChange}
-          value={requestIdFilter}
-        />
-      </div>
+          <input
+            id="userId"
+            type="text"
+            placeholder="Ticket ID"
+            className="form-input mt-4 h-10 w-32 dark:border-none dark:bg-[#1E1611]"
+            onChange={handleRequestIdChange}
+            value={requestIdFilter}
+          />
+        </div>
+      )}
 
-      <div>
-        {replyData === false && (
-          <div className="table-responsive mb-5 xs:px-5 lg:px-0">
-            <table>
-              <thead>
-                <tr>
-                  <th>Request ID</th>
-                  <th>UserName</th>
-                  <th>Mobile No.</th>
-                  <th>Ticket Name</th>
+      {replyData === false && (
+        <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
+          <Tab.List className="my-3 flex flex-wrap">
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`${
+                    selected ? "bg-primary text-white !outline-none" : ""
+                  }
+                    -mb-[1px] block rounded p-3.5 py-2 hover:bg-primary hover:text-white ltr:mr-2 rtl:ml-2`}
+                >
+                  Active
+                </button>
+              )}
+            </Tab>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`${
+                    selected ? "bg-primary text-white !outline-none" : ""
+                  }
+                    -mb-[1px] block rounded p-3.5 py-2 hover:bg-primary hover:text-white ltr:mr-2 rtl:ml-2`}
+                >
+                  DeActive
+                </button>
+              )}
+            </Tab>
+          </Tab.List>
 
-                  <th>Title</th>
-                  <th>Status</th>
-                  <th className="text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData?.map((data) => {
-                  return (
-                    <tr key={data?.id}>
-                      <td>
-                        <div className="whitespace-nowrap">
-                          {data?.ticket_id}
-                        </div>
-                      </td>
-                      <td>{data?.lead_name || "-"}</td>
-                      <td>{data?.lead_mobileNo || "-"}</td>
-                      <td>{data?.ticketName || "-"}</td>
-                      <td>{data?.issue || "-"}</td>
+          <Tab.Panels>
+            <Tab.Panel>
+              <div className="relative overflow-x-auto">
+                <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                  <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                      <th>Ticket ID</th>
+                      <th>UserName</th>
+                      <th>Mobile No.</th>
+                      <th>Ticket Name</th>
 
-                      <td>
-                        {/* <span
+                      <th>Title</th>
+                      <th>Status</th>
+
+                      <th className="text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {getFilteredTabData().map((data) => (
+                      <tr key={data?.id}>
+                        <td>
+                          <div className="whitespace-nowrap">
+                            {data?.ticket_id}
+                          </div>
+                        </td>
+                        <td>{data?.lead_name || "-"}</td>
+                        <td>{data?.lead_mobileNo || "-"}</td>
+                        <td>{data?.ticketName || "-"}</td>
+                        <td>{data?.issue || "-"}</td>
+
+                        <td>
+                          <select
+                            id="Type"
+                            className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                            onChange={(e) =>
+                              handleStatus(
+                                data?._id,
+                                e.target.value,
+                                data?.ticketName
+                              )
+                            }
+                            value={data?.status}
+                          >
+                            <option value={"Active"}>Active</option>
+                            <option value={"DeActive"}>DeActive</option>
+                          </select>
+                        </td>
+                        <td className="text-center">
+                          <div className="dropdown">
+                            <VisibilityIcon
+                              onClick={() => handleVisibility(data)}
+                              className="mr-5"
+                            />
+                            <span
+                              className="badge cursor-pointer bg-secondary"
+                              onClick={() => {
+                                setReplyOpen(true);
+                                setName(data?.ticketName);
+                                setReplyId(data?._id);
+                                setReply(data?.reply);
+                                setStatus(data?.status);
+                              }}
+                            >
+                              REPLAY
+                            </span>
+                            <span
+                              className="badge ml-5 cursor-pointer bg-info"
+                              onClick={() => {
+                                deleteData(data?._id, data?.ticketName);
+                              }}
+                            >
+                              DELETE
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Tab.Panel>
+            <Tab.Panel>
+              <div className="relative overflow-x-auto">
+                <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                  <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                      <th>Ticket ID</th>
+                      <th>UserName</th>
+                      <th>Mobile No.</th>
+                      <th>Ticket Name</th>
+
+                      <th>Title</th>
+                      <th>Status</th>
+                      <th className="text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {getFilteredTabData().map((data) => (
+                      <tr key={data?.id}>
+                        <td>
+                          <div className="whitespace-nowrap">
+                            {data?.ticket_id}
+                          </div>
+                        </td>
+                        <td>{data?.lead_name || "-"}</td>
+                        <td>{data?.lead_mobileNo || "-"}</td>
+                        <td>{data?.ticketName || "-"}</td>
+                        <td>{data?.issue || "-"}</td>
+
+                        <td>
+                          {/* <span
                           className={`badge whitespace-nowrap ${
                             data?.status === "Active"
                               ? "bg-success"
@@ -301,58 +413,59 @@ const Resources = () => {
                         >
                           {data?.status?.toUpperCase()}
                         </span> */}
-                        <select
-                          id="Type"
-                          className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
-                          onChange={(e) =>
-                            handleStatus(
-                              data?._id,
-                              e.target.value,
-                              data?.ticketName
-                            )
-                          }
-                          value={data?.status}
-                        >
-                          <option value={"Active"}>Active</option>
-                          <option value={"DeActive"}>DeActive</option>
-                        </select>
-                      </td>
-                      <td className="text-center">
-                        <div className="dropdown">
-                          <VisibilityIcon
-                            onClick={() => handleVisibility(data)}
-                            className="mr-5"
-                          />
-                          <span
-                            className="badge cursor-pointer bg-secondary"
-                            onClick={() => {
-                              setReplyOpen(true);
-                              setName(data?.ticketName);
-                              setReplyId(data?._id);
-                              setReply(data?.reply);
-                              setStatus(data?.status);
-                            }}
+                          <select
+                            id="Type"
+                            className="form-select w-32 text-white-dark dark:border-none dark:bg-[#261C16]"
+                            onChange={(e) =>
+                              handleStatus(
+                                data?._id,
+                                e.target.value,
+                                data?.ticketName
+                              )
+                            }
+                            value={data?.status}
                           >
-                            REPLAY
-                          </span>
-                          <span
-                            className="badge ml-5 cursor-pointer bg-info"
-                            onClick={() => {
-                              deleteData(data?._id, data?.ticketName);
-                            }}
-                          >
-                            DELETE
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+                            <option value={"Active"}>Active</option>
+                            <option value={"DeActive"}>DeActive</option>
+                          </select>
+                        </td>
+                        <td className="text-center">
+                          <div className="dropdown">
+                            <VisibilityIcon
+                              onClick={() => handleVisibility(data)}
+                              className="mr-5"
+                            />
+                            <span
+                              className="badge cursor-pointer bg-secondary"
+                              onClick={() => {
+                                setReplyOpen(true);
+                                setName(data?.ticketName);
+                                setReplyId(data?._id);
+                                setReply(data?.reply);
+                                setStatus(data?.status);
+                              }}
+                            >
+                              REPLAY
+                            </span>
+                            <span
+                              className="badge ml-5 cursor-pointer bg-info"
+                              onClick={() => {
+                                deleteData(data?._id, data?.ticketName);
+                              }}
+                            >
+                              DELETE
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Tab.Panel>
+          </Tab.Panels>
+        </Tab.Group>
+      )}
 
       {replyData && (
         <div className="m-0 p-0">
