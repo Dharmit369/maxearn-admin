@@ -11,9 +11,16 @@ import { ReactSortable } from "react-sortablejs";
 import Select from "react-select";
 import { Tab } from "@headlessui/react";
 import auth from "../utils/auth";
+// import 'suneditor/dist/css/suneditor.min.css';
+// import "suneditor/dist/css/suneditor.min.css";
+
 import "react-quill/dist/quill.snow.css";
 
 import dynamic from "next/dynamic";
+
+// const SunEditor = dynamic(() => import("suneditor-react"), {
+//   ssr: false,
+// });
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -551,6 +558,7 @@ const CreateCampaigns = ({
               value={shareContent}
               onChange={setShareContent}
             />
+            {/* <SunEditor /> */}
           </div>
 
           <div className="flex justify-end">

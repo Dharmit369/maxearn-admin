@@ -12,11 +12,15 @@ import Select from "react-select";
 import { Tab } from "@headlessui/react";
 import auth from "../utils/auth";
 import axios from "axios";
+import TablePagination from "@mui/material/TablePagination";
 
 const UserStatistics = () => {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -86,6 +90,20 @@ const UserStatistics = () => {
     link.click();
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = tableData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return loading ? (
     <div>
       <Loader />
@@ -141,7 +159,7 @@ const UserStatistics = () => {
               </tr>
             </thead>
             <tbody>
-              {tableData?.map((data, index) => {
+              {paginatedData?.map((data, index) => {
                 return (
                   <tr key={data?.id}>
                     <td>{index + 1}</td>
@@ -155,6 +173,15 @@ const UserStatistics = () => {
               })}
             </tbody>
           </table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={tableData?.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </div>
       </div>
     </div>

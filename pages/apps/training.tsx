@@ -8,6 +8,7 @@ import { BASE_URL } from "@/constants";
 import axios from "axios";
 import { showAlert } from "@/components/showAlert";
 import auth from "../utils/auth";
+import TablePagination from "@mui/material/TablePagination";
 
 const Traning = () => {
   const [loading, setLoading] = useState(true);
@@ -19,6 +20,8 @@ const Traning = () => {
   const [editId, setEditId] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const data = {
     file: "",
@@ -175,17 +178,29 @@ const Traning = () => {
     setUploadedFiles([]);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = tableData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return loading ? (
     <div>
       <Loader />
     </div>
   ) : (
     <div>
-       <div className="my-6">
-              <h2 className="text-xl font-semibold dark:text-white">
-               Training
-              </h2>
-            </div>
+      <div className="my-6">
+        <h2 className="text-xl font-semibold dark:text-white">Training</h2>
+      </div>
       <div className="table-responsive mb-5">
         <table>
           <thead>
@@ -198,7 +213,7 @@ const Traning = () => {
             </tr>
           </thead>
           <tbody>
-            {tableData?.map((data, index) => {
+            {paginatedData?.map((data, index) => {
               return (
                 <tr key={data?._id}>
                   <td>{index + 1}</td>
@@ -230,6 +245,15 @@ const Traning = () => {
             })}
           </tbody>
         </table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={tableData?.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
 
         <div className="flex justify-end">
           <button

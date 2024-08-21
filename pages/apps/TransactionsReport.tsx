@@ -1,3 +1,5 @@
+"use client";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
@@ -13,12 +15,16 @@ import { Tab } from "@headlessui/react";
 import auth from "../utils/auth";
 import axios from "axios";
 import moment from "moment";
+import TablePagination from "@mui/material/TablePagination";
 
 const TransactionsReport = () => {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -99,6 +105,20 @@ const TransactionsReport = () => {
     link.click();
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = tableData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return loading ? (
     <div>
       <Loader />
@@ -166,7 +186,7 @@ const TransactionsReport = () => {
               </tr>
             </thead>
             <tbody>
-              {tableData?.map((data, index) => {
+              {paginatedData?.map((data, index) => {
                 return (
                   <tr key={data?.id}>
                     <td>{index + 1}</td>
@@ -185,6 +205,15 @@ const TransactionsReport = () => {
               })}
             </tbody>
           </table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={tableData?.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </div>
       </div>
     </div>

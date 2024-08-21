@@ -14,6 +14,7 @@ import auth from "../utils/auth";
 import axios from "axios";
 import { showAlert } from "@/components/showAlert";
 import moment from "moment";
+import TablePagination from "@mui/material/TablePagination";
 
 interface TableData {
   id: any;
@@ -46,6 +47,8 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
   const [linkSharedCount, setLinkSharedCount] = useState(0);
   const [applicationRejectedCount, setApplicationRejectedCount] = useState(0);
   const [paidLead, setPaidLead] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
 
@@ -216,6 +219,7 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
       "Email",
       "Phone number",
       "Status",
+      "Note",
     ];
 
     // <td>{index + 1}</td>
@@ -257,6 +261,7 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
       data?.email,
       data?.phone_num,
       data?.status,
+      data?.note,
     ]);
 
     let csvContent =
@@ -307,6 +312,20 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
     setLeadEditOpen(true);
     setChangeData(data);
   };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = filteredTableData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return loading ? (
     <div>
@@ -469,36 +488,39 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                     <th>Email</th>
                     <th>Phone number</th>
                     <th>Status</th>
+                    <th>Note</th>
                     <th className="text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredTableData?.map((data: TableData, index) => {
+                  {paginatedData?.map((data: TableData, index) => {
                     return (
-                      <tr key={data.id}>
+                      <tr key={data?.id}>
                         <td>{index + 1}</td>
                         <td>{data?.lead_id}</td>
-                        <td>{data.name}</td>
-                        <td>{data.name}</td>
+                        <td>{data?.name}</td>
+                        <td>{data?.name}</td>
                         <td>
-                          {moment(data.created_timestamp).format("DD/MM/YYYY")}
+                          {moment(data?.created_timestamp)?.format(
+                            "DD/MM/YYYY"
+                          )}
                         </td>
                         <td>
-                          <span>{data.email}</span>
+                          <span>{data?.email}</span>
                         </td>
                         <td>
-                          <span>{data.phone_num}</span>
+                          <span>{data?.phone_num}</span>
                         </td>
                         <td>
                           <span
                             className={`badge whitespace-nowrap ${
-                              data.status === "completed"
+                              data?.status === "completed"
                                 ? "bg-primary   "
-                                : data.status === "Pending"
+                                : data?.status === "Pending"
                                 ? "bg-secondary"
-                                : data.status === "In Progress"
+                                : data?.status === "In Progress"
                                 ? "bg-success"
-                                : data.status === "Canceled"
+                                : data?.status === "Canceled"
                                 ? "bg-danger"
                                 : "bg-primary"
                             }`}
@@ -506,6 +528,10 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                             {data.status}
                           </span>
                         </td>
+                        <td>
+                          <span>{data?.note || "-"}</span>
+                        </td>
+
                         <td className="text-center">
                           <div className="dropdown">
                             <span
@@ -527,6 +553,15 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                   })}
                 </tbody>
               </table>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={tableData?.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
             </div>
           </div>
         </div>
@@ -620,7 +655,9 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                   </select>
                 </div>
 
-                {changeData?.status === "SaleCompleted" && (
+                {(changeData?.status === "SaleCompleted" ||
+                  changeData?.status === "PartialSaleCompleted" ||
+                  changeData?.status === "AllSaleCompleted") && (
                   <div>
                     <label htmlFor="amount">Amount</label>
                     <input
@@ -634,6 +671,7 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                     />
                   </div>
                 )}
+
                 <div>
                   <label htmlFor="commnet">Note</label>
                   <input

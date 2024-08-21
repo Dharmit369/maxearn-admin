@@ -27,6 +27,7 @@ import BankDetails from "@/pages/apps/BankDetails";
 import AddTransaction from "@/pages/apps/AddTransaction";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import auth from "../utils/auth";
+import TablePagination from "@mui/material/TablePagination";
 
 const UserList = () => {
   const [loading, setLoading] = useState(true);
@@ -40,6 +41,8 @@ const UserList = () => {
   const [email, setEmail] = useState("");
   const [editId, setEditId] = useState("");
   const [infoData, setInfoData] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleEdit = (data: any) => {
     setEdit(true);
@@ -63,7 +66,7 @@ const UserList = () => {
 
     try {
       const res = await axios.get(
-        `${BASE_URL}/user?status=${status}&email=${email}&name=${name}&user_id=${userId}&mobile_num=${mobileNo}`,
+        `${BASE_URL}/user?status=${status}&email=${email}&name=${name}&affiliate_id=${userId}&mobile_num=${mobileNo}`,
         {
           maxBodyLength: Infinity,
           headers: {
@@ -152,6 +155,20 @@ const UserList = () => {
 
   console.log("edit", edit);
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = tableData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return loading ? (
     <div>
       <Loader />
@@ -191,15 +208,6 @@ const UserList = () => {
               value={mobileNo}
             />
 
-            <input
-              id="mobileNo"
-              type="text"
-              placeholder="Email"
-              className="form-input h-10 dark:border-none dark:bg-[#1E1611]"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
-
             <select
               id="product"
               className="form-select h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
@@ -227,9 +235,9 @@ const UserList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tableData?.map((data) => {
+                  {paginatedData?.map((data) => {
                     return (
-                      <tr key={data.id}>
+                      <tr key={data?.id}>
                         <td>
                           <div
                             style={{
@@ -295,6 +303,15 @@ const UserList = () => {
                   })}
                 </tbody>
               </table>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={tableData?.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
             </div>
           </div>
         </div>

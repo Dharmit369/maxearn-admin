@@ -214,44 +214,44 @@ const Campaigns = () => {
       formData.append("interest_rate", campaignData?.interest_rate);
 
       console.log("formData: ", formData);
-      const res = await axios.post(`${BASE_URL}/marketing/campaign`, formData, {
-        maxBodyLength: Infinity,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(res.data, "create response");
-      if (res.data) {
-        setCreateCampaigns(false);
-        showAlert(15, res.data.message, "success");
-        setCampaignData({
-          name: "",
-          title: "",
-          user_payout: "",
-          advertize_payout: "",
-          target_link: "",
-          category_id: "",
-          approval_rate: "",
-          joining_fee: "",
-          annual_fee: "",
-          info: "",
-          tagline1: "",
-          tagline2: "",
-          pincode_proceed: "",
-          content: "",
-          goals: "",
-          status: "",
-          interest_rate: "",
-          loan_amount: "",
-        });
-        setFeatured_image(null);
-        setShared_image(null);
-        setOffer_image(null);
-        getData();
-      } else {
-        showAlert(15, res.data.message, "error");
-      }
+      // const res = await axios.post(`${BASE_URL}/marketing/campaign`, formData, {
+      //   maxBodyLength: Infinity,
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+      // console.log(res.data, "create response");
+      // if (res.data) {
+      //   setCreateCampaigns(false);
+      //   showAlert(15, res.data.message, "success");
+      //   setCampaignData({
+      //     name: "",
+      //     title: "",
+      //     user_payout: "",
+      //     advertize_payout: "",
+      //     target_link: "",
+      //     category_id: "",
+      //     approval_rate: "",
+      //     joining_fee: "",
+      //     annual_fee: "",
+      //     info: "",
+      //     tagline1: "",
+      //     tagline2: "",
+      //     pincode_proceed: "",
+      //     content: "",
+      //     goals: "",
+      //     status: "",
+      //     interest_rate: "",
+      //     loan_amount: "",
+      //   });
+      //   setFeatured_image(null);
+      //   setShared_image(null);
+      //   setOffer_image(null);
+      //   getData();
+      // } else {
+      //   showAlert(15, res.data.message, "error");
+      // }
     } catch (e) {
       console.error(e, "banner create error");
       showAlert(15, "An error occurred while submitting data", "error");

@@ -8,8 +8,8 @@ import auth from "../utils/auth";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ModelTicketData from "@/components/ModelTicketData";
 import StatusModel from "@/components/statusModel";
-import RNFS from "react-native-fs";
 import { Tab } from "@headlessui/react";
+import TablePagination from "@mui/material/TablePagination";
 
 const Resources = () => {
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,8 @@ const Resources = () => {
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
   const [ticketname, setTicketName] = useState("");
-
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [dropdownValue, setDropdownValue] = useState("AllTickets");
   const [requestIdFilter, setRequestIdFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -73,6 +74,15 @@ const Resources = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const applyFilters = () => {
@@ -222,6 +232,11 @@ const Resources = () => {
     updateStatus(id, status, name);
   };
 
+  const paginatedData = getFilteredTabData().slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return loading ? (
     <div>
       <Loader />
@@ -310,7 +325,7 @@ const Resources = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {getFilteredTabData().map((data) => (
+                    {paginatedData?.map((data) => (
                       <tr key={data?.id}>
                         <td>
                           <div className="whitespace-nowrap">
@@ -372,6 +387,14 @@ const Resources = () => {
                   </tbody>
                 </table>
               </div>
+              <TablePagination
+                component="div"
+                count={getFilteredTabData()?.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
             </Tab.Panel>
             <Tab.Panel>
               <div className="relative overflow-x-auto">
@@ -389,7 +412,7 @@ const Resources = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {getFilteredTabData().map((data) => (
+                    {paginatedData?.map((data) => (
                       <tr key={data?.id}>
                         <td>
                           <div className="whitespace-nowrap">
@@ -462,6 +485,14 @@ const Resources = () => {
                   </tbody>
                 </table>
               </div>
+              <TablePagination
+                component="div"
+                count={getFilteredTabData().length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>

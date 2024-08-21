@@ -10,6 +10,7 @@ import KycTable from "./kyc-table";
 import CustomModal from "@/components/CustomModal";
 import ReactPaginate from "react-paginate";
 import { CSVLink } from "react-csv";
+import TablePagination from "@mui/material/TablePagination";
 
 const KycUser = () => {
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,8 @@ const KycUser = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedStatusId, setSelectedStatusId] = useState("");
   const [modalMessage, setModalMessage] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const openModal = () => setStatusModelOpen(true);
   const closeModal = () => setStatusModelOpen(false);
@@ -338,6 +341,33 @@ const KycUser = () => {
     link.click();
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const AllpaginatedData = tableData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+  const SubmitedpaginatedData = submittedKycData?.userData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
+  const PendingpaginatedData = pendingKycData?.userData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+  const ApprovedpagintedData = approveKycData?.userData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return loading ? (
     <div>
       <Loader />
@@ -462,7 +492,7 @@ const KycUser = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {tableData?.map((data, index) => {
+                    {AllpaginatedData?.map((data, index) => {
                       return (
                         <tr key={data?._id}>
                           <td>{index + 1}</td>
@@ -581,6 +611,15 @@ const KycUser = () => {
                     })}
                   </tbody>
                 </table>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={tableData?.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
               </div>
             </Tab.Panel>
             <Tab.Panel>
@@ -613,7 +652,7 @@ const KycUser = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {pendingKycData?.userData?.map((data, userIndex) => (
+                    {PendingpaginatedData?.map((data, userIndex) => (
                       <tr key={data?._id}>
                         <td>{userIndex + 1}</td>
                         <td>{data?.username}</td>
@@ -729,6 +768,15 @@ const KycUser = () => {
                     ))}
                   </tbody>
                 </table>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={pendingKycData?.userData?.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
               </div>
             </Tab.Panel>
             <Tab.Panel>
@@ -759,7 +807,7 @@ const KycUser = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {submittedKycData?.userData?.map((user, userIndex) =>
+                    {SubmitedpaginatedData?.map((user, userIndex) =>
                       user?.user?.kycData?.map((data, index) => (
                         <tr key={data?._id}>
                           <td>{userIndex + 1}</td>
@@ -877,6 +925,15 @@ const KycUser = () => {
                     )}
                   </tbody>
                 </table>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={submittedKycData?.userData?.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
               </div>
             </Tab.Panel>
             <Tab.Panel>
@@ -905,7 +962,7 @@ const KycUser = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {approveKycData?.userData?.map((user, userIndex) =>
+                    {ApprovedpagintedData?.map((user, userIndex) =>
                       user?.user?.kycData?.map((data, index) => (
                         <tr key={data?._id}>
                           <td>{userIndex + 1}</td>
@@ -1024,6 +1081,15 @@ const KycUser = () => {
                     )}
                   </tbody>
                 </table>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={approveKycData?.userData?.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
               </div>
             </Tab.Panel>
           </Tab.Panels>

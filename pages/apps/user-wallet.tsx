@@ -18,6 +18,7 @@ import moment from "moment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ModelDetails from "@/components/ModelDetails";
 import auth from "../utils/auth";
+import TablePagination from "@mui/material/TablePagination";
 
 const UserWallet = () => {
   const data = {
@@ -38,6 +39,8 @@ const UserWallet = () => {
   const [dataInfo, setDataInfo] = useState([]);
   const [typeData, setTypeData] = useState("");
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     filterData();
@@ -238,6 +241,20 @@ const UserWallet = () => {
     link.click();
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = tableData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return loading ? (
     <div>
       <Loader />
@@ -303,20 +320,6 @@ const UserWallet = () => {
               onChange={(e) => handleChange(e)}
               value={changeData?.end_date}
             />
-            {/* <select
-              id="campgain"
-              className="form-select h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
-              name="status"
-              onChange={(e) => handleChange(e)}
-              value={changeData?.status}
-            >
-              <option key={"all"} value={"all"}>
-                All
-              </option>
-              <option>Debit</option>
-              <option>Credit</option>
-            </select> */}
-
             <select
               id="campgain"
               className="form-select h-10 text-white-dark dark:border-none dark:bg-[#1E1611]"
@@ -386,7 +389,7 @@ const UserWallet = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tableData?.map((data, index) => {
+                  {paginatedData?.map((data, index) => {
                     return (
                       <tr key={data?._id}>
                         <td>{data?.lead_id}</td>
@@ -479,6 +482,15 @@ const UserWallet = () => {
                   })}
                 </tbody>
               </table>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={tableData?.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
             </div>
           </div>
         </div>

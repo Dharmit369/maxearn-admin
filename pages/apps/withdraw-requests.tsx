@@ -13,6 +13,7 @@ import StatusModel from "@/components/statusModel";
 import ModelDetails from "@/components/ModelDetails";
 import ModelDetailsNew from "@/components/ModelDetailsNew";
 import auth from "../utils/auth";
+import TablePagination from "@mui/material/TablePagination";
 
 const UserWallet = () => {
   const currentMonthStart = moment().startOf("month").format("YYYY-MM-DD");
@@ -38,6 +39,8 @@ const UserWallet = () => {
   const [modelDetails, setModelDetails] = useState(false);
   const [modelData, setModelData] = useState([]);
   const router = useRouter();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     statusOption();
@@ -185,6 +188,20 @@ const UserWallet = () => {
     setModelData(data);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = tableData?.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return loading ? (
     <div>
       <Loader />
@@ -299,7 +316,7 @@ const UserWallet = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tableData?.map((data, index) => {
+                  {paginatedData?.map((data, index) => {
                     return (
                       <tr key={data?._id}>
                         <td>
@@ -381,6 +398,15 @@ const UserWallet = () => {
                   })}
                 </tbody>
               </table>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={tableData?.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
             </div>
           </div>
         </div>
