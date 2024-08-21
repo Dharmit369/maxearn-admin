@@ -176,7 +176,11 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
       pincode: changeData?.pincode,
     };
 
-    if (changeData?.status === "SaleCompleted") {
+    if (
+      changeData?.status === "SaleCompleted" ||
+      changeData?.status === "PartialSaleCompleted" ||
+      changeData?.status === "AllSaleCompleted"
+    ) {
       _data.amount = parseInt(changeData?.amount);
     }
     console.log(_data, "dadadsssdsasd");
