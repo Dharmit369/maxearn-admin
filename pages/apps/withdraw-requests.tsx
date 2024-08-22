@@ -202,6 +202,46 @@ const UserWallet = () => {
     page * rowsPerPage + rowsPerPage
   );
 
+  const exportCSV = () => {
+    const headers = [
+      "Request ID",
+      "Affiliate Id",
+      "Date",
+      "Amount",
+      "User Name",
+      "Status Details",
+    ];
+
+    // "_id": "66b0e403b4c94f999423781a",
+    // "affiliate_id": "366108",
+    // "amount": 500,
+    // "value": "InWallet",
+    // "status": "NotPaid",
+    // "date": "2024-08-05T14:38:36.709Z",
+    // "username": "rahul_k"
+    // },
+    const rows = tableData?.map((data, index) => [
+      index + 1,
+      data?.affiliate_id,
+      data?.date,
+      data?.amount,
+      data?.username,
+      data?.status,
+    ]);
+
+    let csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Withdraw-Request.csv");
+    document.body.appendChild(link);
+
+    link.click();
+  };
+
   return loading ? (
     <div>
       <Loader />
@@ -299,6 +339,15 @@ const UserWallet = () => {
               placeholder="Lead Id"
               className="form-input dark:border-none dark:bg-[#1E1611]"
             /> */}
+          </div>
+          <div className="flex flex-row items-center xs:px-5 lg:px-0">
+            <button
+              type="submit"
+              className="btn btn-primary my-6"
+              onClick={exportCSV}
+            >
+              Export Withdraw Request
+            </button>
           </div>
 
           <div>

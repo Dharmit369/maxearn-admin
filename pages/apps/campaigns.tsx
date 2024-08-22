@@ -71,7 +71,7 @@ const Campaigns = () => {
 
   const [statusChange, setStatusChange] = useState("");
   const [goals, setGoals] = useState([{ description: "", price: "" }]);
-  const [content, setContent] = useState(``);
+  const [content, setContent] = useState("");
   const [shareContent, setShareContent] = useState(``);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState("");
@@ -560,6 +560,7 @@ const Campaigns = () => {
                 <table>
                   <thead>
                     <tr>
+                      <th>Id</th>
                       <th>Image</th>
                       <th>User</th>
                       <th>Campaign Name</th>
@@ -574,6 +575,7 @@ const Campaigns = () => {
                     {tableData?.map((data) => {
                       return (
                         <tr key={data?.id}>
+                          <td>{data?._id}</td>
                           <td>
                             {/* <div className="whitespace-nowrap">{data.id}</div> */}
                             <img

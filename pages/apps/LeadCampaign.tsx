@@ -217,6 +217,8 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
   const exportTableData = () => {
     const headers = [
       "ID",
+      "Lead ID",
+      "Campaign Name",
       "Campaign Id",
       "Created By",
       "Date",
@@ -259,6 +261,8 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
 
     const rows = tableData?.map((data, index) => [
       index + 1,
+      data?.lead_id,
+      campname,
       data?.campaign_id,
       data?.name,
       data?.created_timestamp,

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 
 import Dropdown from "@/components/Dropdown";
 import { Fragment } from "react";
@@ -21,7 +21,10 @@ import dynamic from "next/dynamic";
 // const SunEditor = dynamic(() => import("suneditor-react"), {
 //   ssr: false,
 // });
-
+const JoditEditor = dynamic(() => import("jodit-react"), {
+  ssr: false,
+  loading: () => <p>Loading Editor...</p>,
+});
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const CreateCampaigns = ({
@@ -45,6 +48,12 @@ const CreateCampaigns = ({
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState(``);
   const [contents, setContents] = useState("");
+  const editor = useRef(null);
+
+  const config = {
+    readonly: false,
+    height: 400,
+  };
 
   console.log("createCampaigns2", createCampaigns);
   // useEffect(() => {
@@ -54,6 +63,13 @@ const CreateCampaigns = ({
 
   //     return () => clearTimeout(timer);
   // }, []);
+
+  const handleBlur = (newContent) => {
+    setShareContent(typeof newContent === "string" ? newContent : "");
+  };
+  const handleContentBlur = (newContent) => {
+    setContent(typeof newContent === "string" ? newContent : "");
+  };
 
   console.log("options", categoryOptionData);
 
@@ -549,16 +565,24 @@ const CreateCampaigns = ({
 
           <div>
             <label htmlFor="Content">Share Content</label>
-            <ReactQuill theme="snow" value={content} onChange={setContent} />
+            <JoditEditor
+              ref={editor}
+              value={content}
+              config={config}
+              onBlur={handleContentBlur}
+              onChange={(newContent) => {}}
+            />
           </div>
           <div>
             <label htmlFor="Share content">Offer Description</label>
-            <ReactQuill
-              theme="snow"
+
+            <JoditEditor
+              ref={editor}
               value={shareContent}
-              onChange={setShareContent}
+              config={config}
+              onBlur={handleBlur}
+              onChange={(newContent) => {}}
             />
-            {/* <SunEditor /> */}
           </div>
 
           <div className="flex justify-end">
