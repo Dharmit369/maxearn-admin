@@ -139,9 +139,18 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
         ).length;
         setLinkSharedCount(linkSharedCount);
         const PaidlinkSharedCount = res?.data?.data?.filter(
-          (item) => item?.status === ""
+          (item) => item?.status === "SaleCompleted"
         ).length;
-        setPaidLead(PaidlinkSharedCount);
+        const PaidlinkSharedCount2 = res?.data?.data?.filter(
+          (item) => item?.status === "PartialSaleCompleted"
+        ).length;
+        // AllSaleCompleted
+        const PaidlinkSharedCount3 = res?.data?.data?.filter(
+          (item) => item?.status === "AllSaleCompleted"
+        ).length;
+        setPaidLead(
+          PaidlinkSharedCount + PaidlinkSharedCount2 + PaidlinkSharedCount3
+        );
         setLoading(false);
       } else {
         setTableData([]);
@@ -522,13 +531,13 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                         <td>
                           <span
                             className={`badge whitespace-nowrap ${
-                              data?.status === "completed"
-                                ? "bg-primary   "
-                                : data?.status === "Pending"
-                                ? "bg-secondary"
-                                : data?.status === "In Progress"
+                              data?.status === "PartialSaleCompleted"
                                 ? "bg-success"
-                                : data?.status === "Canceled"
+                                : data?.status === "SaleCompleted"
+                                ? "bg-success"
+                                : data?.status === "AllSaleCompleted"
+                                ? "bg-success"
+                                : data?.status === "ApplicationRejected"
                                 ? "bg-danger"
                                 : "bg-primary"
                             }`}
@@ -541,19 +550,29 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                         </td>
 
                         <td className="text-center">
-                          <div className="dropdown">
-                            <span
-                              className="badge cursor-pointer bg-primary"
-                              onClick={() => editClick(data)}
-                            >
-                              Edit
-                            </span>
-                            <span
+                          <div className="flex items-center justify-center space-x-4">
+                            <img
+                              onClick={() => {
+                                editClick(data);
+                              }}
+                              src={Images?.EDIT}
+                              alt=""
+                              className="h-[25px] w-[25px]"
+                            />
+                            <img
+                              onClick={() => {
+                                deleteLead(data?._id);
+                              }}
+                              src={Images?.DELETE}
+                              alt=""
+                              className="h-[25px] w-[25px]"
+                            />
+                            {/* <span
                               className="badge ml-5 cursor-pointer bg-danger"
                               onClick={() => deleteLead(data?._id)}
                             >
                               Delete
-                            </span>
+                            </span> */}
                           </div>
                         </td>
                       </tr>

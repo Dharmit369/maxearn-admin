@@ -376,6 +376,7 @@ const UserWallet = () => {
                 <thead>
                   <tr>
                     <th>Lead ID</th>
+                    <th>Lead Name</th>
                     <th>User Name</th>
                     <th>Mobile No</th>
                     <th>Date</th>
@@ -393,6 +394,7 @@ const UserWallet = () => {
                     return (
                       <tr key={data?._id}>
                         <td>{data?.lead_id}</td>
+                        <td>{data?.lead_name}</td>
                         <td>{data?.user_name}</td>
                         <td>{data?.user_phone}</td>
 
@@ -451,30 +453,25 @@ const UserWallet = () => {
                             {data.status}
                           </span>
                         </td>
-                        {/* <td> */}
-                        {/* <span className={`badge whitespace-nowrap `}> */}
-                        {/* {data.status} */}
-                        {/* <select */}
-                        {/* id="Type" */}
-                        {/* className="form-select w-32 text-white-dark dark:border-none dark:bg-[#1E1611]" */}
-                        {/* // onChange={(e) => handleStatus(data?._id, e.target.value)} */}
-                        {/* // value={data?.status} */}
-                        {/* > */}
-                        {/* <option value={""}>Please Select</option> */}
-                        {/* <option value={"Hold"}>On Hold</option> */}
-                        {/* <option value={"InWallet"}>In Wallet</option> */}
-                        {/* <option value={"Requested"}>Requested</option> */}
-                        {/* <option value={"Paid"}>Paid</option> */}
-                        {/* <option value={"NotPaid"}>NotPaid</option> */}
-                        {/* </select> */}
-                        {/* // </span> */}
-                        {/* // </td> */}
+
                         <td className="text-center">
-                          <div className="dropdown">
-                            <DeleteIcon onClick={() => deleteData(data?._id)} />
-                            <VisibilityIcon
-                              onClick={() => handleVisibility(data)}
+                          <div className="flex items-center justify-center space-x-4">
+                            {/* <DeleteIcon onClick={() => deleteData(data?._id)} /> */}
+                            <img
+                              onClick={() => deleteData(data?._id)}
+                              src={Images?.DELETE}
+                              alt=""
+                              className="h-[25px] w-[25px]"
                             />
+                            <img
+                              onClick={() => handleVisibility(data)}
+                              src={Images?.INFO}
+                              alt=""
+                              className="h-[25px] w-[25px]"
+                            />
+                            {/* <VisibilityIcon
+                              onClick={() => handleVisibility(data)}
+                            /> */}
                           </div>
                         </td>
                       </tr>

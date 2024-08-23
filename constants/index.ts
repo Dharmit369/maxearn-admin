@@ -17,6 +17,15 @@ export const Images = {
   USERS: "/Images/multiple-users-silhouette.png",
   WALLET: "/Images/wallet.png",
   TICKET: "/Images/customer-service.png",
+  EDIT: "/Images/edit.png",
+  DELETE: "/Images/recycle-bin.png",
+  INFO: "/Images/information.png",
+  LOCK: "/Images/lock-up.png",
+  LEAD: "/Images/team-lead.png",
+  PIN: "/Images/placeholder.png",
+  VIDEO: "/Images/video.png",
+
+  // lock-up
 };
 
 export const BASE_URL = "https://maxearnbackend-j4xejzdp6q-el.a.run.app/api/v1";

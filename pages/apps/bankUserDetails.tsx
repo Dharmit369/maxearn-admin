@@ -210,7 +210,6 @@ const BankUserDetails = () => {
     } else if (index === 2) {
       filteredData = tableData?.filter((data) => data?.status === "Approved");
     }
-    setCsvData(converttoCsv(filteredData));
   };
 
   return loading ? (
@@ -226,7 +225,7 @@ const BankUserDetails = () => {
           </h2>
         </div>
       </div>
-      <Tab.Group onChange={handleTabChange}>
+      <Tab.Group>
         <Tab.List className="mt-5 flex flex-wrap">
           <Tab as={Fragment}>
             {({ selected }) => (

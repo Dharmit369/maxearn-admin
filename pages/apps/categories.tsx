@@ -260,17 +260,28 @@ const Categories = () => {
                       <td>{data?.sub_title}</td>
                       <td>{data?.parent_category}</td>
                       {/* <td>{data.date}</td> */}
-                      <td className="border-b border-[#ebedf2] p-3 text-center dark:border-[#191e3a]">
-                        <ModeEditIcon
+                      <td className="-b flex items-center justify-center space-x-4 border-[#ebedf2] p-3 text-center dark:border-[#191e3a]">
+                        <img
                           onClick={() => {
                             setEditId(data?._id),
                               setEdit(true),
                               setAddCategory(true),
                               setCategoryData(data);
                           }}
+                          src={Images?.EDIT}
+                          alt=""
+                          className="h-[25px] w-[25px]"
                         />
                         {/* </ModeEditIcon> */}
-                        <DeleteIcon onClick={() => deleteData(data?._id)} />
+                        {/* <DeleteIcon onClick={() => deleteData(data?._id)} /> */}
+                        <img
+                          onClick={() => {
+                            deleteData(data?._id);
+                          }}
+                          src={Images?.DELETE}
+                          alt=""
+                          className="h-[25px] w-[25px]"
+                        />
                       </td>
                     </tr>
                   );

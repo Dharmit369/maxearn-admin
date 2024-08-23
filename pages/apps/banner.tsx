@@ -5,7 +5,7 @@ import Loader from "@/components/Layouts/Loader";
 import React from "react";
 import Model from "@/components/Model";
 import axios from "axios";
-import { BASE_URL } from "@/constants";
+import { BASE_URL, Images } from "@/constants";
 import { showAlert } from "@/components/showAlert";
 import { useRouter } from "next/router";
 import auth from "../utils/auth";
@@ -229,13 +229,21 @@ const Banner = () => {
                       {data?.url}
                     </a>
                   </td>
-                  <td className="border-b border-[#ebedf2] p-3 text-center dark:border-[#191e3a] md:space-x-4">
-                    <ModeEditIcon
+                  <td className="dark:-[#191e3a] flex items-center justify-center border-[#ebedf2] p-3 text-center md:space-x-4">
+                    <img
                       onClick={() => {
                         handleEditClick(data);
                       }}
+                      src={Images?.EDIT}
+                      alt=""
+                      className="h-[25px] w-[25px]"
                     />
-                    <DeleteIcon onClick={() => deleteBanner(data?._id)} />
+                    <img
+                      onClick={() => deleteBanner(data?._id)}
+                      src={Images?.DELETE}
+                      alt=""
+                      className="h-[25px] w-[25px]"
+                    />
                   </td>
                 </tr>
               );

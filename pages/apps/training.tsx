@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Loader from "@/components/Layouts/Loader";
 import React from "react";
 import Model from "@/components/Model";
-import { BASE_URL } from "@/constants";
+import { BASE_URL, Images } from "@/constants";
 import axios from "axios";
 import { showAlert } from "@/components/showAlert";
 import auth from "../utils/auth";
@@ -232,13 +232,27 @@ const Traning = () => {
                   <td>
                     <div className="whitespace-nowrap">{data?.description}</div>
                   </td>
-                  <td className="border-b border-[#ebedf2] p-3 text-center dark:border-[#191e3a] md:space-x-4">
-                    <ModeEditIcon
+                  <td className="flex justify-center border-[#ebedf2] p-3 text-center dark:border-[#191e3a] md:space-x-4">
+                    {/* <ModeEditIcon
                       onClick={() => {
                         handleEditClick(data);
                       }}
+                    /> */}
+                    <img
+                      onClick={() => {
+                        handleEditClick(data);
+                      }}
+                      src={Images?.EDIT}
+                      alt=""
+                      className="h-[25px] w-[25px]"
                     />
-                    <DeleteIcon onClick={() => deleteTraining(data?._id)} />
+                    {/* <DeleteIcon onClick={() => deleteTraining(data?._id)} /> */}
+                    <img
+                      onClick={() => deleteTraining(data?._id)}
+                      src={Images?.DELETE}
+                      alt=""
+                      className="h-[25px] w-[25px]"
+                    />
                   </td>
                 </tr>
               );

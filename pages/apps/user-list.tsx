@@ -229,7 +229,7 @@ const UserList = () => {
                     <th>Name</th>
                     <th>Mobile No.</th>
                     <th>Reffered By</th>
-                    <th>Status</th>
+                    <th>Block</th>
                     <th>Referral Active</th>
                     <th className="text-center">Action</th>
                   </tr>
@@ -290,11 +290,44 @@ const UserList = () => {
                           </span>
                         </td>
                         <td className="text-center">
-                          <div className="flex w-full justify-between">
-                            <ModeEditIcon onClick={() => handleEdit(data)} />
-                            <InfoIcon onClick={() => handleIcon(data)} />
-                            <DeleteIcon onClick={() => deleteData(data?._id)} />
-                            <LockIcon onClick={() => lockData(data)} />
+                          <div className="flex w-full items-center justify-between space-x-4">
+                            {/* <ModeEditIcon onClick={() => handleEdit(data)} /> */}
+                            <img
+                              onClick={() => {
+                                handleEdit(data);
+                              }}
+                              src={Images?.EDIT}
+                              alt=""
+                              className="h-[25px] w-[25px]"
+                            />
+                            <img
+                              onClick={() => {
+                                handleIcon(data);
+                              }}
+                              src={Images?.INFO}
+                              alt=""
+                              className="h-[25px] w-[25px]"
+                            />
+                            <img
+                              onClick={() => {
+                                deleteData(data?._id);
+                              }}
+                              src={Images?.DELETE}
+                              alt=""
+                              className="h-[25px] w-[25px]"
+                            />
+                            <img
+                              onClick={() => {
+                                lockData(data);
+                              }}
+                              src={Images?.LOCK}
+                              alt=""
+                              className="h-[25px] w-[25px]"
+                            />
+
+                            {/* <InfoIcon onClick={() => handleIcon(data)} /> */}
+                            {/* <DeleteIcon onClick={() => deleteData(data?._id)} /> */}
+                            {/* <LockIcon onClick={() => lockData(data)} /> */}
                             {/* <ExitToAppIcon /> */}
                           </div>
                         </td>

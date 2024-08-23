@@ -24,6 +24,7 @@ const UserWallet = () => {
     start_date: currentMonthStart,
     end_date: currentMonthEnd,
     status: "",
+    mobile_num: "",
   };
 
   const [changeData, setchangeData] = useState(data);
@@ -51,14 +52,14 @@ const UserWallet = () => {
   }, [changeData]);
 
   const getWithdrawalRequest = async () => {
-    setLoading(true);
+    // setLoading(true);
     const token = localStorage.getItem("token");
     console.log(
       `${BASE_URL}/withdraw/?affiliate_id=${changeData?.affiliate_id}&start_date=${changeData?.start_date}&end_date=${changeData?.end_date}&status=${changeData?.status}`
     );
     try {
       const res = await axios.get(
-        `${BASE_URL}/withdraw/?affiliate_id=${changeData?.affiliate_id}&start_date=${changeData?.start_date}&end_date=${changeData?.end_date}&status=${changeData?.status}`,
+        `${BASE_URL}/withdraw/?affiliate_id=${changeData?.affiliate_id}&start_date=${changeData?.start_date}&end_date=${changeData?.end_date}&status=${changeData?.status}&mobile_num={changeData?.mobile_num}`,
         {
           maxBodyLength: Infinity,
           headers: {
@@ -287,6 +288,15 @@ const UserWallet = () => {
               onChange={(e) => handleChange(e)}
               value={changeData?.affiliate_id}
             />
+            <input
+              id="gridEmail"
+              type="text"
+              placeholder="Mobile No"
+              className="form-input mt-4 h-10 dark:border-none dark:bg-[#1E1611]"
+              name="mobile_num"
+              onChange={(e) => handleChange(e)}
+              value={changeData?.mobile_num}
+            />
 
             <input
               id="gridEmail"
@@ -356,6 +366,9 @@ const UserWallet = () => {
                 <thead>
                   <tr>
                     <th>Request ID</th>
+                    <th>User ID</th>
+                    <th>Mobile No</th>
+
                     <th>Date</th>
                     <th>Amount</th>
                     <th>User Name</th>
@@ -371,21 +384,23 @@ const UserWallet = () => {
                         <td>
                           <div className="whitespace-nowrap">{index + 1}</div>
                         </td>
+                        <td>{data?.affiliate_id}</td>
+                        <td>{data?.mobile_num}</td>
                         <td>{moment(data?.date)?.format("DD/MM/YYYY")}</td>
                         <td>{data?.amount + " " + "Rs"}</td>
                         <td>{data?.username}</td>
                         <td>
                           <span
                             className={`badge whitespace-nowrap ${
-                              data?.status === "in_review"
+                              data?.status === "InWallet"
                                 ? "bg-primary   "
-                                : data?.status === "Pending"
-                                ? "bg-secondary"
-                                : data?.status === "In Progress"
-                                ? "bg-success"
-                                : data?.status === "Canceled"
+                                : data?.status === "Hold"
                                 ? "bg-danger"
-                                : "bg-primary"
+                                : data?.status === "Paid"
+                                ? "bg-success"
+                                : data?.status === "NotPaid"
+                                ? "bg-danger"
+                                : "bg-yellow-700"
                             }`}
                           >
                             {data?.status?.toUpperCase()}
@@ -434,7 +449,7 @@ const UserWallet = () => {
                               className="badge ml-5 cursor-pointer bg-danger"
                               onClick={() => deleteWithdrawal(data?._id)}
                             >
-                              REVERT
+                              DELETE
                             </span>
                             <VisibilityIcon
                               className="ml-5"

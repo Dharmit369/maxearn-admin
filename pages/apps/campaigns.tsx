@@ -13,7 +13,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import { showAlert } from "@/components/showAlert";
-import { BASE_URL } from "@/constants";
+import { BASE_URL, Images } from "@/constants";
 import axios from "axios";
 import CreateCampaign from "./CreateCampaign";
 import LeadCampaign from "./LeadCampaign";
@@ -555,112 +555,132 @@ const Campaigns = () => {
               </select>
             </div>
 
-            <div>
-              <div className="table-responsive mb-5  xs:px-5 lg:px-0">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Id</th>
-                      <th>Image</th>
-                      <th>User</th>
-                      <th>Campaign Name</th>
-                      <th>Created At</th>
-                      <th>Status</th>
-                      <th>Update Status</th>
+            <div className="table-responsive mb-5 ">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Image</th>
+                    <th>User</th>
+                    <th>Campaign Name</th>
+                    <th>Created At</th>
+                    <th>Status</th>
+                    <th>Update Status</th>
 
-                      <th className="text-center">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tableData?.map((data) => {
-                      return (
-                        <tr key={data?.id}>
-                          <td>{data?._id}</td>
-                          <td>
-                            {/* <div className="whitespace-nowrap">{data.id}</div> */}
-                            <img
-                              src={data?.featured_image}
-                              alt={data?.featured_image}
-                              className="w-13 h-10"
-                            />
-                          </td>
-                          <td>{data?.name}</td>
-                          <td>{data?.name}</td>
-                          <td>
-                            {moment(data?.created_at)?.format("DD/MM/YYYY")}
-                          </td>
-                          <td>
-                            <span
-                              className={`badge whitespace-nowrap ${
-                                data?.status === "in_review"
-                                  ? "bg-primary   "
-                                  : data?.status === "Pending"
-                                  ? "bg-secondary"
-                                  : data?.status === "In Progress"
-                                  ? "bg-success"
-                                  : data?.status === "Canceled"
-                                  ? "bg-danger"
-                                  : "bg-primary"
-                              }`}
-                            >
-                              {data?.status?.toUpperCase()}
-                            </span>
-                          </td>
-                          <select
-                            id="Type"
-                            className="form-select mt-2 w-36 text-white-dark dark:border-none dark:bg-[#261C16]"
-                            onChange={(e) =>
-                              handleStatus(data?._id, e.target.value)
-                            }
-                            value={data?.status}
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData?.map((data) => {
+                    return (
+                      <tr key={data?.id}>
+                        <td>{data?._id}</td>
+                        <td>
+                          {/* <div className="whitespace-nowrap">{data.id}</div> */}
+                          <img
+                            src={data?.featured_image}
+                            alt={data?.featured_image}
+                            className="w-13 h-10"
+                          />
+                        </td>
+                        <td>{data?.name}</td>
+                        <td>{data?.name}</td>
+                        <td>
+                          {moment(data?.created_at)?.format("DD/MM/YYYY")}
+                        </td>
+                        <td>
+                          <span
+                            className={`badge whitespace-nowrap ${
+                              data?.status === "in_review"
+                                ? "bg-primary   "
+                                : data?.status === "Pending"
+                                ? "bg-secondary"
+                                : data?.status === "Approved"
+                                ? "bg-success"
+                                : data?.status === "Ended"
+                                ? "bg-danger"
+                                : "bg-primary"
+                            }`}
                           >
-                            <option value={""}>Please Select</option>
-                            <option value={"InReview"}>InReview</option>
-                            <option value={"Approved"}>Approved</option>
-                            <option value={"Ended"}>Ended</option>
-                          </select>
-                          <td className="text-center">
-                            <div className="flex w-full justify-between">
-                              <Tooltip title="Edit" placement="top">
-                                <ModeEditIcon
+                            {data?.status?.toUpperCase()}
+                          </span>
+                        </td>
+                        <select
+                          id="Type"
+                          className="form-select mt-2 w-36 text-white-dark dark:border-none dark:bg-[#261C16]"
+                          onChange={(e) =>
+                            handleStatus(data?._id, e.target.value)
+                          }
+                          value={data?.status}
+                        >
+                          <option value={""}>Please Select</option>
+                          <option value={"InReview"}>InReview</option>
+                          <option value={"Approved"}>Approved</option>
+                          <option value={"Ended"}>Ended</option>
+                        </select>
+                        <td className="text-center">
+                          <div className="flex justify-between  space-x-4">
+                            <Tooltip title="Edit" placement="top">
+                              {/* <ModeEditIcon
                                   onClick={() => handleDetails(data)}
-                                />
-                              </Tooltip>
-                              <Tooltip title="Delete" placement="top">
-                                <DeleteIcon
-                                  onClick={() => deleteData(data?._id)}
-                                />
-                              </Tooltip>
-                              <Tooltip title="Lead" placement="top">
-                                <PersonIcon
-                                  onClick={() =>
-                                    handleClick("lead", data?._id, data)
-                                  }
-                                />
-                              </Tooltip>
-                              {/* <Tooltip title="offer18 campaign" placement="top">
-                                <ExitToAppIcon />
-                              </Tooltip> */}
-                              <Tooltip title="Pin Code" placement="top">
-                                <LocationOnIcon
-                                  onClick={() => setLocationOpen(true)}
-                                />
-                              </Tooltip>
-                              <Tooltip title="video" placement="top">
-                                <VideocamIcon
-                                  onClick={() =>
-                                    handleClick("video", data?._id)
-                                  }
-                                />
-                              </Tooltip>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                                /> */}
+                              <img
+                                onClick={() => {
+                                  handleDetails(data);
+                                }}
+                                src={Images?.EDIT}
+                                alt=""
+                                className="h-[25px] w-[25px]"
+                              />
+                            </Tooltip>
+                            <Tooltip title="Delete" placement="top">
+                              <img
+                                onClick={() => {
+                                  deleteData(data?._id);
+                                }}
+                                src={Images?.DELETE}
+                                alt=""
+                                className="h-[25px] w-[25px]"
+                              />
+                            </Tooltip>
+                            <Tooltip title="Lead" placement="top">
+                              <img
+                                onClick={() => {
+                                  handleClick("lead", data?._id, data);
+                                }}
+                                src={Images?.LEAD}
+                                alt=""
+                                className="h-[25px] w-[25px]"
+                              />
+                            </Tooltip>
+
+                            <Tooltip title="Pin Code" placement="top">
+                              <img
+                                onClick={() => {
+                                  setLocationOpen(true);
+                                }}
+                                src={Images?.PIN}
+                                alt=""
+                                className="h-[25px] w-[25px]"
+                              />
+                            </Tooltip>
+                            <Tooltip title="video" placement="top">
+                              <img
+                                onClick={() => {
+                                  handleClick("video", data?._id);
+                                }}
+                                src={Images?.VIDEO}
+                                alt=""
+                                className="h-[25px] w-[25px]"
+                              />
+                            </Tooltip>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
             <div className="flex justify-end">
               <button

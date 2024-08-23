@@ -205,11 +205,11 @@ const CreateCampaigns = ({
               Offer Image
             </label>
             <div className="flex justify-between xs:flex-col sm:flex-row">
-              {isEdit && campaignData?.featured_image && (
+              {isEdit && campaignData?.offer_image && (
                 <div className="mb-2">
                   <img
-                    src={campaignData.featured_image}
-                    alt="Featured Image"
+                    src={campaignData.offer_image}
+                    alt="offer_image"
                     className="h-32 w-32 object-cover"
                   />
                 </div>
@@ -219,11 +219,10 @@ const CreateCampaigns = ({
                 type="file"
                 placeholder="Upload Featured Image"
                 className="form-input w-full dark:border-none dark:bg-[#1E1611]"
-                name="featured_image"
+                name="offer_image"
                 onChange={(event) =>
                   handleMultipleChange(event, "featured_image")
                 }
-                // value={campaignData?.featured_image || ""}
               />
             </div>
           </div>
@@ -235,7 +234,7 @@ const CreateCampaigns = ({
 
           <div>
             <label htmlFor="OfferImage">Featured Image</label>
-            <input
+            {/* <input
               id="OfferImage"
               type="file"
               placeholder="Offer Image"
@@ -243,7 +242,28 @@ const CreateCampaigns = ({
               name="offer_image"
               onChange={(event) => handleMultipleChange(event, "offer_image")}
               // value={campaignData?.offer_image || ""}
-            />
+            /> */}
+
+            <div className="flex justify-between xs:flex-col sm:flex-row">
+              {isEdit && campaignData?.featured_image && (
+                <div className="mb-2">
+                  <img
+                    src={campaignData.featured_image}
+                    alt="offer_image"
+                    className="h-32 w-32 object-cover"
+                  />
+                </div>
+              )}
+              <input
+                id="featureImage"
+                type="file"
+                placeholder="feature Image"
+                className="form-input dark:border-none dark:bg-[#1E1611]"
+                name="offer_image"
+                onChange={(event) => handleMultipleChange(event, "offer_image")}
+                // value={campaignData?.offer_image || ""}
+              />
+            </div>
           </div>
 
           {/* <div>

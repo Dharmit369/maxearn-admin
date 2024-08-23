@@ -133,8 +133,8 @@ const commission = () => {
                   </td>
                   <td>{data.commission}</td>
                   <td>{data?.referral_active === false ? "false" : "true"}</td>
-                  <td className="border-b border-[#ebedf2] p-3 text-center dark:border-[#191e3a] md:space-x-4">
-                    <ModeEditIcon
+                  <td className="p- md:space-x- flex items-center justify-center border-[#ebedf2] text-center dark:border-[#191e3a]">
+                    {/* <ModeEditIcon
                       onClick={() =>
                         handleStatus(
                           data?._id,
@@ -142,6 +142,18 @@ const commission = () => {
                           data.referral_active
                         )
                       }
+                    /> */}
+                    <img
+                      onClick={() => {
+                        handleStatus(
+                          data?._id,
+                          data.commission,
+                          data.referral_active
+                        );
+                      }}
+                      src={Images?.EDIT}
+                      alt=""
+                      className="h-[25px] w-[25px]"
                     />
                   </td>
                 </tr>
