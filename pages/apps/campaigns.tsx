@@ -32,7 +32,7 @@ const Campaigns = () => {
     advertize_payout: "",
     target_link: "",
     category_id: "",
-    approval_rate: "",
+    approval_rate: null,
     joining_fee: "",
     annual_fee: "",
     info: "",
@@ -49,8 +49,8 @@ const Campaigns = () => {
     description3: "",
     price4: "",
     description4: "",
-    interest_rate: "",
-    loan_amount: "",
+    interest_rate: null,
+    loan_amount: null,
   };
   const [loading, setLoading] = useState(true);
   const [createCampaigns, setCreateCampaigns] = useState(false);

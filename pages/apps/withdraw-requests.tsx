@@ -4,7 +4,7 @@ import AnimatedCard from "@/components/animated-card";
 import GroupIcon from "@mui/icons-material/Group";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
-import { BASE_URL } from "@/constants";
+import { BASE_URL, Images } from "@/constants";
 import { showAlert } from "@/components/showAlert";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -59,7 +59,7 @@ const UserWallet = () => {
     );
     try {
       const res = await axios.get(
-        `${BASE_URL}/withdraw/?affiliate_id=${changeData?.affiliate_id}&start_date=${changeData?.start_date}&end_date=${changeData?.end_date}&status=${changeData?.status}&mobile_num={changeData?.mobile_num}`,
+        `${BASE_URL}/withdraw/?affiliate_id=${changeData?.affiliate_id}&start_date=${changeData?.start_date}&end_date=${changeData?.end_date}&status=${changeData?.status}&mobile_num=${changeData?.mobile_num}`,
         {
           maxBodyLength: Infinity,
           headers: {
@@ -213,14 +213,6 @@ const UserWallet = () => {
       "Status Details",
     ];
 
-    // "_id": "66b0e403b4c94f999423781a",
-    // "affiliate_id": "366108",
-    // "amount": 500,
-    // "value": "InWallet",
-    // "status": "NotPaid",
-    // "date": "2024-08-05T14:38:36.709Z",
-    // "username": "rahul_k"
-    // },
     const rows = tableData?.map((data, index) => [
       index + 1,
       data?.affiliate_id,
@@ -428,7 +420,24 @@ const UserWallet = () => {
                         </td>
                         <td className="text-center">
                           <div className="dropdown">
-                            <span
+                            <img
+                              onClick={() => {
+                                router.push(
+                                  {
+                                    pathname: "/apps/wallet-request-details",
+                                    query: {
+                                      withdrawalid: data?._id,
+                                      username: data?.username,
+                                    },
+                                  },
+                                  "/wallet-request-details"
+                                );
+                              }}
+                              src={Images?.INFO}
+                              alt=""
+                              className="h-[25px] w-[25px]"
+                            />
+                            {/* <span
                               className="badge cursor-pointer bg-primary"
                               onClick={() => {
                                 router.push(
@@ -444,13 +453,19 @@ const UserWallet = () => {
                               }}
                             >
                               DETAILS
-                            </span>
-                            <span
+                            </span> */}
+                            <img
+                              onClick={() => deleteWithdrawal(data?._id)}
+                              src={Images?.DELETE}
+                              alt=""
+                              className="h-[25px] w-[25px]"
+                            />
+                            {/* <span
                               className="badge ml-5 cursor-pointer bg-danger"
                               onClick={() => deleteWithdrawal(data?._id)}
                             >
                               DELETE
-                            </span>
+                            </span> */}
                             <VisibilityIcon
                               className="ml-5"
                               onClick={() => handleVisibility(data)}
