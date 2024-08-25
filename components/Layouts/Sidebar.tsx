@@ -463,6 +463,16 @@ const Sidebar = () => {
                             </div>
                           </Link>
                         </li>
+
+                        <li className="nav-item">
+                          <Link href="/apps/ads-banner" className="group">
+                            <div className="flex w-full items-center">
+                              <span className="w-full text-white dark:text-[#fff] dark:group-hover:text-white-dark">
+                                {t("Ads Banner")}
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
                         {/* 
                         <li className="nav-item ">
                           <Link href="/apps/withdraw-requests" className="group">

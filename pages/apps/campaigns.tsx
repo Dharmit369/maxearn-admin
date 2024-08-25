@@ -32,7 +32,7 @@ const Campaigns = () => {
     advertize_payout: "",
     target_link: "",
     category_id: "",
-    approval_rate: null,
+    approval_rate: "",
     joining_fee: "",
     annual_fee: "",
     info: "",
@@ -195,7 +195,7 @@ const Campaigns = () => {
       formData.append("advertize_payout", campaignData?.advertize_payout);
       formData.append("target_link", campaignData?.target_link);
       formData.append("category_id", campaignData?.category_id);
-      formData.append("approval_rate", campaignData?.approval_rate);
+      formData.append("approval_rate", campaignData?.approval_rate || null);
       formData.append("joining_fee", campaignData?.joining_fee);
       formData.append("annual_fee", campaignData?.annual_fee);
       // formData.append("info", campaignData?.info);

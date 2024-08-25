@@ -15,6 +15,7 @@ const Model = ({
   isbanner = true,
   setDesc,
   desc,
+  statusname,
 }: any) => {
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -36,6 +37,8 @@ const Model = ({
   function handleMultipleChange(event: any) {
     setFiles(event?.target?.files[0]);
   }
+
+  console.log(banner, "asnajnsjansjansjansnjasn");
   return (
     <div>
       <div className="fixed inset-0 z-50 bg-black opacity-50"></div>
@@ -118,7 +121,7 @@ const Model = ({
                 htmlFor="relatedContent"
                 className="block text-base font-medium text-gray-700 dark:text-white"
               >
-                URL
+                {statusname ? statusname : "URL"}
               </label>
               <input
                 type="text"
