@@ -700,7 +700,7 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                 )}
 
                 <div>
-                  <label htmlFor="commnet">Note</label>
+                  <label htmlFor="commnet">Remark</label>
                   <input
                     id="note"
                     placeholder="note"

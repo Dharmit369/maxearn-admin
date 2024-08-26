@@ -215,14 +215,12 @@ const CreateCampaigns = ({
                 </div>
               )}
               <input
-                id="FeaturedImage"
+                id="OfferImage"
                 type="file"
                 placeholder="Upload Featured Image"
                 className="form-input w-full dark:border-none dark:bg-[#1E1611]"
                 name="offer_image"
-                onChange={(event) =>
-                  handleMultipleChange(event, "featured_image")
-                }
+                onChange={(event) => handleMultipleChange(event, "offer_image")}
               />
             </div>
           </div>
@@ -233,14 +231,14 @@ const CreateCampaigns = ({
             </div> */}
 
           <div>
-            <label htmlFor="OfferImage">Featured Image</label>
+            <label htmlFor="OfferImage">Campaign Image</label>
             {/* <input
               id="OfferImage"
               type="file"
               placeholder="Offer Image"
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="offer_image"
-              onChange={(event) => handleMultipleChange(event, "offer_image")}
+              onChange={(event) => handleMultipleChange(event, "OfferImage")}
               // value={campaignData?.offer_image || ""}
             /> */}
 
@@ -260,7 +258,9 @@ const CreateCampaigns = ({
                 placeholder="feature Image"
                 className="form-input dark:border-none dark:bg-[#1E1611]"
                 name="offer_image"
-                onChange={(event) => handleMultipleChange(event, "offer_image")}
+                onChange={(event) =>
+                  handleMultipleChange(event, "featured_image")
+                }
                 // value={campaignData?.offer_image || ""}
               />
             </div>
