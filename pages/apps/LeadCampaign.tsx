@@ -1,9 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-
-import Dropdown from "@/components/Dropdown";
-import { Fragment } from "react";
-import Image from "next/image";
 import { BASE_URL, Images } from "@/constants";
 import Link from "next/link";
 import Loader from "@/components/Layouts/Loader";
@@ -49,6 +45,7 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
   const [paidLead, setPaidLead] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [selectedFile, setSelectedFile] = useState(null); // State for selected file
 
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
 
@@ -69,6 +66,40 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
   useEffect(() => {
     getLead();
   }, [rowId, user, startDate, endDate, changeStatus]);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const uploadFile = async () => {
+    if (!selectedFile) {
+      showAlert(15, "Please select a file first", "error");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    const config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `${BASE_URL}/lead/uploadData`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: formData,
+    };
+
+    try {
+      const response = await axios.request(config);
+      showAlert(15, response?.data?.message, "success");
+      getLead();
+      console.log(JSON.stringify(response.data));
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      showAlert(15, "An error occurred while uploading the file", "error");
+    }
+  };
 
   const userOption = async () => {
     setLoading(true);
@@ -236,37 +267,6 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
       "Status",
       "Note",
     ];
-
-    // <td>{index + 1}</td>
-    // <td>{data?.lead_id}</td>
-    // <td>{data.name}</td>
-    // <td>{data.name}</td>
-    // <td>
-    //   {moment(data.created_timestamp).format("DD/MM/YYYY")}
-    // </td>
-    // <td>
-    //   <span>{data.email}</span>
-    // </td>
-    // <td>
-    //   <span>{data.phone_num}</span>
-    // </td>
-    // <td>
-    //   <span
-    //     className={`badge whitespace-nowrap ${
-    //       data.status === "completed"
-    //         ? "bg-primary   "
-    //         : data.status === "Pending"
-    //         ? "bg-secondary"
-    //         : data.status === "In Progress"
-    //         ? "bg-success"
-    //         : data.status === "Canceled"
-    //         ? "bg-danger"
-    //         : "bg-primary"
-    //     }`}
-    //   >
-    //     {data.status}
-    //   </span>
-    // </td>
 
     const rows = tableData?.map((data, index) => [
       index + 1,
@@ -453,18 +453,32 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                 ))}
               </select>
             </div>
+            <div className="flex xs:px-5 lg:px-0 ">
+              <button
+                type="submit"
+                className="btn btn-primary my-6"
+                onClick={exportTableData}
+              >
+                Export
+              </button>
+            </div>
           </div>
 
-          <div className="flex xs:px-5 lg:px-0 ">
-            {/* <button type="submit" className="btn btn-primary my-6 mr-3">
-              Delete All
-            </button> */}
-            <button
-              type="submit"
-              className="btn btn-primary my-6"
-              onClick={exportTableData}
+          <div className="my-6 flex flex-col items-start">
+            <label
+              htmlFor="fileUpload"
+              className="text-xl font-semibold dark:text-white"
             >
-              Export
+              Upload Excel File
+            </label>
+            <input
+              type="file"
+              id="fileUpload"
+              onChange={handleFileChange}
+              className="my-3 text-gray-700 dark:text-white"
+            />
+            <button onClick={uploadFile} className="btn btn-primary my-2">
+              Upload File
             </button>
           </div>
 
