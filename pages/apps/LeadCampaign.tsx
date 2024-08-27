@@ -529,7 +529,7 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                       <tr key={data?.id}>
                         <td>{index + 1}</td>
                         <td>{data?.lead_id}</td>
-                        <td>{data?.name}</td>
+                        <td>{data?.affiliate_name}</td>
                         <td>{data?.name}</td>
                         <td>
                           {moment(data?.created_timestamp)?.format(
