@@ -32,7 +32,7 @@ const Campaigns = () => {
     advertize_payout: "",
     target_link: "",
     category_id: "",
-    approval_rate: "",
+    approval_rate: null,
     joining_fee: "",
     annual_fee: "",
     info: "",

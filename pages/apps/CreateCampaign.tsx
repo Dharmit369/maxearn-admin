@@ -289,7 +289,7 @@ const CreateCampaigns = ({
               onChange={(e) => handleChange(e)}
               value={campaignData?.approval_rate}
             >
-              <option value={""}>Please Select</option>
+              <option value={"null"}>Please Select</option>
               <option value={"low"}>low</option>
               <option value={"medium"}>medium</option>
               <option value={"excellent"}>excellent</option>
