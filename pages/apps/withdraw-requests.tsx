@@ -206,19 +206,21 @@ const UserWallet = () => {
   const exportCSV = () => {
     const headers = [
       "Request ID",
-      "Affiliate Id",
       "Date",
-      "Amount",
-      "User Name",
+      "Affiliate Id",
+      "Affiliate Name",
+      "Affiliate Phone Number",
+      "Withdraw Amount",
       "Status Details",
     ];
 
     const rows = tableData?.map((data, index) => [
       index + 1,
-      data?.affiliate_id,
       data?.date,
-      data?.amount,
+      data?.affiliate_id,
       data?.username,
+      data?.mobile_num,
+      data?.amount,
       data?.status,
     ]);
 

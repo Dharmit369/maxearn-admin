@@ -65,6 +65,8 @@ const UserStatistics = () => {
       "Affiliate Name",
       "Lead Payment",
       "Referal Payment",
+      // "Transfer to Bank",
+      // "In wallet",
       "Total Memo",
     ];
 

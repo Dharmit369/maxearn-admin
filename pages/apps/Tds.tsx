@@ -150,24 +150,15 @@ const Tds = () => {
   };
 
   const exportCSV = () => {
-    const headers = [
-      "name",
-      "mobileNo",
-      "emailId",
-      "pancardNo",
-      "tds_amount",
-      "Withdraw_amount",
-      "date",
-    ];
+    const headers = ["Sr No", "DATE", "PAN NO", "SECTION", "TDS", "TDS AMOUNT"];
 
-    const rows = filteredData?.map((data) => [
-      data?.user_name,
-      data?.mobile_num,
-      data?.email,
+    const rows = filteredData?.map((data, index) => [
+      index + 1,
+      data?.date,
       data?.pan_card_number,
+      "194C",
       data?.amount,
       data?.withdraw_amount,
-      data?.date,
     ]);
 
     let csvContent =

@@ -206,20 +206,23 @@ const UserWallet = () => {
   const exportCSV = () => {
     const headers = [
       "Lead ID",
-      "User Name",
-      "Mobile No",
       "Date",
+      "Affiliate Id",
+      "Affiliate Name",
+      "Affiliate Mobile No",
       "Payment Type",
-      "Amount",
-      "Paid For",
+      "Lead Name",
+      "Lead Phone Number",
+      "Lead email",
+      "Campaign Name",
       "Amount Status",
     ];
 
     const rows = tableData?.map((data) => [
       data?.lead_id,
-      data?.user_name,
-      data?.user_phone,
       moment(data?.date)?.format("DD/MM/YYYY"),
+      data?.affiliate_id,
+      data?.user_phone,
       data?.type,
       data?.amount,
       data?.type === "Reffral"

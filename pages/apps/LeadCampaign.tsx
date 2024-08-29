@@ -258,27 +258,39 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
     const headers = [
       "ID",
       "Lead ID",
-      "Campaign Name",
-      "Campaign Id",
-      "Created By",
       "Date",
-      "Email",
+      "Affiliate id",
       "Phone number",
+      "Campaign Name",
+      "Lead Name",
+      "Lead Email",
+      "Lead Phone number",
+      "pincode",
       "Status",
+      // "Amount",
       "Note",
     ];
 
     const rows = tableData?.map((data, index) => [
       index + 1,
       data?.lead_id,
-      campname,
-      data?.campaign_id,
-      data?.name,
       data?.created_timestamp,
+      data?.affiliate_id,
+      data?.affiliate_num,
+      data?.campaign_name,
+      data?.name,
       data?.email,
       data?.phone_num,
+      data?.pincode,
       data?.status,
       data?.note,
+
+      // campname,
+      // data?.campaign_id,
+      // data?.name,
+      // ,
+      // data?.email,
+      // data?.phone_num,
     ]);
 
     let csvContent =
