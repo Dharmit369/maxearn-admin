@@ -56,13 +56,6 @@ const CreateCampaigns = ({
   };
 
   console.log("createCampaigns2", createCampaigns);
-  // useEffect(() => {
-  //     const timer = setTimeout(() => {
-  //         setLoading(false);
-  //     }, 500);
-
-  //     return () => clearTimeout(timer);
-  // }, []);
 
   const handleBlur = (newContent) => {
     setShareContent(typeof newContent === "string" ? newContent : "");
@@ -225,22 +218,8 @@ const CreateCampaigns = ({
             </div>
           </div>
 
-          {/* <div>
-                <label htmlFor="OfferDescription">Offer Description</label>
-                <input id="OfferDescription" type="text" placeholder="Offer Description" className="form-input dark:bg-[#261C16] dark:border-none" />
-            </div> */}
-
           <div>
             <label htmlFor="OfferImage">Campaign Image</label>
-            {/* <input
-              id="OfferImage"
-              type="file"
-              placeholder="Offer Image"
-              className="form-input dark:border-none dark:bg-[#1E1611]"
-              name="offer_image"
-              onChange={(event) => handleMultipleChange(event, "OfferImage")}
-              // value={campaignData?.offer_image || ""}
-            /> */}
 
             <div className="flex justify-between xs:flex-col sm:flex-row">
               {isEdit && campaignData?.featured_image && (
@@ -261,27 +240,13 @@ const CreateCampaigns = ({
                 onChange={(event) =>
                   handleMultipleChange(event, "featured_image")
                 }
-                // value={campaignData?.offer_image || ""}
               />
             </div>
           </div>
 
-          {/* <div>
-                <label htmlFor="VideoLink">Video Link</label>
-                <input id="VideoLink" type="text" placeholder="Video Link" className="form-input dark:bg-[#261C16] dark:border-none" />
-            </div> */}
-
           <div>
             <label htmlFor="ApprovalRate">Approval Rate</label>
-            {/* <input
-              id="ApprovalRate"
-              type="text"
-              placeholder="Approval Rate"
-              className="form-input dark:border-none dark:bg-[#1E1611]"
-              name="approval_rate"
-              onChange={(e) => handleChange(e)}
-              value={campaignData?.approval_rate}
-            /> */}
+
             <select
               id="ApprovalRate"
               className="form-select text-white-dark dark:border-none dark:bg-[#1E1611]"
@@ -289,7 +254,7 @@ const CreateCampaigns = ({
               onChange={(e) => handleChange(e)}
               value={campaignData?.approval_rate}
             >
-              <option value={"null"}>Please Select</option>
+              <option value="">Please Select</option>
               <option value={"low"}>low</option>
               <option value={"medium"}>medium</option>
               <option value={"excellent"}>excellent</option>
@@ -322,19 +287,6 @@ const CreateCampaigns = ({
             />
           </div>
 
-          {/* <div>
-            <label htmlFor="Info">Info</label>
-            <input
-              id="Info"
-              type="text"
-              placeholder="Info"
-              className="form-input dark:border-none dark:bg-[#1E1611]"
-              name="info"
-              onChange={(e) => handleChange(e)}
-              value={campaignData?.info || ""}
-            />
-          </div> */}
-
           <div>
             <label htmlFor="TagLine1">TagLine 1</label>
             <input
@@ -361,11 +313,6 @@ const CreateCampaigns = ({
             />
           </div>
 
-          {/* <div>
-                <label htmlFor="SharedDiscription">Shared Discription</label>
-                <input id="SharedDiscription" type="text" placeholder="Shared Discription" className="form-input dark:bg-[#261C16] dark:border-none" />
-            </div> */}
-
           <div>
             <label htmlFor="SharedImage">Shared Image</label>
             <div className="flex justify-between xs:flex-col sm:flex-row">
@@ -387,7 +334,6 @@ const CreateCampaigns = ({
                 onChange={(event) =>
                   handleMultipleChange(event, "shared_image")
                 }
-                // value={campaignData?.shared_image || ""}
               />
             </div>
           </div>
@@ -407,110 +353,6 @@ const CreateCampaigns = ({
             </select>
           </div>
 
-          {/* <div>
-            <label htmlFor="Content">Content</label>
-            <input
-              id="Content"
-              type="text"
-              placeholder="Content"
-              className="form-input dark:border-none dark:bg-[#1E1611]"
-              name="content"
-              onChange={(e) => handleChange(e)}
-              value={campaignData?.content}
-            />
-          </div> */}
-          {/* <div>
-                <label htmlFor="Description">Description</label>
-                <input id="Description" type="text" placeholder="Description" className="form-input dark:bg-[#1E1611] dark:border-none" name="description" onChange={(e) => handleChange(e)} />
-            </div>  */}
-
-          {/* <div>
-            <label htmlFor="goals">Goal</label>
-
-            <div className="flex gap-3">
-              <input
-                // id={`description-${index}`}
-                type="text"
-                placeholder="description 1"
-                className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
-                name="description1"
-                value={campaignData?.description1 || ""}
-                onChange={(e) => handleChange(e)}
-              />
-              <input
-                // id={`price-${index}`}
-                type="text"
-                placeholder="price 1"
-                className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
-                name="price1"
-                value={campaignData?.price1 || ""}
-                onChange={(e) => handleChange(e)}
-              />
-            </div>
-
-            <div className="flex gap-3">
-              <input
-                // id={`description-${index}`}
-                type="text"
-                placeholder="description 2"
-                className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
-                name="description2"
-                value={campaignData?.description2 || ""}
-                onChange={(e) => handleChange(e)}
-              />
-              <input
-                // id={`price-${index}`}
-                type="text"
-                placeholder="price 2"
-                className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
-                name="price2"
-                value={campaignData?.price2 || ""}
-                onChange={(e) => handleChange(e)}
-              />
-            </div>
-
-            <div className="flex gap-3">
-              <input
-                // id={`description-${index}`}
-                type="text"
-                placeholder="description 3"
-                className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
-                name="description3"
-                value={campaignData?.description3 || " "}
-                onChange={(e) => handleChange(e)}
-              />
-              <input
-                // id={`price-${index}`}
-                type="text"
-                placeholder="price 3"
-                className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
-                name="price3"
-                value={campaignData?.price3 || " "}
-                onChange={(e) => handleChange(e)}
-              />
-            </div>
-
-            <div className="flex gap-3">
-              <input
-                // id={`description-${index}`}
-                type="text"
-                placeholder="description 4"
-                className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
-                name="description4"
-                value={campaignData?.description4 || " "}
-                onChange={(e) => handleChange(e)}
-              />
-              <input
-                // id={`price-${index}`}
-                type="text"
-                placeholder="price 4"
-                className="form-input my-5 dark:border-none dark:bg-[#1E1611]"
-                name="price4"
-                value={campaignData?.price4 || " "}
-                onChange={(e) => handleChange(e)}
-              />
-            </div>
-          </div> */}
           <div>
             <label htmlFor="goals">Goals</label>
             {goals?.map((goal, index) => (
@@ -541,21 +383,6 @@ const CreateCampaigns = ({
               Add Goal
             </button>
           </div>
-
-          {/* <div>
-            <label htmlFor="Status">Status</label>
-            <select
-              id="Type"
-              className="form-select w-44 text-white-dark dark:border-none dark:bg-[#261C16]"
-              onChange={(e) => handleChange(e, campaignData?._id)}
-              value={campaignData?.status}
-            >
-              <option value={""}>Please Select</option>
-              <option value={"InReview"}>InReview</option>
-              <option value={"Approved"}>Approved</option>
-              <option value={"Ended"}>Ended</option>
-            </select>
-          </div> */}
 
           <div>
             <label htmlFor="LoanAmount">Loan Amount</label>
