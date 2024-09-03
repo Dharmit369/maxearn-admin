@@ -70,6 +70,7 @@ const CreateCampaigns = ({
     const { name, value } = e.target;
     const newGoals = [...goals];
     newGoals[index] = { ...newGoals[index], [name]: value };
+    console.log(newGoals, "sajbsajnsjansjansjnajsnajsnasjnasjns");
     setGoals(newGoals);
   };
   const addGoal = () => {
