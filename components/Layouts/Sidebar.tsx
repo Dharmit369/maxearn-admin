@@ -579,7 +579,6 @@ const Sidebar = () => {
                           alt=""
                           className="h-[20px] w-[20px] brightness-[1.2] contrast-[1.1] hue-rotate-[190deg] invert-[1] saturate-[5] sepia-[1] filter"
                         />
-                        ''{" "}
                         <span className="text-white dark:text-[#fff] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
                           {t("Activity")}
                         </span>
