@@ -53,6 +53,8 @@ const Dashboard = () => {
   const [requestedHoldBalance, setRequestedHoldBalance] = useState([]);
   const [totalProfit, setTotalProfit] = useState([]);
   const [totalBal, setTotalBal] = useState([]);
+  const [dailybalance, setDailybalance] = useState("");
+
   const router = useRouter();
   console.log("total:", weeklyLeadData);
 
@@ -91,6 +93,7 @@ const Dashboard = () => {
     getRequestedHoldBalance();
     getTotalProfit();
     getTotalBal();
+    DailyWallet();
   }, []);
 
   const getApprovedKycData = async () => {
@@ -417,6 +420,30 @@ const Dashboard = () => {
     }
   };
 
+  const DailyWallet = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/admin/getDailyTotalWalletTransaction`,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res.data, "data response daily wallet");
+      // setRequestedHoldBalance(res?.data?.data);
+      setDailybalance(res?.data?.dailyTotal);
+      setLoading(false);
+    } catch (e) {
+      console.error(e, "Total Lead Data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getTotalProfit = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -590,7 +617,10 @@ const Dashboard = () => {
                 <CurrencyRupeeIcon className="text-white" />
               </AnimatedCard>
 
-              <AnimatedCard title={"Unpaid Balance"} value={"4859"}>
+              <AnimatedCard
+                title={"Daily Wallet Transaction"}
+                value={dailybalance}
+              >
                 <MoneyOffIcon className="text-white" />
               </AnimatedCard>
 
