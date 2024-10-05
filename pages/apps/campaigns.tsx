@@ -218,7 +218,7 @@ const Campaigns = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(res.data, "create response");
+      console.log(res.data, "create response1");
       if (res.data) {
         setCreateCampaigns(false);
         showAlert(15, res.data.message, "success");
