@@ -264,25 +264,12 @@ const Campaigns = () => {
     const token = localStorage.getItem("token");
     try {
       //   console.log(banner);
-      const goalsData = [
-        {
-          description: campaignData?.description1 ?? "",
-          price: campaignData?.price1 ?? "",
-        },
-        {
-          description: campaignData?.description2 ?? "",
-          price: campaignData?.price2 ?? "",
-        },
-        {
-          description: campaignData?.description3 ?? "",
-          price: campaignData?.price3 ?? "",
-        },
-        {
-          description: campaignData?.description4 ?? "",
-          price: campaignData?.price4 ?? "",
-        },
-      ];
-      console.log(goalsData, content, shareContent, "ssssss");
+
+      const goalsData = goals.map((goal) => ({
+        description: goal.description ?? "",
+        price: goal.price ?? "",
+      }));
+      console.log(goalsData, content, shareContent, " ");
       console.log(
         campaignData?.pincode_proceed,
         "category_idcategory_idcategory_idcategory_id"
@@ -303,8 +290,7 @@ const Campaigns = () => {
       formData.append("pincode_proceed", campaignData?.pincode_proceed);
       formData.append("content", content);
       formData.append("goals", JSON.stringify(goalsData));
-      //   formData.append("price", campaignData?.price);
-      //   formData.append("status", campaignData?.status);
+
       formData.append(
         "featured_image",
         featured_image ? featured_image : campaignData?.featured_image
@@ -358,6 +344,12 @@ const Campaigns = () => {
         setFeatured_image(null);
         setShared_image(null);
         setOffer_image(null);
+        const emptyGoals = goals.map((goal) => ({
+          description: "",
+          price: "",
+        }));
+        setGoals(emptyGoals);
+
         getData();
       } else {
         showAlert(15, res.data.message, "error");

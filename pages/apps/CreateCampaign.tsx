@@ -66,13 +66,24 @@ const CreateCampaigns = ({
 
   console.log("options", categoryOptionData);
 
+  // const handleGoalChange = (index, e) => {
+  //   const { name, value } = e.target;
+  //   const newGoals = [...goals];
+  //   newGoals[index] = { ...newGoals[index], [name]: value };
+  //   console.log(newGoals, "sajbsajnsjansjansjnajsnajsnasjnasjns");
+  //   setGoals(newGoals);
+  // };
+  // const addGoal = () => {
+  //   setGoals([...goals, { description: "", price: "" }]);
+  // };
+
   const handleGoalChange = (index, e) => {
     const { name, value } = e.target;
     const newGoals = [...goals];
     newGoals[index] = { ...newGoals[index], [name]: value };
-    console.log(newGoals, "sajbsajnsjansjansjnajsnajsnasjnasjns");
     setGoals(newGoals);
   };
+
   const addGoal = () => {
     setGoals([...goals, { description: "", price: "" }]);
   };
