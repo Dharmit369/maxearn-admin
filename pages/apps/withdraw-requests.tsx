@@ -365,6 +365,7 @@ const UserWallet = () => {
 
                     <th>Date</th>
                     <th>Amount</th>
+                    <th>Final Amount</th>
                     <th>User Name</th>
                     <th>Status Details</th>
                     <th>Status</th>
@@ -382,6 +383,8 @@ const UserWallet = () => {
                         <td>{data?.mobile_num}</td>
                         <td>{moment(data?.date)?.format("DD/MM/YYYY")}</td>
                         <td>{data?.amount + " " + "Rs"}</td>
+                        <td>{data?.amount_tds + " " + "Rs"}</td>
+
                         <td>{data?.username}</td>
                         <td>
                           <span
