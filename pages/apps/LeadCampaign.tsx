@@ -149,7 +149,7 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
     console.log(`${BASE_URL}/lead`);
     try {
       const res = await axios.get(
-        `${BASE_URL}/lead/filter?user_id=${user}&start_date=${startDate}&end_date=${endDate}&status=${changeStatus}&campaign_id=${rowId}`,
+        `${BASE_URL}/lead/filter?user_id=${user}&start_date=${startDate}&end_date=${endDate}&status=${changeStatus}&campaign_id=${rowId}&pageSize=1000000&pageIndex=1`,
         {
           maxBodyLength: Infinity,
           headers: {
