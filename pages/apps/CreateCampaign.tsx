@@ -55,6 +55,12 @@ const CreateCampaigns = ({
     height: 400,
   };
 
+  useEffect(() => {
+    if (campaignData?.goals) {
+      setGoals(campaignData?.goals);
+    }
+  }, [campaignData, setGoals]);
+
   console.log("createCampaigns2", createCampaigns);
 
   const handleBlur = (newContent) => {
@@ -64,28 +70,23 @@ const CreateCampaigns = ({
     setContent(typeof newContent === "string" ? newContent : "");
   };
 
-  console.log("options", categoryOptionData);
-
-  // const handleGoalChange = (index, e) => {
-  //   const { name, value } = e.target;
-  //   const newGoals = [...goals];
-  //   newGoals[index] = { ...newGoals[index], [name]: value };
-  //   console.log(newGoals, "sajbsajnsjansjansjnajsnajsnasjnasjns");
-  //   setGoals(newGoals);
-  // };
-  // const addGoal = () => {
-  //   setGoals([...goals, { description: "", price: "" }]);
-  // };
+  console.log("optionscampaignDatacampaignData", campaignData);
 
   const handleGoalChange = (index, e) => {
     const { name, value } = e.target;
-    const newGoals = [...goals];
-    newGoals[index] = { ...newGoals[index], [name]: value };
-    setGoals(newGoals);
+    const updatedGoals = [...goals];
+    updatedGoals[index] = { ...updatedGoals[index], [name]: value };
+    setGoals(updatedGoals);
   };
 
   const addGoal = () => {
-    setGoals([...goals, { description: "", price: "" }]);
+    setGoals((prevGoals) => [...prevGoals, { description: "", price: "" }]);
+  };
+  const handleDeleteGoal = (index) => {
+    console.log("Before deleting:", goals);
+    const updatedGoals = goals.filter((_, goalIndex) => goalIndex !== index);
+    setGoals(updatedGoals);
+    console.log("After deleting:", updatedGoals);
   };
 
   return (
@@ -277,7 +278,7 @@ const CreateCampaigns = ({
             <label htmlFor="JoiningFee">Joining Fee</label>
             <input
               id="JoiningFee"
-              type="number"
+              // type="number"
               placeholder="Joining Fee"
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="joining_fee"
@@ -290,7 +291,7 @@ const CreateCampaigns = ({
             <label htmlFor="AnnualFee">Annual Fee</label>
             <input
               id="AnnualFee"
-              type="number"
+              // type="number"
               placeholder="Annual Fee"
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="annual_fee"
@@ -385,6 +386,13 @@ const CreateCampaigns = ({
                   value={goal?.price || ""}
                   onChange={(e) => handleGoalChange(index, e)}
                 />
+                <button
+                  type="button"
+                  className="text-red-500"
+                  onClick={() => handleDeleteGoal(index)}
+                >
+                  Delete
+                </button>
               </div>
             ))}
             <button
@@ -400,7 +408,7 @@ const CreateCampaigns = ({
             <label htmlFor="LoanAmount">Loan Amount</label>
             <input
               id="LoanAmount"
-              type="number"
+              // type="number"
               placeholder="Loan Amount"
               className="form-input dark:border-none dark:bg-[#afacaa]"
               name="loan_amount"
@@ -413,7 +421,7 @@ const CreateCampaigns = ({
             <label htmlFor="InterestRate">Interest Rate</label>
             <input
               id="InterestRate"
-              type="number"
+              // type="number"
               placeholder="Interest Rate"
               className="form-input dark:border-none dark:bg-[#1E1611]"
               name="interest_rate"

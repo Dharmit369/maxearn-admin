@@ -269,7 +269,7 @@ const Campaigns = () => {
         description: goal.description ?? "",
         price: goal.price ?? "",
       }));
-      console.log(goalsData, content, shareContent, " ");
+      console.log(goalsData, "1234");
       console.log(
         campaignData?.pincode_proceed,
         "category_idcategory_idcategory_idcategory_id"
