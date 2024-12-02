@@ -138,11 +138,14 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
   const handleSearchChange = (e: any) => {
     setSearchTerm(e.target.value);
   };
-
-  const filteredTableData = tableData.filter((item) =>
-    item?.lead_id.toString()?.includes(searchTerm)
-  );
-
+  const filteredTableData = tableData.filter((item) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      item?.lead_id?.toString()?.toLowerCase()?.includes(search) ||
+      item?.name?.toLowerCase()?.includes(search) ||
+      item?.phone_num?.toString()?.toLowerCase()?.includes(search)
+    );
+  });
   const getLead = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -396,20 +399,18 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
           <div className="my-6 flex justify-between xs:flex-col xs:space-y-4 xs:px-5 lg:flex-row lg:gap-3 lg:px-0">
             <div className="w-full">
               <label htmlFor="User" className="mt-4">
-                Name
+                Search
               </label>
 
               <input
-                id="userId"
                 type="text"
-                placeholder="Created By Name"
-                className="m  form-input h-10  dark:border-none dark:bg-[#1E1611]"
-                name="affiliate_id"
-                onChange={handleSearchChange}
+                placeholder="Search by name, mobile number, or lead ID"
                 value={searchTerm}
+                onChange={handleSearchChange}
+                className=" form-input h-10  dark:border-none dark:bg-[#1E1611]"
               />
             </div>
-            <div className="w-full">
+            {/* <div className="w-full">
               <label htmlFor="User" className="mt-">
                 Mobile No
               </label>
@@ -423,7 +424,7 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                 onChange={handleSearchChange}
                 value={searchTerm}
               />
-            </div>
+            </div> */}
 
             <div className="w-full">
               <label htmlFor="startDate">Start Date</label>
@@ -525,7 +526,9 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                   <tr>
                     <th>Sr No</th>
                     <th>Lead ID</th>
-                    <th>Created By</th>
+                    <th>User Details</th>
+                    <th>Mobile No</th>
+
                     <th>Name</th>
                     <th>Date</th>
                     <th>Email</th>
@@ -542,6 +545,8 @@ const LeadCampaign = ({ setLeadOpen, rowId, campname, campprice }: any) => {
                         <td>{index + 1}</td>
                         <td>{data?.lead_id}</td>
                         <td>{data?.affiliate_name}</td>
+                        <td>{data?.phone_num}</td>
+
                         <td>{data?.name}</td>
                         <td>
                           {moment(data?.created_timestamp)?.format(

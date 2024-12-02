@@ -43,6 +43,8 @@ const UserList = () => {
   const [infoData, setInfoData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   const handleEdit = (data: any) => {
     setEdit(true);
@@ -55,6 +57,11 @@ const UserList = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleDeleteConfirmation = (user) => {
+    setUserToDelete(user);
+    setShowDeleteConfirmation(true);
+  };
 
   useEffect(() => {
     getUserList();
@@ -82,6 +89,13 @@ const UserList = () => {
       console.error(e, "Total Lead Data");
     } finally {
       //   setLoading(false);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    if (userToDelete) {
+      await deleteData(userToDelete._id);
+      setShowDeleteConfirmation(false);
     }
   };
 
@@ -309,9 +323,7 @@ const UserList = () => {
                               className="h-[25px] w-[25px]"
                             />
                             <img
-                              onClick={() => {
-                                deleteData(data?._id);
-                              }}
+                              onClick={() => handleDeleteConfirmation(data)}
                               src={Images?.DELETE}
                               alt=""
                               className="h-[25px] w-[25px]"
@@ -356,6 +368,25 @@ const UserList = () => {
           setModal={setModal}
           infoData={infoData}
         />
+      )}
+
+      {showDeleteConfirmation && (
+        <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="rounded bg-white p-4 shadow-lg">
+            <p>Are you sure you want to delete this user?</p>
+            <div className="mt-4 flex justify-end">
+              <button onClick={() => setShowDeleteConfirmation(false)}>
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteUser}
+                className="ml-2 rounded bg-red-500 px-3 py-1 text-white"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {edit && (

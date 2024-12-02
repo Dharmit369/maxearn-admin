@@ -207,7 +207,9 @@ const Traning = () => {
             <tr>
               <th>SR NO.</th>
               <th>TITLE</th>
-              <th>FILE</th>
+              <th>IMAGE</th>
+
+              <th>URL</th>
               <th>DESC</th>
               <th className="text-center">ACTION</th>
             </tr>
@@ -219,6 +221,19 @@ const Traning = () => {
                   <td>{index + 1}</td>
                   <td>
                     <div className="whitespace-nowrap">{data?.title}</div>
+                  </td>
+                  <td>
+                    <a
+                      className="whitespace-nowrap"
+                      href={data?.image}
+                      target="_blank"
+                    >
+                      <img
+                        src={data?.image}
+                        alt="Image Preview"
+                        className="h-24 w-24 object-contain"
+                      />
+                    </a>
                   </td>
                   <td>
                     <a

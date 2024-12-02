@@ -365,28 +365,30 @@ const Campaigns = () => {
   };
 
   const deleteData = async (id: any) => {
-    const token = localStorage.getItem("token");
-    console.log(`${BASE_URL}/marketing/campaign/${id}`);
-    try {
-      const res = await axios.delete(`${BASE_URL}/marketing/campaign/${id}`, {
-        maxBodyLength: Infinity,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(res.data, "delete banner response");
-      if (res) {
-        setTableData(res?.data?.data);
-        setCreateCampaigns(false);
-        showAlert(15, res.data.message, "success");
-        getData();
-      } else {
-        showAlert(15, res?.data?.message, "error");
+    if (window.confirm("Are you sure you want to delete this campaign?")) {
+      const token = localStorage.getItem("token");
+      console.log(`${BASE_URL}/marketing/campaign/${id}`);
+      try {
+        const res = await axios.delete(`${BASE_URL}/marketing/campaign/${id}`, {
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data, "delete banner response");
+        if (res) {
+          setTableData(res?.data?.data);
+          setCreateCampaigns(false);
+          showAlert(15, res.data.message, "success");
+          getData();
+        } else {
+          showAlert(15, res?.data?.message, "error");
+        }
+      } catch (e) {
+        console.error(e, "delete banner error");
+      } finally {
+        setLoading(false);
       }
-    } catch (e) {
-      console.error(e, "delete banner error");
-    } finally {
-      setLoading(false);
     }
   };
 

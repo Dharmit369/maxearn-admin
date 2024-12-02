@@ -246,8 +246,8 @@ const VideoCampaign = ({ setVideoOpen, rowId }: any) => {
                     <th>Sr</th>
                     <th>Title</th>
                     <th>Video</th>
-                    <th>Code</th>
-                    <th>Description</th>
+                    {/* <th>Code</th>
+                    <th>Description</th> */}
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -260,8 +260,8 @@ const VideoCampaign = ({ setVideoOpen, rowId }: any) => {
                         </td>
                         <td>{data?.title}</td>
                         <td>{data?.link}</td>
-                        <td>{data?.code}</td>
-                        <td>{data?.short_description}</td>
+                        {/* <td>{data?.code}</td>
+                        <td>{data?.short_description}</td> */}
                         <td>
                           <DeleteIcon onClick={() => deleteBanner(data?._id)} />
                         </td>
